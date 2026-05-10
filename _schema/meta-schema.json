@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KB Entry Metadata",
+  "description": "Fill one meta.json per KB entry folder",
+  "type": "object",
+  "required": ["title", "domain", "date", "status", "tags", "summary"],
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Human-readable project title"
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["automations", "research", "rcm-operations", "billing-config", "executive-reports", "consulting"],
+      "description": "Which top-level folder this belongs to"
+    },
+    "date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}$",
+      "description": "YYYY-MM format"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "verified", "production", "deprecated"],
+      "description": "Maturity of this entry"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Searchable keywords: tools, concepts, payers, systems"
+    },
+    "summary": {
+      "type": "string",
+      "description": "One sentence. What this entry is about."
+    },
+    "related": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relative paths to related KB entries"
+    },
+    "author": {
+      "type": "string",
+      "description": "Who created/approved this entry"
+    }
+  }
+}

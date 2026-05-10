@@ -1,0 +1,45 @@
+{
+  "kb_version": "1.0",
+  "last_updated": "2026-05",
+  "maintainer": "Dr. Seidel",
+  "description": "RCM AI Knowledge Base — blueprints, strategies, and lessons learned",
+  "domains": [
+    {
+      "id": "automations",
+      "label": "Automations",
+      "path": "automations/",
+      "description": "Workflow automations, AI agents, API integrations, Monday.com, n8n"
+    },
+    {
+      "id": "research",
+      "label": "Research",
+      "path": "research/",
+      "description": "Payer analysis, timely filing, taxonomy, NPI, regulatory"
+    },
+    {
+      "id": "rcm-operations",
+      "label": "RCM Operations",
+      "path": "rcm-operations/",
+      "description": "SOPs, onboarding, biller maturation, denial management"
+    },
+    {
+      "id": "billing-config",
+      "label": "Billing Configuration",
+      "path": "billing-config/",
+      "description": "eCW v12, 837P, clearinghouse, ERA/EFT"
+    },
+    {
+      "id": "executive-reports",
+      "label": "Executive Reports",
+      "path": "executive-reports/",
+      "description": "Strategic summaries for ownership and management"
+    },
+    {
+      "id": "consulting",
+      "label": "Consulting",
+      "path": "consulting/",
+      "description": "Advisory engagements, gap analyses, roadmaps"
+    }
+  ],
+  "entries": []
+}
