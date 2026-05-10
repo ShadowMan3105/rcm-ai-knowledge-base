@@ -1,0 +1,19 @@
+{
+  "title": "n8n DataTable Workflow Pattern With Idempotent Upsert And PDF Parser Architecture",
+  "domain": "automations",
+  "date": "2026-05",
+  "status": "verified",
+  "tags": [
+    "n8n",
+    "datatable",
+    "idempotency",
+    "pdf-parsing",
+    "workflow-design",
+    "source-verification"
+  ],
+  "summary": "Reusable blueprint for n8n ingestion pipelines that parse vendor PDF reports into a normalized deduplicated cache, with verified DataTable node config, deterministic batch_id idempotency, parallel-branch parser shape, and coordinate-aware PDF extraction.",
+  "related": [
+    "automations/universal-claims-ingestion-transient-dedupe/"
+  ],
+  "author": "Claude (verified by Dr. Seidel)"
+}

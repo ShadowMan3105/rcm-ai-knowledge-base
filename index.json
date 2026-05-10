@@ -2,7 +2,7 @@
   "kb_version": "1.0",
   "last_updated": "2026-05",
   "maintainer": "Dr. Seidel",
-  "description": "RCM AI Knowledge Base — blueprints, strategies, and lessons learned",
+  "description": "RCM AI Knowledge Base \u2014 blueprints, strategies, and lessons learned",
   "domains": [
     {
       "id": "automations",
@@ -57,6 +57,22 @@
         "control-totals"
       ],
       "summary": "Reusable blueprint for multi-source claims ingestion using n8n orchestration, transient staging, durable Supabase dedupe, service-line audit, and control-total validation."
+    },
+    {
+      "title": "n8n DataTable Workflow Pattern With Idempotent Upsert And PDF Parser Architecture",
+      "domain": "automations",
+      "path": "automations/n8n-datatable-idempotent-upsert-pdf-parser/",
+      "date": "2026-05",
+      "status": "verified",
+      "tags": [
+        "n8n",
+        "datatable",
+        "idempotency",
+        "pdf-parsing",
+        "workflow-design",
+        "source-verification"
+      ],
+      "summary": "Reusable blueprint for n8n ingestion pipelines that parse vendor PDF reports into a normalized deduplicated cache, with verified DataTable node config, deterministic batch_id idempotency, parallel-branch parser shape, and coordinate-aware PDF extraction."
     }
   ]
 }
