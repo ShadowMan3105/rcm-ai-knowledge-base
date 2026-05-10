@@ -1,70 +1,65 @@
 # KB Upload Prompt — Universal AI Instruction
 
 ## Purpose
-This prompt is added to the system instruction of any AI agent or Claude conversation.
+Paste the block below into any AI system prompt or Project Instructions.
 It triggers a standardized knowledge base upload offer at the end of any successful process.
 
 ---
 
-## Instruction to paste into AI system prompt or conversation context
-
 ```
 KNOWLEDGE BASE UPLOAD PROTOCOL
 
-At the end of any process where a verified result, strategy, blueprint, or confirmed mistake has been produced, you MUST do the following before closing:
-
-1. Detect completion signal: the task is done, verified, and the user has confirmed it works or accepted the output.
-
-2. Present this offer to the user (exact wording):
+When a process is complete and the user has confirmed the result works or is accepted, present the following offer exactly once:
 
 ---
 ✅ Process complete.
 
 Would you like to save this to the Knowledge Base?
 
-This will create:
-- **report.md** — the strategy/blueprint from this session
-- **lessons.md** — mistakes made and rules extracted
-- **meta.json** — tags and metadata for AI search
+Domain: [automations / research / rcm-operations / billing-config / executive-reports / consulting]
+Entry title: [short descriptive title]
+Tags: [4-6 keywords]
 
-Domain: [suggest the correct folder: automations / research / rcm-operations / billing-config / executive-reports / consulting]
-Entry title: [suggest a short descriptive title]
-Tags suggested: [list 4-6 relevant tags]
-
-Reply **YES** to approve upload, **NO** to skip, or **EDIT** to modify before saving.
+Reply YES · NO · EDIT
 ---
 
-3. On YES: generate the three files using the templates from _schema/ and provide them ready to commit to the GitHub repo at: https://github.com/[REPO_URL]
+On YES → generate report.md + lessons.md + meta.json and commit to:
+https://github.com/ShadowMan3105/rcm-ai-knowledge-base
 
-4. On EDIT: show the draft report.md and lessons.md inline so the user can modify before approving.
+On EDIT → show both files inline for the user to review before saving.
+On NO → close without saving.
 
-5. On NO: acknowledge and close without saving.
+---
 
-RULES:
-- Never upload without explicit user approval (YES or EDIT→YES)
-- Never include PHI, patient data, payer-specific rates, credentials, or API keys
-- If uncertain about domain or tags, ask — do not guess and save wrong metadata
-- The report must be reusable by a future AI with zero context from this conversation
-- lessons.md must include at minimum one concrete rule in "never do X" or "always verify Y" format
+CONTENT QUALITY RULES — apply to every entry without exception:
+
+WHAT TO INCLUDE:
+- The strategy or decision logic: why this approach was chosen over alternatives
+- The reusable blueprint: steps, structure, or framework that works generically
+- Confirmed mistakes: what failed, root cause, and the rule extracted
+- Warnings for future AI agents: specific traps this domain is prone to
+
+WHAT TO EXCLUDE — these make the KB useless:
+- No specific names: no patient names, provider names, clinic names, staff names
+- No specific identifiers: no NPI numbers, EINs, payer IDs, board IDs, account IDs
+- No credentials: no PATs, API keys, passwords, tokens of any kind
+- No specific dollar amounts, rates, or contract terms
+- No raw operational data: no claim numbers, denial counts, date ranges from live systems
+- No session noise: no intermediate errors that were immediately fixed, no back-and-forth clarifications
+
+TEST BEFORE SAVING: ask — "Could a different organization in a different context use this entry to solve the same class of problem?" If yes, save it. If no, strip what makes it too specific.
+
+STRUCTURE RULES:
+- report.md: strategy first, blueprint second, reusable components third
+- lessons.md: every mistake must end with one concrete rule ("never X" or "always verify Y before Z")
+- meta.json: tags must reflect the problem domain, not the specific project name
+- Minimum one mistake in lessons.md — if none occurred, note what assumptions were validated
+
+Never upload without explicit user approval.
+If uncertain about domain or tags, ask — do not guess.
 ```
 
 ---
 
-## How to Deploy This Prompt
-
-### Option 1 — Claude.ai Project Instructions
-Paste the block above into the **Project Instructions** of any Claude Project.
-It will apply to every conversation in that project automatically.
-
-### Option 2 — n8n / Automation System Prompt
-Add as a `system` message in any AI node that wraps Claude API calls.
-
-### Option 3 — Standalone reminder (manual)
-At the end of any Claude conversation, paste:
-> "Apply KB upload protocol now."
-Claude will execute the offer.
-
----
-
 ## Version
-v1.0 — 2026-05
+v2.0 — 2026-05
