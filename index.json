@@ -41,5 +41,22 @@
       "description": "Advisory engagements, gap analyses, roadmaps"
     }
   ],
-  "entries": []
+  "entries": [
+    {
+      "title": "Universal Claims Ingestion With Transient Cache And Durable Dedupe",
+      "domain": "automations",
+      "path": "automations/universal-claims-ingestion-transient-dedupe/",
+      "date": "2026-05",
+      "status": "draft",
+      "tags": [
+        "n8n",
+        "supabase",
+        "claims-ingestion",
+        "deduplication",
+        "transient-cache",
+        "control-totals"
+      ],
+      "summary": "Reusable blueprint for multi-source claims ingestion using n8n orchestration, transient staging, durable Supabase dedupe, service-line audit, and control-total validation."
+    }
+  ]
 }
