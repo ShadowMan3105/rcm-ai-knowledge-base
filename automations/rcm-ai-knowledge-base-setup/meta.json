@@ -1,0 +1,10 @@
+{
+  "title": "RCM AI Knowledge Base — Setup & Architecture",
+  "domain": "automations",
+  "date": "2026-05",
+  "status": "production",
+  "tags": ["github", "knowledge-base", "ai-agents", "blueprints", "lessons", "index", "architecture"],
+  "summary": "Public GitHub repo designed for AI-readable knowledge persistence across RCM projects — blueprints, strategies, and lessons learned.",
+  "related": [],
+  "author": "Dr. Seidel"
+}
