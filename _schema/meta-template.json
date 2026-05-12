@@ -1,0 +1,20 @@
+{
+  "id": "KB-2026-0000-replace-with-kebab-slug",
+  "title": "Human-readable title",
+  "domain": "automations",
+  "kind": "blueprint",
+  "status": "proposed",
+  "confidence": "medium",
+  "created_at": "2026-05-11",
+  "created_by": "claude-sonnet-4-6",
+  "last_verified": "2026-05-11",
+  "last_verified_by": "claude-sonnet-4-6",
+  "human_approved_by": null,
+  "tags": ["replace", "with", "lowercase-kebab-tags"],
+  "summary": "One- or two-sentence description of what this entry is about.",
+  "related": [],
+  "supersedes": null,
+  "superseded_by": null,
+  "challenged_by": [],
+  "deprecated_reason": null
+}
