@@ -1,10 +1,28 @@
 {
+  "id": "KB-2026-0002-rcm-ai-knowledge-base-setup",
   "title": "RCM AI Knowledge Base — Setup & Architecture",
   "domain": "automations",
-  "date": "2026-05",
-  "status": "production",
-  "tags": ["github", "knowledge-base", "ai-agents", "blueprints", "lessons", "index", "architecture"],
-  "summary": "Public GitHub repo designed for AI-readable knowledge persistence across RCM projects — blueprints, strategies, and lessons learned.",
+  "kind": "meta",
+  "status": "active",
+  "confidence": "high",
+  "created_at": "2026-05-01",
+  "created_by": "human:dr-seidel",
+  "last_verified": "2026-05-11",
+  "last_verified_by": "claude-opus-4-7",
+  "human_approved_by": "Dr. Seidel",
+  "tags": [
+    "github",
+    "knowledge-base",
+    "ai-agents",
+    "blueprints",
+    "lessons",
+    "index",
+    "architecture"
+  ],
+  "summary": "Public GitHub repo designed for AI-readable knowledge persistence across RCM projects — blueprints, strategies, and lessons learned. Note: superseded in part by the v2 multi-agent protocol; see AI_PROTOCOL.md.",
   "related": [],
-  "author": "Dr. Seidel"
+  "supersedes": null,
+  "superseded_by": null,
+  "challenged_by": [],
+  "deprecated_reason": null
 }

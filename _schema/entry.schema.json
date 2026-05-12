@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/ShadowMan3105/rcm-ai-knowledge-base/_schema/entry.schema.json",
+  "title": "KB Entry Metadata v2",
+  "description": "Schema for meta.json in every KB entry folder. Multi-agent safe.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "domain",
+    "kind",
+    "status",
+    "confidence",
+    "created_at",
+    "created_by",
+    "last_verified",
+    "last_verified_by",
+    "tags",
+    "summary"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^KB-[0-9]{4}-[0-9]{4}-[a-z0-9-]+$",
+      "description": "Immutable stable ID. Format: KB-YYYY-NNNN-kebab-slug. Never change after creation."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Human-readable title."
+    },
+    "domain": {
+      "type": "string",
+      "enum": [
+        "automations",
+        "research",
+        "rcm-operations",
+        "billing-config",
+        "executive-reports",
+        "consulting"
+      ]
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "blueprint",
+        "lesson",
+        "sop",
+        "analysis",
+        "playbook",
+        "reference",
+        "meta"
+      ],
+      "description": "What kind of artifact this entry represents."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "active",
+        "challenged",
+        "deprecated",
+        "superseded"
+      ]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"],
+      "description": "Curator's or author's stated confidence in the entry's correctness."
+    },
+    "created_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Immutable creation date YYYY-MM-DD."
+    },
+    "created_by": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Immutable. Canonical agent ID (see AI_PROTOCOL.md §8)."
+    },
+    "last_verified": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Date of last verification. Mutable."
+    },
+    "last_verified_by": {
+      "type": "string",
+      "minLength": 2
+    },
+    "human_approved_by": {
+      "type": ["string", "null"],
+      "description": "Name of human curator who approved this entry, if any."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+      "minItems": 1
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 800
+    },
+    "related": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Relative paths or KB IDs of related entries.",
+      "default": []
+    },
+    "supersedes": {
+      "type": ["string", "null"],
+      "description": "ID of the entry this replaces. Immutable.",
+      "default": null
+    },
+    "superseded_by": {
+      "type": ["string", "null"],
+      "description": "ID of the entry that replaces this one.",
+      "default": null
+    },
+    "challenged_by": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^CH-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$" },
+      "description": "Open or resolved challenge IDs referencing this entry.",
+      "default": []
+    },
+    "deprecated_reason": {
+      "type": ["string", "null"],
+      "description": "Required when status is 'deprecated' or 'superseded'."
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "superseded" } } },
+      "then": { "required": ["superseded_by", "deprecated_reason"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "deprecated" } } },
+      "then": { "required": ["deprecated_reason"] }
+    },
+    {
+      "if": { "properties": { "status": { "const": "challenged" } } },
+      "then": { "properties": { "challenged_by": { "minItems": 1 } } }
+    }
+  ]
+}
