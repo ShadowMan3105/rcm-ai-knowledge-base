@@ -1,0 +1,40 @@
+name: KB Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate entries + index sync
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema (strict validator)
+        run: pip install --quiet jsonschema
+
+      - name: Validate all entries and challenges
+        run: python _tools/validate.py
+
+      - name: Verify index.json is up-to-date
+        run: |
+          cp index.json index.before.json
+          python _tools/rebuild_index.py
+          # Ignore the `last_built` line since the date changes every run.
+          if ! diff <(grep -v '"last_built"' index.before.json) \
+                    <(grep -v '"last_built"' index.json) > /dev/null; then
+            echo "::error::index.json is out of date. Run: python _tools/rebuild_index.py and commit the result."
+            diff <(grep -v '"last_built"' index.before.json) \
+                 <(grep -v '"last_built"' index.json) || true
+            exit 1
+          fi
+          echo "index.json is in sync."
