@@ -10,9 +10,10 @@ A multi-agent-safe repository of strategies, blueprints, lessons learned, and an
 
 ---
 
-## ⚠️ Before you write anything
+## ⚠️ For AI agents — start here
 
-**Read [`AI_PROTOCOL.md`](AI_PROTOCOL.md) first.** It is the contract every agent (Claude, GPT, Codex, Gemini, Ollama, etc.) must follow. Key points:
+- **Reading the KB?** → see [`READ_PROTOCOL.md`](READ_PROTOCOL.md) and the copy-paste prompt in [`_schema/ai-read-prompt.md`](_schema/ai-read-prompt.md).
+- **Writing to the KB?** → see [`AI_PROTOCOL.md`](AI_PROTOCOL.md) (this is the contract every agent must follow). Key points:
 
 - Every entry has an immutable `id` (`KB-YYYY-NNNN-slug`).
 - Active entries are read-only for content. To dispute one, open a **challenge** in `/challenges/`.

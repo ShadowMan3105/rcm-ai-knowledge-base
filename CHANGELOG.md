@@ -8,6 +8,20 @@ Format: each entry is `## [version] — YYYY-MM-DD` followed by sections
 
 ---
 
+## [v1.1] — 2026-05-11
+
+Adds the consumer side of the protocol — how AIs *read* and apply prior knowledge.
+
+### Added
+- `READ_PROTOCOL.md` — 6-step read flow + canonical raw-content URLs + what to do when an active entry looks wrong.
+- `_schema/ai-read-prompt.md` — universal copy-paste system prompt for Claude.ai Projects, ChatGPT Custom GPTs, n8n AI Agents, CLAUDE.md, and API `system` parameters. Includes per-platform setup notes.
+- `_tools/query.py` — terminal querying (`--tag`, `--domain`, `--status`, `--search`, `--id`, `--show report|lessons|meta`).
+
+### Changed
+- `README.md` — top of the agent section now splits **Reading the KB** vs **Writing to the KB**.
+
+---
+
 ## [v1.0] — 2026-05-11
 
 First versioned protocol. Establishes multi-agent safety guarantees.
