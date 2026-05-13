@@ -3,7 +3,7 @@
   "title": "Universal Claims Ingestion With Transient Cache And Durable Dedupe",
   "domain": "automations",
   "kind": "blueprint",
-  "status": "proposed",
+  "status": "active",
   "confidence": "low",
   "created_at": "2026-05-01",
   "created_by": "codex",
