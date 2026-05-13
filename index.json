@@ -2,21 +2,21 @@
   "kb_version": "2.0",
   "schema": "_schema/entry.schema.json",
   "protocol": "AI_PROTOCOL.md",
-  "last_built": "2026-05-11",
+  "last_built": "2026-05-12",
   "maintainer": "Dr. Seidel",
   "description": "RCM AI Knowledge Base — multi-agent safe blueprints, lessons, and analyses.",
   "stats": {
-    "total_entries": 4,
+    "total_entries": 5,
     "by_status": {
       "active": 3,
-      "proposed": 1
+      "proposed": 2
     },
     "by_domain": {
-      "automations": 3,
+      "automations": 4,
       "executive-reports": 1
     },
     "by_kind": {
-      "blueprint": 3,
+      "blueprint": 4,
       "meta": 1
     }
   },
@@ -187,6 +187,45 @@
       "challenged_by": [],
       "human_approved_by": "Seidel Delgado",
       "path": "executive-reports/rcm-executive-dashboards-hf-2026/"
+    },
+    {
+      "id": "KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf",
+      "title": "Multi-Clinic Paid Claims Consolidation From eCW PDF Reports (ALL_CLAIM + PAYMENT + RECEIVABLES)",
+      "domain": "automations",
+      "kind": "blueprint",
+      "status": "proposed",
+      "confidence": "high",
+      "created_at": "2026-05-12",
+      "created_by": "claude-opus-4-7",
+      "last_verified": "2026-05-12",
+      "last_verified_by": "claude-opus-4-7",
+      "tags": [
+        "ecw",
+        "pdf-parsing",
+        "pdfplumber",
+        "claims-reconciliation",
+        "multi-clinic",
+        "hf-texas",
+        "openpyxl",
+        "excel-consolidation",
+        "payment-detail",
+        "receivables",
+        "all-claim-report",
+        "format-drift",
+        "parallel-processing",
+        "pickle-cache",
+        "ocr-fallback"
+      ],
+      "summary": "End-to-end pipeline that consolidates three eCW v12 PDF reports (ALL CLAIM, PAYMENT DETAIL, RECEIVABLES) across 11 clinics × 3 months into a single Excel workbook with 9 sheets (Claims_Detail, Payments_Detail, Receivables_Checks, Summary_Provider_Month, Summary_Insurance_Month, Reconciliation, Master_Enriched, Flags, README). Includes check-level PMT↔REC reconciliation (cuadra a $0 en 31/32 combinaciones), service-line LEFT JOIN AC↔PMT, parallel multiprocessing with pickle cache, scanned-PDF detection, and resilience against two distinct eCW report-header formats (APR-style vs FEB-style label drift). Run against 99 PDFs produces 10,612 Claims rows + 9,866 Payment rows + 1,281 Checks in ~5-7 min cold, <15s warm.",
+      "related": [
+        "KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser",
+        "KB-2026-0004-rcm-executive-dashboards-hf-2026"
+      ],
+      "supersedes": null,
+      "superseded_by": null,
+      "challenged_by": [],
+      "human_approved_by": null,
+      "path": "automations/multi-clinic-paid-claims-consolidation-pdf/"
     }
   ],
   "challenges": []
