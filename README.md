@@ -16,7 +16,8 @@ A multi-agent-safe repository of strategies, blueprints, lessons learned, and an
 - **Writing to the KB?** → see [`AI_PROTOCOL.md`](AI_PROTOCOL.md) (this is the contract every agent must follow). Key points:
 
 - Every entry has an immutable `id` (`KB-YYYY-NNNN-slug`).
-- Active entries are read-only for content. To dispute one, open a **challenge** in `/challenges/`.
+- Active entries are read-only for content. To **dispute** a strategy/conclusion, open a **challenge** in `/challenges/`. To make a **surface correction** (typo, dead link, lesson subsequent update), file a **patch** in `/patches/`.
+- `lessons.md` is append-only. `### Mistake N` blocks are immutable — once recorded, the mistake stays on the record forever, even if the underlying bug is later fixed. New info goes into the `Subsequent Updates` block.
 - After any change, run `python _tools/validate.py` and `python _tools/rebuild_index.py`. Never hand-edit `index.json`.
 - Some fields (`id`, `created_at`, `created_by`, `supersedes`) are immutable.
 
@@ -38,17 +39,20 @@ proposed ──► active ──► challenged ──► (deprecated | supersede
                   └─────────────────► deprecated  (curator-decided)
 ```
 
-## How to challenge an entry
+## Challenge vs Patch — which one do I file?
 
-If you (an AI) believe an `active` entry is wrong or obsolete:
+| | **Challenge** | **Patch** |
+|---|---|---|
+| When | You doubt the **strategy, conclusion, or correctness** of the entry | The fix is **superficial** — typo, dead link, wrong tag, library version in a code example, appending to a `Subsequent Updates` block |
+| Folder | `challenges/CH-YYYY-MM-DD-slug.md` | `patches/PA-YYYY-MM-DD-slug.md` |
+| Template | `_schema/challenge-template.md` | `_schema/patch-template.md` |
+| Effect on target entry | Status becomes `challenged`; curator review required | Status unchanged; merges on CI green |
+| Curator review | Required | Optional |
+| Touches `### Mistake N` block | Never directly (resolved via supersede if accepted) | Never deletes/rewrites — only appends to `Subsequent Updates` |
 
-1. **Do not edit** its `report.md` or `lessons.md`.
-2. Copy `_schema/challenge-template.md` to `challenges/CH-YYYY-MM-DD-slug.md`.
-3. Append your challenge ID to the target's `challenged_by` and set its `status` to `challenged`.
-4. Validate, rebuild index, commit.
-5. Dr. Seidel resolves.
+If you start writing a patch and find yourself questioning the strategy, stop and convert it to a challenge.
 
-Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 and §7.
+Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons.md), §7 (challenge resolution), §13 (patches).
 
 ---
 
@@ -63,16 +67,20 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 and §7.
 ├── _schema/                ← JSON schemas + templates
 │   ├── entry.schema.json
 │   ├── challenge.schema.json
+│   ├── patch.schema.json
 │   ├── revision.schema.json
+│   ├── tags-canonical.json ← Allowed tags per domain (warn-only enforcement)
 │   ├── meta-template.json
 │   ├── challenge-template.md
+│   ├── patch-template.md
 │   ├── report-template.md
 │   └── lessons-template.md
 ├── _tools/
 │   ├── rebuild_index.py    ← Run after any change
-│   ├── validate.py         ← Run before commit
+│   ├── validate.py         ← Run before commit (emits WARN for staleness + non-canonical tags)
 │   └── next_id.py          ← Get next stable KB ID
-├── challenges/             ← Open / resolved challenges
+├── challenges/             ← Substantive disputes (curator-resolved)
+├── patches/                ← Surface corrections (CI-green merge)
 └── <domain>/<slug>/
     ├── meta.json
     ├── report.md
@@ -113,4 +121,4 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 and §7.
 Dr. Seidel — RCM Operations & AI Strategy
 
 ## Protocol version
-v1.0 (2026-05-11) — see `AI_PROTOCOL.md`.
+v1.2 (2026-05-12) — see `AI_PROTOCOL.md`.

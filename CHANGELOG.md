@@ -8,6 +8,41 @@ Format: each entry is `## [version] — YYYY-MM-DD` followed by sections
 
 ---
 
+## [v1.2] — 2026-05-12
+
+Introduces **patches** (surface-level corrections separate from challenges), **append-only Subsequent Updates** in `lessons.md`, **mistake categorization** with a closed enum, **canonical tags** per domain, and **staleness warnings** for active entries older than 180 days.
+
+### Added
+- `_schema/patch.schema.json` — JSON Schema for the YAML frontmatter of files in `patches/`. Patch types: `typo`, `dead-link`, `metadata-fix`, `format-cleanup`, `factual-detail`, `lesson-subsequent-update`, `tag-correction`.
+- `_schema/patch-template.md` — copy-paste starter for a patch, with Before/After block and a "this is a patch (not a challenge)" justification checklist.
+- `_schema/tags-canonical.json` — canonical tag vocabulary per domain plus a global set. `validate.py` emits a WARNING (not error) on non-canonical tags; new tags must be added here in the same PR.
+- `patches/` — open / merged / rejected patches, parallel to `challenges/`.
+- `AI_PROTOCOL.md` §4.D — "File a Patch" path for surface corrections that do NOT question the strategy of the target entry.
+- `AI_PROTOCOL.md` §4.5 — explicit rules for editing `lessons.md`: `### Mistake N` blocks are immutable; new info appends to a `Subsequent Updates` block; the original mistake stays on the record forever.
+- `AI_PROTOCOL.md` §12 — Mistake categories (closed enum), tag canon policy, and staleness threshold (180 days).
+- `AI_PROTOCOL.md` §13 — patches operational notes (do NOT change target status, NOT a way to bypass a challenge, multiple patches per entry are allowed).
+- `_tools/validate.py` — emits WARNINGS for: (a) active entries with `last_verified` older than 180 days, (b) tags not present in `tags-canonical.json`. Warnings do not fail CI unless `--strict` is passed. Also now validates files under `patches/` against `patch.schema.json`.
+- `_tools/rebuild_index.py` — collects patches into a top-level `patches` list in `index.json`, plus `stats.open_patches` and `stats.open_challenges` counts.
+
+### Changed
+- `_schema/lessons-template.md` — each `### Mistake N` block now declares `Category` (closed enum) and `Severity` (low/medium/high) and includes an optional `Subsequent Updates` block. Adds an inline cheat-sheet of categories and severity levels.
+- `AI_PROTOCOL.md` — version bumped from v1.0 to v1.2 (skipping v1.1, which was a CHANGELOG-only entry from `READ_PROTOCOL.md` introduction).
+- `AI_PROTOCOL.md` §1 — glossary now includes `Patch` and `Subsequent Update`.
+- `AI_PROTOCOL.md` §10 — Hard Prohibitions adds rules for `patches/` deletion and against renumbering/rewriting existing `### Mistake N` blocks.
+- `index.json` — `kb_version` bumped to `2.1`. New `patches` list and new `stats.open_challenges` / `stats.open_patches` counters.
+- `README.md` — adds a "Patches vs Challenges" pointer and reflects new repo layout (`patches/`).
+
+### Removed
+- Nothing removed. The point of v1.2 is to ADD non-destructive editing paths and make lesson categorization explicit. Existing entries and lessons remain valid; the new fields (`Category`, `Severity`) are recommended but not enforced retroactively (existing lessons keep their original format until a maintainer chooses to refactor them).
+
+### Migration notes
+- **Existing entries**: no migration required. The new mistake-category and severity fields apply to lessons written from v1.2 onward. Old `### Mistake N` blocks may stay as-is, but maintainers may add categories/severity via a `format-cleanup` patch over time.
+- **Existing tags**: `validate.py` will emit warnings for the first run because the canon was just introduced. The intent is that existing tags will be folded into `tags-canonical.json` as they are encountered, not all at once. Warnings are NOT errors.
+- **Existing `last_verified` dates**: entries verified on 2026-05-11 will not warn for staleness until ~2026-11-07 (180-day window).
+- **CI behavior**: the workflow `validate.yml` is unchanged. Warnings are advisory. If you want CI to fail on warnings, run `python _tools/validate.py --strict` and adjust the workflow.
+
+---
+
 ## [v1.1] — 2026-05-11
 
 Adds the consumer side of the protocol — how AIs *read* and apply prior knowledge.

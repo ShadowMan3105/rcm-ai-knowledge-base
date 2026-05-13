@@ -1,23 +1,34 @@
 #!/usr/bin/env python3
-"""Validate all KB entries and challenges against their schemas.
+"""Validate all KB entries, challenges, and patches against their schemas.
 
 Uses jsonschema if available; falls back to a built-in minimal validator
 covering required fields, enums, and patterns from entry.schema.json /
-challenge.schema.json. This keeps the tool runnable with stdlib only.
+challenge.schema.json / patch.schema.json. This keeps the tool runnable
+with stdlib only.
+
+Beyond hard validation, this tool also emits WARNINGS for:
+  - staleness: active entries with last_verified older than STALENESS_DAYS
+  - non-canonical tags: tags not listed in _schema/tags-canonical.json
+
+Warnings do NOT fail CI. Errors do.
 
 Exit code: 0 if all valid, 1 otherwise.
 
 Usage:  python _tools/validate.py [--strict]
+        --strict: treat warnings as errors (CI gate option)
 """
 from __future__ import annotations
 
 import json
 import re
 import sys
+from datetime import date, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_DIR = ROOT / "_schema"
+
+STALENESS_DAYS = 180  # active entries older than this trigger a WARN
 
 try:
     import jsonschema  # type: ignore
@@ -115,11 +126,71 @@ def parse_frontmatter(md_path: Path) -> dict | None:
     return meta
 
 
+def load_canonical_tags() -> dict | None:
+    """Return the set of canonical tags per domain, or None if the file is missing.
+
+    Structure returned:
+        {
+            "<domain>": set(domain-tags + global tags),
+            "_global": set(global tags),
+        }
+    """
+    p = SCHEMA_DIR / "tags-canonical.json"
+    if not p.is_file():
+        return None
+    data = load_json(p)
+    glob = set(data.get("global", []))
+    out: dict[str, set[str]] = {"_global": glob}
+    for dom, tags in (data.get("by_domain") or {}).items():
+        out[dom] = set(tags) | glob
+    return out
+
+
+def check_staleness(instance: dict) -> list[str]:
+    """Return warnings for active entries that have not been verified in a while."""
+    warns: list[str] = []
+    if instance.get("status") != "active":
+        return warns
+    lv = instance.get("last_verified")
+    if not lv:
+        return warns
+    try:
+        lv_date = datetime.strptime(lv, "%Y-%m-%d").date()
+    except ValueError:
+        return warns
+    age = (date.today() - lv_date).days
+    if age > STALENESS_DAYS:
+        warns.append(
+            f"staleness: active entry last_verified {lv} ({age} days ago > {STALENESS_DAYS}d). "
+            f"Re-verify against the source and bump last_verified, or open a challenge."
+        )
+    return warns
+
+
+def check_tags(instance: dict, canonical: dict | None) -> list[str]:
+    """Return warnings for tags not present in tags-canonical.json for the entry's domain."""
+    if canonical is None:
+        return []
+    warns: list[str] = []
+    domain = instance.get("domain", "")
+    allowed = canonical.get(domain) or canonical.get("_global", set())
+    tags = instance.get("tags") or []
+    for t in tags:
+        if t not in allowed and t not in canonical.get("_global", set()):
+            warns.append(f"non-canonical tag: '{t}' not in tags-canonical.json for domain '{domain}'")
+    return warns
+
+
 def main() -> int:
+    strict = "--strict" in sys.argv
+
     entry_schema = load_json(SCHEMA_DIR / "entry.schema.json")
     ch_schema = load_json(SCHEMA_DIR / "challenge.schema.json")
+    patch_schema_path = SCHEMA_DIR / "patch.schema.json"
+    patch_schema = load_json(patch_schema_path) if patch_schema_path.is_file() else None
+    canonical_tags = load_canonical_tags()
 
-    n_ok = n_fail = 0
+    n_ok = n_fail = n_warn = 0
     ids_seen: dict[str, Path] = {}
 
     domains = ["automations", "research", "rcm-operations", "billing-config", "executive-reports", "consulting"]
@@ -141,11 +212,21 @@ def main() -> int:
             if slug_expected and meta_path.parent.name != slug_expected:
                 errs.append(f"folder name '{meta_path.parent.name}' != id slug '{slug_expected}'")
 
+            warns = check_staleness(instance) + check_tags(instance, canonical_tags)
+
             if errs:
                 n_fail += 1
                 print(f"FAIL  {meta_path.relative_to(ROOT)}")
                 for e in errs:
                     print(f"      - {e}")
+                for w in warns:
+                    print(f"      ! {w}")
+            elif warns:
+                n_ok += 1
+                n_warn += len(warns)
+                print(f"WARN  {meta_path.relative_to(ROOT)}")
+                for w in warns:
+                    print(f"      ! {w}")
             else:
                 n_ok += 1
                 print(f"OK    {meta_path.relative_to(ROOT)}")
@@ -168,8 +249,33 @@ def main() -> int:
                 n_ok += 1
                 print(f"OK    {ch_file.relative_to(ROOT)}")
 
-    print(f"\n{n_ok} OK, {n_fail} FAIL  (validator: {'jsonschema' if HAVE_JSONSCHEMA else 'built-in'})")
-    return 0 if n_fail == 0 else 1
+    pa_dir = ROOT / "patches"
+    if pa_dir.is_dir() and patch_schema is not None:
+        for pa_file in sorted(pa_dir.glob("PA-*.md")):
+            meta = parse_frontmatter(pa_file)
+            if meta is None:
+                print(f"FAIL  {pa_file.relative_to(ROOT)}: no frontmatter")
+                n_fail += 1
+                continue
+            errs = validate(meta, patch_schema)
+            if errs:
+                n_fail += 1
+                print(f"FAIL  {pa_file.relative_to(ROOT)}")
+                for e in errs:
+                    print(f"      - {e}")
+            else:
+                n_ok += 1
+                print(f"OK    {pa_file.relative_to(ROOT)}")
+
+    suffix = f"  (validator: {'jsonschema' if HAVE_JSONSCHEMA else 'built-in'})"
+    print(f"\n{n_ok} OK, {n_fail} FAIL, {n_warn} WARN{suffix}")
+
+    if n_fail:
+        return 1
+    if strict and n_warn:
+        print("strict mode: treating warnings as errors")
+        return 1
+    return 0
 
 
 if __name__ == "__main__":

@@ -61,6 +61,19 @@ def collect_challenges() -> list[dict]:
     return out
 
 
+def collect_patches() -> list[dict]:
+    pa_dir = ROOT / "patches"
+    if not pa_dir.is_dir():
+        return []
+    out = []
+    for f in sorted(pa_dir.glob("PA-*.md")):
+        meta = parse_frontmatter(f)
+        if meta:
+            meta["path"] = f.relative_to(ROOT).as_posix()
+            out.append(meta)
+    return out
+
+
 def parse_frontmatter(md_path: Path) -> dict | None:
     """Minimal YAML frontmatter parser (key: value only, no nesting)."""
     try:
@@ -106,8 +119,10 @@ def main() -> int:
 
     entries.sort(key=lambda e: e.get("id", ""))
 
+    patches = collect_patches()
+
     index = {
-        "kb_version": "2.0",
+        "kb_version": "2.1",
         "schema": "_schema/entry.schema.json",
         "protocol": "AI_PROTOCOL.md",
         "last_built": date.today().isoformat(),
@@ -118,6 +133,8 @@ def main() -> int:
             "by_status": _count(entries, "status"),
             "by_domain": _count(entries, "domain"),
             "by_kind":   _count(entries, "kind"),
+            "open_challenges": sum(1 for c in collect_challenges() if c.get("status") == "open"),
+            "open_patches":    sum(1 for p in patches if p.get("status") == "open"),
         },
         "domains": [
             {"id": i, "label": l, "path": f"{i}/", "description": d}
@@ -125,11 +142,12 @@ def main() -> int:
         ],
         "entries": entries,
         "challenges": collect_challenges(),
+        "patches": patches,
     }
 
     out_path = ROOT / "index.json"
     out_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"index.json rebuilt: {len(entries)} entries, {len(index['challenges'])} challenges")
+    print(f"index.json rebuilt: {len(entries)} entries, {len(index['challenges'])} challenges, {len(patches)} patches")
     return 0
 
 
