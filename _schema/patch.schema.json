@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "KB Patch Metadata",
+  "description": "Schema for the YAML frontmatter of files in patches/. A patch is a surface-level correction (typo, dead link, metadata fix, factual detail update) that does NOT question the strategy of the target entry. Patches can be merged on CI green; they do not require curator review. For substantive disputes use a challenge instead.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "patches",
+    "opened_at",
+    "opened_by",
+    "patch_type",
+    "applied_to",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^PA-[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$",
+      "description": "Format: PA-YYYY-MM-DD-short-slug."
+    },
+    "patches": {
+      "type": "string",
+      "pattern": "^KB-[0-9]{4}-[0-9]{4}-[a-z0-9-]+$",
+      "description": "ID of the entry being patched."
+    },
+    "opened_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "opened_by": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Canonical agent ID."
+    },
+    "patch_type": {
+      "type": "string",
+      "enum": [
+        "typo",
+        "dead-link",
+        "metadata-fix",
+        "format-cleanup",
+        "factual-detail",
+        "lesson-subsequent-update",
+        "tag-correction"
+      ],
+      "description": "What kind of surface correction. 'lesson-subsequent-update' appends to a Mistake's Subsequent Updates block; it does NOT delete or rewrite the original Mistake."
+    },
+    "applied_to": {
+      "type": "string",
+      "enum": [
+        "report.md",
+        "lessons.md",
+        "meta.json"
+      ],
+      "description": "Which file inside the target entry the patch modifies."
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 500
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "merged", "rejected"]
+    },
+    "merged_at": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "merged_by": {
+      "type": ["string", "null"]
+    },
+    "merge_notes": {
+      "type": ["string", "null"]
+    }
+  }
+}
