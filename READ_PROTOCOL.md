@@ -2,7 +2,7 @@
 
 **Companion to `AI_PROTOCOL.md`.** That file governs *writing*; this one governs *reading*.
 
-If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to help with anything RCM-, billing-, automation-, or healthcare-operations-related, follow these steps **before** generating advice or code.
+If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to help with anything RCM-, billing-, automation-, or healthcare-operations-related, read [`AGENTS.md`](AGENTS.md) first and then follow these steps **before** generating advice or code.
 
 ---
 
@@ -88,3 +88,18 @@ python _tools/query.py --search "claims dedupe"
 ```
 
 See `_tools/query.py --help`.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Optional Graphify navigation
+Graphify may be used after the normal read protocol. It is a navigation aid only.
+
+Required behavior:
+
+1. Read `AGENTS.md`, `AI_PROTOCOL.md`, `READ_PROTOCOL.md`, and `index.json` first.
+2. Use Graphify to discover candidate relationships, clusters, or paths.
+3. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
+4. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
+5. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
+
+See `_schema/graphify-agent-prompt.md` for a copy-paste agent prompt.
+<!-- GRAPHIFY-KB-LAYER:END -->

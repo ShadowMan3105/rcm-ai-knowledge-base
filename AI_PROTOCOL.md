@@ -2,6 +2,11 @@
 
 **Read this BEFORE writing anything to this repository.**
 
+`AGENTS.md` is also mandatory first-read context. It defines machine-friendly
+operating constraints, truth policy, verification gates, Graphify boundaries,
+and controlled-tool rules that every AI agent must follow before applying this
+protocol.
+
 This file is the contract every AI agent (Claude, GPT, Codex, Gemini, Ollama, etc.) MUST follow when contributing to `rcm-ai-knowledge-base`. The goal is multi-agent safety: any new agent can read, contribute, and challenge prior work without breaking what previous agents established.
 
 ---
@@ -226,3 +231,27 @@ See §4.D for the procedure. Additional rules:
 3. Patches must NOT bypass a challenge. If a patch touches multiple paragraphs, rewrites a `Rule extracted`, or changes the strategy of `report.md`, it is a challenge in disguise — stop and open Path A instead.
 4. Multiple patches against the same entry are allowed and expected over time.
 5. `validate.py` and `rebuild_index.py` track patches; the index exposes a top-level `patches` list and a `stats.open_patches` count.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Graphify knowledge graph layer
+
+Graphify is permitted as an advisory navigation and relationship-discovery layer.
+
+Rules:
+
+- Read `AGENTS.md` before using Graphify or changing KB files.
+- `AI_PROTOCOL.md`, generated `index.json`, each entry's `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` remain authoritative.
+- Graphify outputs must not be used to directly modify immutable fields or active entry content.
+- Any graph-derived dispute about correctness must become a challenge.
+- Any surface correction must become a patch.
+- New reusable strategy must become a governed KB entry with a stable ID.
+- Do not ingest PHI, credentials, API keys, payer-specific rates, live operational data, or unreviewed client exports.
+- Use `_tools/build_graphify_corpus.py` as the preferred input boundary.
+- Run `_tools/check_graphify_policy.py`, `_tools/validate.py`, and `_tools/rebuild_index.py` before committing integration changes.
+
+Commit policy:
+
+- Do not commit generated Graphify outputs by default.
+- Keep `.graphify-kb-corpus/`, `graphify-out/`, `.graphify/`, `.graphify_cache/`, and `.graphify_labels.json` ignored.
+- If the curator later wants a shareable graph artifact committed, update this policy and `.gitignore` explicitly in that PR.
+<!-- GRAPHIFY-KB-LAYER:END -->
