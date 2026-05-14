@@ -1,6 +1,6 @@
 # Graphify Agent Prompt for RCM AI Knowledge Base
 
-Use this only after reading `READ_PROTOCOL.md` and `AI_PROTOCOL.md`.
+Use this only after reading `AGENTS.md`, `READ_PROTOCOL.md`, and `AI_PROTOCOL.md`.
 
 You may use Graphify outputs to navigate the KB faster, but Graphify is advisory only. Do not treat inferred graph edges as verified truth.
 

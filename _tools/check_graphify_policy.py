@@ -8,6 +8,7 @@ import sys
 from pathlib import Path
 
 REQUIRED_FILES = (
+    "AGENTS.md",
     "GRAPHIFY_INTEGRATION.md",
     ".graphifyignore",
     "_tools/build_graphify_corpus.py",
@@ -52,7 +53,6 @@ def main() -> int:
 
     scan_names = set(REQUIRED_FILES) | {
         ".gitignore",
-        "README.md",
         "READ_PROTOCOL.md",
         "AI_PROTOCOL.md",
         "SETUP.md",

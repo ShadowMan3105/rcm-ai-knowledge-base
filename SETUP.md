@@ -63,12 +63,18 @@ python _tools/build_graphify_corpus.py
 python _tools/run_graphify_kb.py --dry-run
 ```
 
-Run extraction with a backend:
+Run headless extraction with a backend:
 
 ```bash
-python _tools/run_graphify_kb.py --backend openai --no-viz
-python _tools/run_graphify_kb.py --backend gemini --no-viz
-OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 python _tools/run_graphify_kb.py --backend ollama --no-viz
+python _tools/run_graphify_kb.py --workflow extract --backend openai
+python _tools/run_graphify_kb.py --workflow extract --backend gemini
+OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 python _tools/run_graphify_kb.py --workflow extract --backend ollama
+```
+
+Run assistant-style project mapping:
+
+```bash
+python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
 ```
 
 Set backend credentials only in your local shell environment. Never commit API keys or paste them into repository files.

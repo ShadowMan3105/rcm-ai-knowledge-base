@@ -12,6 +12,7 @@ A multi-agent-safe repository of strategies, blueprints, lessons learned, and an
 
 ## ⚠️ For AI agents — start here
 
+- **Mandatory operating directive?** → read [`AGENTS.md`](AGENTS.md) first, then follow `AI_PROTOCOL.md` and `READ_PROTOCOL.md`.
 - **Reading the KB?** → see [`READ_PROTOCOL.md`](READ_PROTOCOL.md) and the copy-paste prompt in [`_schema/ai-read-prompt.md`](_schema/ai-read-prompt.md).
 - **Writing to the KB?** → see [`AI_PROTOCOL.md`](AI_PROTOCOL.md) (this is the contract every agent must follow). Key points:
 
@@ -61,6 +62,7 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons
 ```
 .
 ├── AI_PROTOCOL.md          ← Multi-agent contract — READ FIRST
+├── AGENTS.md               ← Mandatory machine-friendly operating directive
 ├── README.md
 ├── SETUP.md
 ├── index.json              ← Auto-generated. Do not hand-edit.
@@ -134,7 +136,13 @@ Standard workflow:
 python _tools/validate.py
 python _tools/rebuild_index.py
 python _tools/build_graphify_corpus.py
-python _tools/run_graphify_kb.py --backend openai --no-viz
+python _tools/run_graphify_kb.py --workflow extract --backend openai
+```
+
+For assistant-style project mapping with visualization flags:
+
+```bash
+python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
 ```
 
 See `GRAPHIFY_INTEGRATION.md` for safety rules, commit policy, and query examples.

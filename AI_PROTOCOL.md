@@ -2,6 +2,11 @@
 
 **Read this BEFORE writing anything to this repository.**
 
+`AGENTS.md` is also mandatory first-read context. It defines machine-friendly
+operating constraints, truth policy, verification gates, Graphify boundaries,
+and controlled-tool rules that every AI agent must follow before applying this
+protocol.
+
 This file is the contract every AI agent (Claude, GPT, Codex, Gemini, Ollama, etc.) MUST follow when contributing to `rcm-ai-knowledge-base`. The goal is multi-agent safety: any new agent can read, contribute, and challenge prior work without breaking what previous agents established.
 
 ---
@@ -234,6 +239,7 @@ Graphify is permitted as an advisory navigation and relationship-discovery layer
 
 Rules:
 
+- Read `AGENTS.md` before using Graphify or changing KB files.
 - `AI_PROTOCOL.md`, generated `index.json`, each entry's `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` remain authoritative.
 - Graphify outputs must not be used to directly modify immutable fields or active entry content.
 - Any graph-derived dispute about correctness must become a challenge.

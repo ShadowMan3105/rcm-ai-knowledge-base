@@ -28,6 +28,7 @@ DOMAIN_DIRS = (
 
 PROTOCOL_FILES = (
     "README.md",
+    "AGENTS.md",
     "READ_PROTOCOL.md",
     "AI_PROTOCOL.md",
     "SETUP.md",

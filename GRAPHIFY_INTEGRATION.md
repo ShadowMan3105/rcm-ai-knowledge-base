@@ -64,6 +64,8 @@ The integration uses a generated local corpus folder:
 
 This folder is rebuilt from the KB and is not committed. It combines metadata and Markdown content into Graphify-friendly files so `meta.json`, `index.json`, `report.md`, and `lessons.md` can be read as one navigable knowledge surface.
 
+Every AI agent must read `AGENTS.md` before using the graph. That file defines the mandatory operating contract: truth policy, authority order, verification gates, Graphify advisory boundaries, and controlled-tool rules.
+
 ---
 
 ## 4. Installation
@@ -106,14 +108,32 @@ From the repository root:
 python _tools/validate.py
 python _tools/rebuild_index.py
 python _tools/build_graphify_corpus.py
-python _tools/run_graphify_kb.py --backend openai --no-viz
+python _tools/run_graphify_kb.py --workflow extract --backend openai
+```
+
+This uses the headless Graphify command:
+
+```bash
+graphify extract .graphify-kb-corpus --backend openai
+```
+
+For assistant-style project mapping with flags such as `--no-viz` or `--wiki`:
+
+```bash
+python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
+```
+
+This uses:
+
+```bash
+graphify .graphify-kb-corpus --no-viz --wiki
 ```
 
 For a local-only backend:
 
 ```bash
 OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 \
-  python _tools/run_graphify_kb.py --backend ollama --no-viz
+  python _tools/run_graphify_kb.py --workflow extract --backend ollama
 ```
 
 For an IDE/assistant skill workflow:
@@ -228,4 +248,5 @@ Before merging this integration:
 - [ ] `python _tools/build_graphify_corpus.py` generates `.graphify-kb-corpus/`.
 - [ ] `graphify --version` works locally.
 - [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected command.
+- [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
 - [ ] No secrets or PHI are committed.
