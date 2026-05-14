@@ -40,6 +40,7 @@ authority_order:
     - "GRAPHIFY_INTEGRATION.md"
     - "_graph/ published Graphify snapshot"
     - "graphify-kb-corpus/"
+    - "graphify-kb-corpus-incremental/"
     - ".graphify-kb-corpus/"
     - "graphify-out/"
     - "Graphify graph edges, clusters, paths, summaries, reports, and inferred relationships"
@@ -71,12 +72,14 @@ graphify_mechanism:
     headless_ci: "python _tools/run_graphify_kb.py --workflow extract --backend <backend>"
     assistant_mapping: "python _tools/run_graphify_kb.py --workflow map --no-viz --wiki"
     local_publish: "python _tools/update_graph_snapshot.py --backend ollama --commit --push"
+    local_incremental_publish: "python _tools/update_graph_snapshot.py --backend ollama --changed-since '24 hours ago' --commit --push"
   mandatory_rules:
     - "Graphify is never the source of truth."
     - "Verify every graph-derived conclusion against original KB files."
     - "Convert substantive graph findings into a challenge, patch, or new governed KB entry."
     - "Do not rewrite active entry content because a graph edge suggests a relationship."
-    - "Commit only controlled _graph/ snapshots, not raw graphify-kb-corpus/, .graphify-kb-corpus/, or graphify-out/."
+    - "_graph/incremental-latest/ is a recent-change map only; do not treat it as a replacement for full _graph/."
+    - "Commit only controlled _graph/ snapshots, not raw graphify-kb-corpus/, graphify-kb-corpus-incremental/, .graphify-kb-corpus/, or graphify-out/."
 
 write_policy:
   default: "read_only_until_task_requires_write"

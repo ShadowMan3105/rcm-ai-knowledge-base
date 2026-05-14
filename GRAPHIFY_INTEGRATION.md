@@ -140,7 +140,7 @@ docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama pos
 Pull a local model once:
 
 ```bash
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull qwen2.5-coder:7b
 ```
 
 Run Graphify locally through Docker:
@@ -220,8 +220,8 @@ python _tools/run_graphify_kb.py --workflow extract --backend openai
 Local Ollama extraction:
 
 ```bash
-OLLAMA_BASE_URL=http://localhost:11434/v1 OLLAMA_MODEL=llama3.1 \
-  python _tools/run_graphify_kb.py --workflow extract --backend ollama --max-concurrency 1
+OLLAMA_BASE_URL=http://localhost:11434/v1 OLLAMA_MODEL=qwen2.5-coder:7b \
+  python _tools/run_graphify_kb.py --workflow extract --backend ollama --max-concurrency 1 --token-budget 4000
 ```
 
 When using Graphify's Ollama backend directly, `OLLAMA_BASE_URL` must point to
@@ -247,7 +247,7 @@ python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
 Publish a controlled `_graph/` snapshot:
 
 ```bash
-python _tools/publish_graph_snapshot.py --backend ollama --model-label ollama:llama3.1
+python _tools/publish_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b
 ```
 
 Full local update with optional Git commit/push:
@@ -255,6 +255,18 @@ Full local update with optional Git commit/push:
 ```bash
 python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ```
+
+Incremental local update for recent changes:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --changed-since "24 hours ago" --commit --push
+```
+
+Incremental output is published to `_graph/incremental-latest/` by default.
+It is a recent-change map, not a replacement for the full `_graph/` snapshot.
+For local Ollama, the incremental default keeps the corpus small: no protocol
+bundle, no index summary, and only changed tooling/schema files unless
+explicitly overridden.
 
 ---
 
@@ -264,6 +276,7 @@ Do not commit raw generated Graphify output:
 
 ```text
 graphify-kb-corpus/
+graphify-kb-corpus-incremental/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/

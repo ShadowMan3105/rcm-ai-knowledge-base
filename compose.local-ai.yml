@@ -65,7 +65,7 @@ services:
     working_dir: /workspace
     environment:
       OLLAMA_BASE_URL: http://ollama:11434/v1
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.1}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b}
       OLLAMA_API_KEY: ${OLLAMA_API_KEY:-ollama-local}
     volumes:
       - .:/workspace
@@ -75,7 +75,7 @@ services:
       - --backend
       - ollama
       - --model-label
-      - ollama:${OLLAMA_MODEL:-llama3.1}
+      - ollama:${OLLAMA_MODEL:-qwen2.5-coder:7b}
 
 volumes:
   n8n_data:

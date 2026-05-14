@@ -36,7 +36,7 @@ Use this command when n8n already exists:
 
 ```bash
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull qwen2.5-coder:7b
 ```
 
 Open n8n:
@@ -55,6 +55,12 @@ Graphify runner Ollama URL:
 
 ```text
 http://ollama:11434/v1
+```
+
+Recommended Graphify model:
+
+```text
+qwen2.5-coder:7b
 ```
 
 Graphify's Ollama backend may still require an `OLLAMA_API_KEY` environment
@@ -79,7 +85,7 @@ Use only if you do not already have n8n:
 ```bash
 cp .env.example .env
 docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama postgres n8n
-docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml exec ollama ollama pull qwen2.5-coder:7b
 ```
 
 ## Generate The Graph Locally
@@ -91,13 +97,29 @@ python _tools/update_graph_snapshot.py --backend ollama
 ```
 
 For local Ollama, the wrapper serializes semantic chunks with
-`--max-concurrency 1` unless you explicitly override it.
+`--max-concurrency 1` and caps semantic chunks with `--token-budget 4000`
+unless you explicitly override those values.
 
 From Docker:
 
 ```bash
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
 ```
+
+For a lighter daily run, process only recent changes:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --changed-since "24 hours ago"
+```
+
+This writes a recent-change snapshot to `_graph/incremental-latest/` by
+default. It should be treated as advisory context for changed files only, not as
+a full replacement for `_graph/`.
+
+The incremental default is intentionally small for local Ollama: no protocol
+bundle, no index summary, and only changed tooling/schema files. Override with
+`--protocol-mode minimal` or `--tooling-mode full` when you need broader
+context.
 
 ## Publish The Graph Snapshot
 
@@ -122,6 +144,7 @@ Raw local files stay ignored:
 
 ```text
 graphify-kb-corpus/
+graphify-kb-corpus-incremental/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/

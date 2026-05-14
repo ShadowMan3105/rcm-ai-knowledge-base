@@ -23,6 +23,7 @@ _scratch/
 
 # Graphify local/generated files
 graphify-kb-corpus/
+graphify-kb-corpus-incremental/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/

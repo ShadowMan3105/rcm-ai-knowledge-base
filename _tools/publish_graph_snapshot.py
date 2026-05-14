@@ -81,6 +81,7 @@ def git_source_status(root: Path) -> str:
             ".",
             ":(exclude)_graph",
             ":(exclude)graphify-kb-corpus",
+            ":(exclude)graphify-kb-corpus-incremental",
             ":(exclude).graphify-kb-corpus",
             ":(exclude)graphify-out",
             ":(exclude).graphify",
@@ -260,7 +261,7 @@ Rules:
 - Do not treat inferred graph edges as KB truth.
 - Do not edit active KB entries based only on graph output.
 - Convert substantive graph findings into a challenge, patch, or governed KB entry.
-- Raw `graphify-kb-corpus/`, `.graphify-kb-corpus/`, and `graphify-out/` stay local and ignored.
+- Raw `graphify-kb-corpus/`, `graphify-kb-corpus-incremental/`, `.graphify-kb-corpus/`, and `graphify-out/` stay local and ignored.
 """
 
     if args.dry_run:

@@ -42,11 +42,16 @@ def main() -> int:
     parser.add_argument("--root", default=".", help="Repository root. Default: current directory.")
     parser.add_argument("--backend", default="ollama", help="Graphify backend for extract workflow.")
     parser.add_argument("--model-label", default=None, help="Model label for _graph/manifest.json.")
-    parser.add_argument("--corpus", default="graphify-kb-corpus", help="Generated corpus folder.")
+    parser.add_argument("--corpus", default=None, help="Generated corpus folder. Default: graphify-kb-corpus or graphify-kb-corpus-incremental.")
     parser.add_argument("--graph-out", default=None, help="Raw Graphify output folder. Default: <corpus>/graphify-out.")
-    parser.add_argument("--dest", default="_graph", help="Published graph snapshot folder.")
+    parser.add_argument("--dest", default=None, help="Published graph snapshot folder. Default: _graph or _graph/incremental-latest.")
     parser.add_argument("--workflow", choices=("extract", "map"), default="extract", help="Graphify workflow.")
     parser.add_argument("--max-concurrency", default=None, help="Graphify extract max concurrency. Default for ollama: 1.")
+    parser.add_argument("--token-budget", default=None, help="Graphify extract token budget. Default for ollama: 4000.")
+    parser.add_argument("--changed-since", default=None, help="Build and publish an incremental graph from files changed since this git date, for example: '24 hours ago'.")
+    parser.add_argument("--protocol-mode", choices=("full", "minimal", "changed", "none"), default=None, help="Protocol copy mode. Default for incremental: none; otherwise full.")
+    parser.add_argument("--skip-index-summary", action="store_true", help="Do not include index-summary.md in the Graphify corpus.")
+    parser.add_argument("--tooling-mode", choices=("full", "changed", "none"), default=None, help="Tool/schema copy mode. Default for incremental: changed; otherwise full.")
     parser.add_argument("--commit", action="store_true", help="Commit _graph and index.json changes.")
     parser.add_argument("--push", action="store_true", help="Push current branch after committing.")
     parser.add_argument("--message", default="graph: update published knowledge map", help="Commit message.")
@@ -60,19 +65,39 @@ def main() -> int:
         return 2
 
     py = sys.executable or "python3"
-    graph_out = args.graph_out or str(Path(args.corpus) / "graphify-out")
+    incremental = bool(args.changed_since)
+    corpus = args.corpus or ("graphify-kb-corpus-incremental" if incremental else "graphify-kb-corpus")
+    dest = args.dest or ("_graph/incremental-latest" if incremental else "_graph")
+    graph_out = args.graph_out or str(Path(corpus) / "graphify-out")
     max_concurrency = args.max_concurrency or ("1" if args.backend == "ollama" else None)
+    token_budget = args.token_budget or ("4000" if args.backend == "ollama" else None)
+    protocol_mode = args.protocol_mode or ("none" if incremental else "full")
+    skip_index_summary = args.skip_index_summary or incremental
+    tooling_mode = args.tooling_mode or ("changed" if incremental else "full")
     model_label = args.model_label or (
         f"{args.backend}:{os.environ['OLLAMA_MODEL']}" if args.backend == "ollama" and os.environ.get("OLLAMA_MODEL") else None
     )
 
     run([py, "_tools/validate.py"], cwd=root, dry_run=args.dry_run)
     run([py, "_tools/rebuild_index.py"], cwd=root, dry_run=args.dry_run)
-    run(
-        [py, "_tools/build_graphify_corpus.py", "--root", str(root), "--out", args.corpus, "--strict-secrets"],
-        cwd=root,
-        dry_run=args.dry_run,
-    )
+    build_cmd = [
+        py,
+        "_tools/build_graphify_corpus.py",
+        "--root",
+        str(root),
+        "--out",
+        corpus,
+        "--protocol-mode",
+        protocol_mode,
+        "--tooling-mode",
+        tooling_mode,
+        "--strict-secrets",
+    ]
+    if skip_index_summary:
+        build_cmd.append("--skip-index-summary")
+    if args.changed_since:
+        build_cmd.extend(["--changed-since", args.changed_since])
+    run(build_cmd, cwd=root, dry_run=args.dry_run)
 
     if not args.skip_graphify:
         if not shutil.which("graphify") and not args.dry_run:
@@ -81,7 +106,7 @@ def main() -> int:
                 file=sys.stderr,
             )
             return 127
-        graph_cmd = [py, "_tools/run_graphify_kb.py", "--skip-validate", "--corpus", args.corpus, "--workflow", args.workflow]
+        graph_cmd = [py, "_tools/run_graphify_kb.py", "--skip-validate", "--skip-build", "--corpus", corpus, "--workflow", args.workflow]
         if args.workflow == "extract":
             graph_cmd.extend(["--backend", args.backend])
             if model_label:
@@ -89,6 +114,8 @@ def main() -> int:
                 graph_cmd.extend(["--model", model_name])
             if max_concurrency:
                 graph_cmd.extend(["--max-concurrency", max_concurrency])
+            if token_budget:
+                graph_cmd.extend(["--token-budget", token_budget])
         else:
             graph_cmd.extend(["--no-viz", "--wiki"])
         run(graph_cmd, cwd=root, dry_run=args.dry_run)
@@ -99,7 +126,7 @@ def main() -> int:
         "--graph-out",
         graph_out,
         "--dest",
-        args.dest,
+        dest,
         "--backend",
         args.backend,
     ]
@@ -108,7 +135,7 @@ def main() -> int:
     run(publish_cmd, cwd=root, dry_run=args.dry_run)
 
     if args.commit:
-        run(["git", "add", "index.json", args.dest], cwd=root, dry_run=args.dry_run)
+        run(["git", "add", "index.json", dest], cwd=root, dry_run=args.dry_run)
         if args.dry_run:
             print("+ git commit skipped in dry-run")
         elif has_changes(root):

@@ -254,6 +254,6 @@ Rules:
 Commit policy:
 
 - Do not commit raw generated Graphify outputs.
-- Keep `graphify-kb-corpus/`, `.graphify-kb-corpus/`, `graphify-out/`, `.graphify/`, `.graphify_cache/`, and `.graphify_labels.json` ignored.
+- Keep `graphify-kb-corpus/`, `graphify-kb-corpus-incremental/`, `.graphify-kb-corpus/`, `graphify-out/`, `.graphify/`, `.graphify_cache/`, and `.graphify_labels.json` ignored.
 - Commit only the controlled `_graph/` snapshot: `README.md`, `GRAPH_REPORT.md`, `graph.json`, and `manifest.json`.
 <!-- GRAPHIFY-KB-LAYER:END -->

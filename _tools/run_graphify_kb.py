@@ -45,12 +45,14 @@ def main() -> int:
     parser.add_argument("--backend", default=None, help="Graphify backend: openai, gemini, claude, claude-cli, ollama, bedrock, etc.")
     parser.add_argument("--model", default=None, help="Optional backend model name.")
     parser.add_argument("--max-concurrency", default=None, help="Extract workflow only: parallel semantic chunks. Use 1 for local LLMs.")
+    parser.add_argument("--token-budget", default=None, help="Extract workflow only: per-chunk token cap. Use a smaller value for local LLMs.")
     parser.add_argument("--mode", default=None, help="Optional Graphify mode, for example: deep.")
     parser.add_argument("--update", action="store_true", help="Re-extract only changed files.")
     parser.add_argument("--force", action="store_true", help="Pass --force to Graphify.")
     parser.add_argument("--no-viz", action="store_true", help="Map workflow only: skip HTML visualization.")
     parser.add_argument("--wiki", action="store_true", help="Map workflow only: ask Graphify to generate a markdown wiki.")
     parser.add_argument("--skip-validate", action="store_true", help="Skip validate.py and rebuild_index.py.")
+    parser.add_argument("--skip-build", action="store_true", help="Use an existing corpus without rebuilding it.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands only.")
     args = parser.parse_args()
 
@@ -62,6 +64,9 @@ def main() -> int:
         return 2
     if args.workflow == "map" and args.max_concurrency:
         print("--max-concurrency is only valid with --workflow extract.", file=sys.stderr)
+        return 2
+    if args.workflow == "map" and args.token_budget:
+        print("--token-budget is only valid with --workflow extract.", file=sys.stderr)
         return 2
 
     root = Path(args.root).resolve()
@@ -79,8 +84,9 @@ def main() -> int:
         if rebuild.exists():
             run([py, str(rebuild)], dry_run=args.dry_run)
 
-    builder = root / "_tools" / "build_graphify_corpus.py"
-    run([py, str(builder), "--root", str(root), "--out", args.corpus], dry_run=args.dry_run)
+    if not args.skip_build:
+        builder = root / "_tools" / "build_graphify_corpus.py"
+        run([py, str(builder), "--root", str(root), "--out", args.corpus], dry_run=args.dry_run)
 
     graphify = shutil.which("graphify")
     if not graphify:
@@ -96,6 +102,9 @@ def main() -> int:
             return 127
 
     corpus_path = str((root / args.corpus).resolve())
+    if not args.dry_run and not Path(corpus_path).is_dir():
+        print(f"Corpus folder not found: {corpus_path}", file=sys.stderr)
+        return 2
     cmd = [graphify]
     if args.workflow == "extract":
         cmd.extend(["extract", corpus_path])
@@ -105,6 +114,8 @@ def main() -> int:
             cmd.extend(["--model", args.model])
         if args.max_concurrency:
             cmd.extend(["--max-concurrency", args.max_concurrency])
+        if args.token_budget:
+            cmd.extend(["--token-budget", args.token_budget])
     else:
         cmd.append(corpus_path)
     if args.mode:

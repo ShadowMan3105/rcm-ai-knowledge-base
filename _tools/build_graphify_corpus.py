@@ -13,6 +13,7 @@ import datetime as dt
 import json
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any, Iterable
@@ -44,6 +45,7 @@ EXCLUDED_DIR_NAMES = {
     ".github",
     ".graphify-kb-corpus",
     "graphify-kb-corpus",
+    "graphify-kb-corpus-incremental",
     "graphify-out",
     "_graph",
     "__pycache__",
@@ -114,6 +116,56 @@ def iter_entry_dirs(root: Path) -> Iterable[tuple[str, Path]]:
         for child in sorted(domain_path.iterdir(), key=lambda p: p.name.lower()):
             if child.is_dir() and (child / "meta.json").exists():
                 yield domain, child
+
+
+def git_lines(root: Path, args: list[str]) -> list[str]:
+    proc = subprocess.run(
+        ["git", "-c", "core.filemode=false", "-c", "core.autocrlf=true", *args],
+        cwd=root,
+        check=False,
+        text=True,
+        capture_output=True,
+    )
+    if proc.returncode != 0:
+        return []
+    return [line.rstrip() for line in proc.stdout.splitlines() if line.strip()]
+
+
+def changed_paths(root: Path, since: str) -> set[str]:
+    paths = set(git_lines(root, ["log", f"--since={since}", "--name-only", "--pretty=format:"]))
+    for line in git_lines(root, ["status", "--porcelain"]):
+        path = line[3:].strip()
+        if " -> " in path:
+            path = path.rsplit(" -> ", 1)[1]
+        if path:
+            paths.add(path.replace("\\", "/"))
+    return paths
+
+
+def entry_for_changed_path(root: Path, rel_path: str) -> tuple[str, Path] | None:
+    parts = Path(rel_path).parts
+    if len(parts) < 2 or parts[0] not in DOMAIN_DIRS:
+        return None
+    entry_dir = root / parts[0] / parts[1]
+    if (entry_dir / "meta.json").exists():
+        return parts[0], entry_dir
+    return None
+
+
+def changed_entries(root: Path, paths: set[str]) -> list[tuple[str, Path]]:
+    seen: set[str] = set()
+    entries: list[tuple[str, Path]] = []
+    for rel_path in sorted(paths):
+        match = entry_for_changed_path(root, rel_path)
+        if not match:
+            continue
+        domain, entry_dir = match
+        key = rel(entry_dir, root)
+        if key in seen:
+            continue
+        seen.add(key)
+        entries.append((domain, entry_dir))
+    return entries
 
 
 def build_index_summary(root: Path) -> str:
@@ -214,11 +266,32 @@ def copy_markdown_collection(root: Path, source_dir: str, out_dir: Path, pattern
     return count
 
 
-def copy_tooling(root: Path, out_dir: Path) -> int:
+def copy_markdown_paths(root: Path, out_dir: Path, paths: set[str], source_dir: str, pattern: str = "*.md") -> int:
+    count = 0
+    for rel_path in sorted(paths):
+        path = root / rel_path
+        if not path.is_file() or path.suffix.lower() != ".md":
+            continue
+        if not rel_path.startswith(f"{source_dir}/") or not path.match(pattern):
+            continue
+        if any(part in EXCLUDED_DIR_NAMES for part in path.parts):
+            continue
+        target = out_dir / source_dir / path.relative_to(root / source_dir)
+        write_text(target, read_text(path))
+        count += 1
+    return count
+
+
+def copy_tooling(root: Path, out_dir: Path, *, mode: str = "full", changed: set[str] | None = None) -> int:
+    if mode == "none":
+        return 0
+    changed = changed or set()
     count = 0
     tools_dir = root / "_tools"
     if tools_dir.is_dir():
         for path in sorted(tools_dir.glob("*.py"), key=lambda p: p.name.lower()):
+            if mode == "changed" and rel(path, root) not in changed:
+                continue
             target = out_dir / "tools" / path.name
             write_text(target, read_text(path))
             count += 1
@@ -228,6 +301,8 @@ def copy_tooling(root: Path, out_dir: Path) -> int:
             if not path.is_file():
                 continue
             if path.suffix.lower() not in {".md", ".json", ".txt", ".yaml", ".yml"}:
+                continue
+            if mode == "changed" and rel(path, root) not in changed:
                 continue
             target = out_dir / "schema" / path.relative_to(schema_dir)
             write_text(target, read_text(path))
@@ -242,6 +317,10 @@ def main() -> int:
     parser.add_argument("--clean", action="store_true", default=True, help="Delete existing output first. Default: true.")
     parser.add_argument("--no-clean", dest="clean", action="store_false", help="Do not delete existing output first.")
     parser.add_argument("--max-revision-bytes", type=int, default=20000, help="Max bytes copied per revision file.")
+    parser.add_argument("--changed-since", default=None, help="Build an incremental corpus from files changed since this git date, for example: '24 hours ago'.")
+    parser.add_argument("--protocol-mode", choices=("full", "minimal", "changed", "none"), default="full", help="Protocol copy mode. Use 'none' for smallest incremental Ollama runs.")
+    parser.add_argument("--skip-index-summary", action="store_true", help="Do not include generated index-summary.md.")
+    parser.add_argument("--tooling-mode", choices=("full", "changed", "none"), default="full", help="Tool/schema copy mode. Use 'changed' for incremental local Ollama runs.")
     parser.add_argument("--strict-secrets", action="store_true", help="Fail if obvious secrets are detected in generated corpus.")
     args = parser.parse_args()
 
@@ -261,6 +340,11 @@ def main() -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
 
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+    changed: set[str] = set()
+    incremental = bool(args.changed_since)
+    if incremental:
+        changed = changed_paths(root, args.changed_since)
+
     write_text(
         out_dir / "README.md",
         "\n".join(
@@ -268,6 +352,8 @@ def main() -> int:
                 "# Graphify Corpus for RCM AI Knowledge Base",
                 "",
                 f"Generated at: `{generated_at}`",
+                f"Mode: `{'incremental' if incremental else 'full'}`",
+                f"Changed since: `{args.changed_since or 'not applicable'}`",
                 "",
                 "This folder is derived from the KB and should not be edited directly.",
                 "Run `_tools/build_graphify_corpus.py` to rebuild it.",
@@ -279,24 +365,41 @@ def main() -> int:
     )
 
     protocol_count = 0
+    minimal_protocol = {"AGENTS.md", "READ_PROTOCOL.md", "AI_PROTOCOL.md", "GRAPHIFY_INTEGRATION.md"}
+    if args.protocol_mode == "none":
+        protocol_files: tuple[str, ...] = ()
+    elif args.protocol_mode == "minimal":
+        protocol_files = tuple(name for name in PROTOCOL_FILES if name in minimal_protocol)
+    elif args.protocol_mode == "changed":
+        protocol_files = tuple(name for name in PROTOCOL_FILES if name in minimal_protocol or name in changed)
+    else:
+        protocol_files = PROTOCOL_FILES
     for filename in PROTOCOL_FILES:
+        if filename not in protocol_files:
+            continue
         path = root / filename
         if path.exists():
             write_text(out_dir / "protocol" / filename, read_text(path))
             protocol_count += 1
 
-    write_text(out_dir / "index" / "index-summary.md", build_index_summary(root))
+    if not args.skip_index_summary:
+        write_text(out_dir / "index" / "index-summary.md", build_index_summary(root))
 
     entry_count = 0
-    for domain, entry_dir in iter_entry_dirs(root):
+    entries = changed_entries(root, changed) if incremental else list(iter_entry_dirs(root))
+    for domain, entry_dir in entries:
         content = build_entry_file(root, domain, entry_dir, args.max_revision_bytes)
         target = out_dir / "entries" / domain / f"{entry_dir.name}.md"
         write_text(target, content)
         entry_count += 1
 
-    challenge_count = copy_markdown_collection(root, "challenges", out_dir, "CH-*.md")
-    patch_count = copy_markdown_collection(root, "patches", out_dir, "PA-*.md")
-    tooling_count = copy_tooling(root, out_dir)
+    if incremental:
+        challenge_count = copy_markdown_paths(root, out_dir, changed, "challenges", "CH-*.md")
+        patch_count = copy_markdown_paths(root, out_dir, changed, "patches", "PA-*.md")
+    else:
+        challenge_count = copy_markdown_collection(root, "challenges", out_dir, "CH-*.md")
+        patch_count = copy_markdown_collection(root, "patches", out_dir, "PA-*.md")
+    tooling_count = copy_tooling(root, out_dir, mode=args.tooling_mode, changed=changed)
 
     secret_hits: list[str] = []
     for path in sorted(out_dir.rglob("*"), key=lambda p: p.as_posix()):
@@ -315,6 +418,12 @@ def main() -> int:
         "challenges": challenge_count,
         "patches": patch_count,
         "tooling_files": tooling_count,
+        "mode": "incremental" if incremental else "full",
+        "changed_since": args.changed_since,
+        "protocol_mode": args.protocol_mode,
+        "index_summary_included": not args.skip_index_summary,
+        "tooling_mode": args.tooling_mode,
+        "changed_paths": sorted(changed),
         "secret_scan_hits": secret_hits,
     }
     write_text(out_dir / "manifest.json", dump_json_for_md(manifest) + "\n")
