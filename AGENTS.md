@@ -47,12 +47,13 @@ authority_order:
 
 required_read_flow:
   before_answering:
-    - "Read README.md for repository purpose."
-    - "Read AI_PROTOCOL.md for write and lifecycle rules."
-    - "Read READ_PROTOCOL.md for KB consumption rules."
     - "Read this AGENTS.md for operating constraints."
+    - "Read README.md for repository purpose and layout."
+    - "Read READ_PROTOCOL.md for KB consumption rules."
+    - "Read AI_PROTOCOL.md for write and lifecycle rules."
     - "Read index.json before choosing entries."
-    - "Read _graph/GRAPH_REPORT.md when present as an advisory navigation cache."
+    - "Read _graph/README.md and _graph/GRAPH_REPORT.md when present as advisory navigation caches."
+    - "Read _graph/incremental-latest/GRAPH_REPORT.md when the task depends on recently changed files."
   entry_selection:
     - "Filter by domain, tags, kind, status, confidence, and last_verified."
     - "Prefer active entries over proposed entries."
@@ -68,11 +69,19 @@ graphify_mechanism:
   input_boundary: "_tools/build_graphify_corpus.py creates graphify-kb-corpus/ from governed KB files."
   published_cache: "_graph/ contains commit-safe Graphify artifacts generated locally and pushed to GitHub."
   cloud_access_pattern: "Cloud AIs read _graph/ from GitHub; they do not connect to local Ollama."
+  current_local_model: "ollama:qwen2.5-coder:7b"
+  production_refresh:
+    cadence: "every 8 hours"
+    local_times: ["02:00", "10:00", "18:00"]
+    changed_since: "8 hours ago"
+    output: "_graph/incremental-latest/"
+    scheduler: "host-level automation named graphify-incremental-kb-snapshot"
+    command: "docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since '8 hours ago'"
   run_paths:
     headless_ci: "python _tools/run_graphify_kb.py --workflow extract --backend <backend>"
     assistant_mapping: "python _tools/run_graphify_kb.py --workflow map --no-viz --wiki"
-    local_publish: "python _tools/update_graph_snapshot.py --backend ollama --commit --push"
-    local_incremental_publish: "python _tools/update_graph_snapshot.py --backend ollama --changed-since '24 hours ago' --commit --push"
+    local_publish: "python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push"
+    local_incremental_publish: "python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since '8 hours ago' --commit --push"
   mandatory_rules:
     - "Graphify is never the source of truth."
     - "Verify every graph-derived conclusion against original KB files."

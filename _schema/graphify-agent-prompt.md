@@ -8,12 +8,13 @@ Required order:
 
 1. Read `AGENTS.md`, `READ_PROTOCOL.md`, `AI_PROTOCOL.md`, and `index.json`.
 2. If `_graph/GRAPH_REPORT.md` exists, read it as an advisory map.
-3. Use `_graph/graph.json` or Graphify queries only to find relationships, paths, clusters, and candidate contradictions.
-4. Filter source entries by `domain`, `status`, `kind`, and `tags`.
-5. Prefer `active` entries over `proposed`; treat `challenged`, `deprecated`, and `superseded` according to protocol.
-6. Read the source `meta.json`, `report.md`, and `lessons.md` before acting.
-7. Check related `challenges/` and `patches/`.
-8. Convert substantive graph findings into a challenge, patch, or new KB entry. Do not directly rewrite active entries.
+3. If the task depends on recent repository changes, read `_graph/incremental-latest/GRAPH_REPORT.md`.
+4. Use `_graph/graph.json`, `_graph/incremental-latest/graph.json`, or Graphify queries only to find relationships, paths, clusters, and candidate contradictions.
+5. Filter source entries by `domain`, `status`, `kind`, and `tags`.
+6. Prefer `active` entries over `proposed`; treat `challenged`, `deprecated`, and `superseded` according to protocol.
+7. Read the source `meta.json`, `report.md`, and `lessons.md` before acting.
+8. Check related `challenges/` and `patches/`.
+9. Convert substantive graph findings into a challenge, patch, or new KB entry. Do not directly rewrite active entries.
 
 Safe example questions:
 

@@ -31,6 +31,16 @@ local Docker/Ollama -> Graphify -> controlled _graph/ snapshot -> GitHub -> clou
 Cloud AIs must not connect to local Ollama. They read `_graph/` from GitHub and
 verify every conclusion against source KB files.
 
+Current production refresh:
+
+```text
+cadence: every 8 hours
+local times: 02:00, 10:00, 18:00
+model: ollama:qwen2.5-coder:7b
+scope: files changed in the previous 8 hours
+output: _graph/incremental-latest/
+```
+
 ---
 
 ## 2. Authority Model
@@ -74,7 +84,8 @@ RCM AI Knowledge Base
 |-- _tools/update_graph_snapshot.py      # local generation + commit helper
 |-- graphify-kb-corpus/                  # generated Graphify input corpus, ignored
 |   `-- graphify-out/                    # raw local generated output, ignored
-`-- _graph/                              # controlled committed navigation snapshot
+`-- _graph/                              # controlled committed navigation snapshots
+    `-- incremental-latest/              # recent-change snapshot from production runner
 ```
 
 The integration uses a generated local corpus folder:
@@ -143,16 +154,22 @@ Pull a local model once:
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull qwen2.5-coder:7b
 ```
 
-Run Graphify locally through Docker:
+Run the production-style incremental Graphify job through Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
+```
+
+Run a full local snapshot only when intentionally refreshing the full map:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b
 ```
 
 Publish and push the controlled `_graph/` snapshot from the host or runner:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push
 ```
 
 For n8n, configure Ollama credentials with:
@@ -253,13 +270,13 @@ python _tools/publish_graph_snapshot.py --backend ollama --model-label ollama:qw
 Full local update with optional Git commit/push:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push
 ```
 
 Incremental local update for recent changes:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --changed-since "24 hours ago" --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago" --commit --push
 ```
 
 Incremental output is published to `_graph/incremental-latest/` by default.
@@ -370,7 +387,7 @@ Run:
 ```bash
 python _tools/rebuild_index.py
 python _tools/build_graphify_corpus.py --clean --strict-secrets
-python _tools/update_graph_snapshot.py --backend ollama --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push
 ```
 
 ### Graph output conflicts in Git
@@ -390,5 +407,6 @@ cache.
 - [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected extract command.
 - [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
 - [ ] `python _tools/update_graph_snapshot.py --dry-run` prints the local publication workflow.
+- [ ] The production runner cadence is every 8 hours and includes a 02:00 local run.
 - [ ] `python _tools/publish_graph_snapshot.py` publishes only allowlisted files when Graphify output exists.
 - [ ] No secrets or PHI are committed.

@@ -20,6 +20,7 @@ PROTOCOL:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base
 README:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/README.md
 GRAPH:     https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/GRAPH_REPORT.md
 GRAPH JSON:https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/graph.json
+GRAPH INC: https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/incremental-latest/GRAPH_REPORT.md
 
 ENTRY meta:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/meta.json
 ENTRY report:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/report.md
@@ -100,10 +101,11 @@ Required behavior:
 
 1. Read `AGENTS.md`, `AI_PROTOCOL.md`, `READ_PROTOCOL.md`, and `index.json` first.
 2. If `_graph/GRAPH_REPORT.md` exists, read it as an advisory map.
-3. Use `_graph/graph.json` or Graphify queries to discover candidate relationships, clusters, or paths.
-4. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
-5. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
-6. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
+3. If the task involves recently changed files, read `_graph/incremental-latest/GRAPH_REPORT.md` as the recent-change map.
+4. Use `_graph/graph.json`, `_graph/incremental-latest/graph.json`, or Graphify queries to discover candidate relationships, clusters, or paths.
+5. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
+6. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
+7. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
 
 See `_schema/graphify-agent-prompt.md` for a copy-paste agent prompt.
 <!-- GRAPHIFY-KB-LAYER:END -->

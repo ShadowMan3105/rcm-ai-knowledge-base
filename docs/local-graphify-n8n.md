@@ -30,6 +30,31 @@ n8n network: n8n-docker_default
 
 Do not start another n8n unless explicitly doing a standalone install.
 
+## Current Production Runner
+
+The current production runner is scheduled outside this repository as a
+host-level automation named:
+
+```text
+graphify-incremental-kb-snapshot
+```
+
+It runs every 8 hours at:
+
+```text
+02:00, 10:00, 18:00 local time
+```
+
+The job uses `qwen2.5-coder:7b`, processes only files changed in the previous
+8 hours, and publishes the result to:
+
+```text
+_graph/incremental-latest/
+```
+
+If this deployment is moved to n8n, recreate the same cadence and command.
+Do not create a second persistent n8n container.
+
 ## Attach Ollama To Existing n8n
 
 Use this command when n8n already exists:
@@ -93,7 +118,7 @@ docker compose -f compose.local-ai.yml exec ollama ollama pull qwen2.5-coder:7b
 From the host:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b
 ```
 
 For local Ollama, the wrapper serializes semantic chunks with
@@ -103,13 +128,13 @@ unless you explicitly override those values.
 From Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
 ```
 
-For a lighter daily run, process only recent changes:
+For the scheduled resource-conscious run, process only recent changes:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --changed-since "24 hours ago"
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
 ```
 
 This writes a recent-change snapshot to `_graph/incremental-latest/` by
@@ -127,7 +152,7 @@ Use this when the local graph output looks correct and Git credentials are
 available:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push
 ```
 
 This commits only:
@@ -159,7 +184,7 @@ Recommended first workflow:
 ```text
 Manual Trigger
 -> Execute Command or local webhook runner
--> python _tools/update_graph_snapshot.py --backend ollama --commit --push
+-> python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago" --commit --push
 -> notify result
 ```
 
@@ -167,8 +192,9 @@ Safer production workflow:
 
 ```text
 Schedule Trigger
+-> run at 02:00, 10:00, 18:00 local time
 -> Git pull main
--> run graph update
+-> run incremental graph update for the previous 8 hours
 -> if git diff _graph/ exists, commit and push
 -> send success/failure notification
 ```
