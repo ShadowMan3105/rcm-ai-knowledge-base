@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-05-14T20:51:05+00:00",
+  "source_commit": "3c23196029267a6ae0bd0e4cf04223f65295d4d8",
+  "source_branch": "main",
+  "source_worktree_status": "clean",
+  "backend": "ollama",
+  "model": "ollama:qwen2.5-coder:7b",
+  "graphify_version": "graphify 0.7.19",
+  "published_files": [
+    "GRAPH_REPORT.md",
+    "graph.json"
+  ],
+  "graph_counts": {
+    "nodes": 32,
+    "edges": 77
+  },
+  "verification": {
+    "raw_graphify_output_committed": false,
+    "controlled_snapshot_only": true,
+    "secret_scan": "passed",
+    "source_of_truth": "AGENTS.md, AI_PROTOCOL.md, index.json, meta.json, report.md, lessons.md, challenges/, patches/"
+  },
+  "advisory_notice": "_graph is a navigation cache generated from governed KB files. Verify every conclusion against source KB files before acting."
+}

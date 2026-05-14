@@ -1,0 +1,1116 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "build_graphify_corpus.py",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L1",
+      "id": "build_graphify_corpus_py",
+      "community": 1,
+      "norm_label": "build_graphify_corpus.py"
+    },
+    {
+      "label": "rel()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L67",
+      "id": "tools_build_graphify_corpus_rel",
+      "community": 3,
+      "norm_label": "rel()"
+    },
+    {
+      "label": "read_text()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L71",
+      "id": "tools_build_graphify_corpus_read_text",
+      "community": 2,
+      "norm_label": "read_text()"
+    },
+    {
+      "label": "write_text()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L83",
+      "id": "tools_build_graphify_corpus_write_text",
+      "community": 3,
+      "norm_label": "write_text()"
+    },
+    {
+      "label": "load_json()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L88",
+      "id": "tools_build_graphify_corpus_load_json",
+      "community": 4,
+      "norm_label": "load_json()"
+    },
+    {
+      "label": "dump_json_for_md()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L95",
+      "id": "tools_build_graphify_corpus_dump_json_for_md",
+      "community": 4,
+      "norm_label": "dump_json_for_md()"
+    },
+    {
+      "label": "scan_sensitive()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L99",
+      "id": "tools_build_graphify_corpus_scan_sensitive",
+      "community": 2,
+      "norm_label": "scan_sensitive()"
+    },
+    {
+      "label": "fence()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L107",
+      "id": "tools_build_graphify_corpus_fence",
+      "community": 1,
+      "norm_label": "fence()"
+    },
+    {
+      "label": "iter_entry_dirs()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L111",
+      "id": "tools_build_graphify_corpus_iter_entry_dirs",
+      "community": 1,
+      "norm_label": "iter_entry_dirs()"
+    },
+    {
+      "label": "git_lines()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L121",
+      "id": "tools_build_graphify_corpus_git_lines",
+      "community": 1,
+      "norm_label": "git_lines()"
+    },
+    {
+      "label": "changed_paths()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L134",
+      "id": "tools_build_graphify_corpus_changed_paths",
+      "community": 1,
+      "norm_label": "changed_paths()"
+    },
+    {
+      "label": "entry_for_changed_path()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L145",
+      "id": "tools_build_graphify_corpus_entry_for_changed_path",
+      "community": 1,
+      "norm_label": "entry_for_changed_path()"
+    },
+    {
+      "label": "changed_entries()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L155",
+      "id": "tools_build_graphify_corpus_changed_entries",
+      "community": 1,
+      "norm_label": "changed_entries()"
+    },
+    {
+      "label": "build_index_summary()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L171",
+      "id": "tools_build_graphify_corpus_build_index_summary",
+      "community": 4,
+      "norm_label": "build_index_summary()"
+    },
+    {
+      "label": "build_entry_file()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L211",
+      "id": "tools_build_graphify_corpus_build_entry_file",
+      "community": 4,
+      "norm_label": "build_entry_file()"
+    },
+    {
+      "label": "copy_markdown_collection()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L255",
+      "id": "tools_build_graphify_corpus_copy_markdown_collection",
+      "community": 3,
+      "norm_label": "copy_markdown_collection()"
+    },
+    {
+      "label": "copy_markdown_paths()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L269",
+      "id": "tools_build_graphify_corpus_copy_markdown_paths",
+      "community": 3,
+      "norm_label": "copy_markdown_paths()"
+    },
+    {
+      "label": "copy_tooling()",
+      "file_type": "code",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L285",
+      "id": "tools_build_graphify_corpus_copy_tooling",
+      "community": 3,
+      "norm_label": "copy_tooling()"
+    },
+    {
+      "label": "check_graphify_policy.py",
+      "file_type": "code",
+      "source_file": "check_graphify_policy.py",
+      "source_location": "L1",
+      "id": "check_graphify_policy_py",
+      "community": 0,
+      "norm_label": "check_graphify_policy.py"
+    },
+    {
+      "label": "publish_graph_snapshot.py",
+      "file_type": "code",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L1",
+      "id": "publish_graph_snapshot_py",
+      "community": 2,
+      "norm_label": "publish_graph_snapshot.py"
+    },
+    {
+      "label": "run_capture()",
+      "file_type": "code",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L31",
+      "id": "tools_publish_graph_snapshot_run_capture",
+      "community": 2,
+      "norm_label": "run_capture()"
+    },
+    {
+      "label": "validate_graph_json()",
+      "file_type": "code",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L59",
+      "id": "tools_publish_graph_snapshot_validate_graph_json",
+      "community": 2,
+      "norm_label": "validate_graph_json()"
+    },
+    {
+      "label": "git_source_status()",
+      "file_type": "code",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L70",
+      "id": "tools_publish_graph_snapshot_git_source_status",
+      "community": 2,
+      "norm_label": "git_source_status()"
+    },
+    {
+      "label": "build_fallback_report()",
+      "file_type": "code",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L96",
+      "id": "tools_publish_graph_snapshot_build_fallback_report",
+      "community": 2,
+      "norm_label": "build_fallback_report()"
+    },
+    {
+      "label": "run_graphify_kb.py",
+      "file_type": "code",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L1",
+      "id": "run_graphify_kb_py",
+      "community": 0,
+      "norm_label": "run_graphify_kb.py"
+    },
+    {
+      "label": "python_executable()",
+      "file_type": "code",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L18",
+      "id": "tools_run_graphify_kb_python_executable",
+      "community": 0,
+      "norm_label": "python_executable()"
+    },
+    {
+      "label": "run()",
+      "file_type": "code",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L22",
+      "id": "tools_run_graphify_kb_run",
+      "community": 0,
+      "norm_label": "run()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L32",
+      "id": "tools_run_graphify_kb_main",
+      "community": 0,
+      "norm_label": "main()"
+    },
+    {
+      "label": "update_graph_snapshot.py",
+      "file_type": "code",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L1",
+      "id": "update_graph_snapshot_py",
+      "community": 0,
+      "norm_label": "update_graph_snapshot.py"
+    },
+    {
+      "label": "capture()",
+      "file_type": "code",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L29",
+      "id": "tools_update_graph_snapshot_capture",
+      "community": 0,
+      "norm_label": "capture()"
+    },
+    {
+      "label": "has_changes()",
+      "file_type": "code",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L36",
+      "id": "tools_update_graph_snapshot_has_changes",
+      "community": 0,
+      "norm_label": "has_changes()"
+    },
+    {
+      "label": "Graphify Agent Prompt for RCM AI Knowledge Base",
+      "file_type": "document",
+      "source_file": "schema/graphify-agent-prompt.md",
+      "source_location": null,
+      "source_url": null,
+      "captured_at": null,
+      "author": null,
+      "contributor": null,
+      "id": "schema_graphify-agent-prompt_md",
+      "community": 5,
+      "norm_label": "graphify agent prompt for rcm ai knowledge base"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L67",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_rel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L83",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_load_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L95",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_dump_json_for_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_scan_sensitive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_fence",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L111",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_iter_entry_dirs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_git_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L134",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_changed_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_entry_for_changed_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_changed_entries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L171",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_build_index_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L211",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_build_entry_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L255",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_copy_markdown_collection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L269",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_copy_markdown_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L285",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_build_graphify_corpus_copy_tooling",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "source": "build_graphify_corpus_py",
+      "target": "tools_run_graphify_kb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L163",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_changed_entries",
+      "target": "tools_build_graphify_corpus_rel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L222",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_entry_file",
+      "target": "tools_build_graphify_corpus_rel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L260",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_markdown_collection",
+      "target": "tools_build_graphify_corpus_rel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L293",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_tooling",
+      "target": "tools_build_graphify_corpus_rel",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L90",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_load_json",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L237",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_entry_file",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_markdown_collection",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L280",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_markdown_paths",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_tooling",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L41",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_scan_sensitive",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L60",
+      "weight": 1.0,
+      "source": "tools_publish_graph_snapshot_validate_graph_json",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L97",
+      "weight": 1.0,
+      "source": "tools_publish_graph_snapshot_build_fallback_report",
+      "target": "tools_build_graphify_corpus_read_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_markdown_collection",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L280",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_markdown_paths",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L296",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_copy_tooling",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L273",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_build_graphify_corpus_write_text",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L176",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_index_summary",
+      "target": "tools_build_graphify_corpus_load_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L213",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_entry_file",
+      "target": "tools_build_graphify_corpus_load_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L182",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_index_summary",
+      "target": "tools_build_graphify_corpus_dump_json_for_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L229",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_build_entry_file",
+      "target": "tools_build_graphify_corpus_dump_json_for_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L429",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_dump_json_for_md",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_scan_sensitive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_build_graphify_corpus_scan_sensitive",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L389",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_iter_entry_dirs",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_changed_paths",
+      "target": "tools_build_graphify_corpus_git_lines",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L346",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_changed_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L159",
+      "weight": 1.0,
+      "source": "tools_build_graphify_corpus_changed_entries",
+      "target": "tools_build_graphify_corpus_entry_for_changed_path",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L389",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_changed_entries",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L386",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_build_index_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L391",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_build_entry_file",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L400",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_copy_markdown_collection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L397",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_copy_markdown_paths",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "build_graphify_corpus.py",
+      "source_location": "L402",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_build_graphify_corpus_copy_tooling",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "check_graphify_policy.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "check_graphify_policy_py",
+      "target": "tools_run_graphify_kb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_publish_graph_snapshot_run_capture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_publish_graph_snapshot_validate_graph_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_publish_graph_snapshot_git_source_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L96",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_publish_graph_snapshot_build_fallback_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "publish_graph_snapshot_py",
+      "target": "tools_run_graphify_kb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "source": "tools_publish_graph_snapshot_git_source_status",
+      "target": "tools_publish_graph_snapshot_run_capture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_publish_graph_snapshot_run_capture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L191",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_publish_graph_snapshot_validate_graph_json",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L216",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_publish_graph_snapshot_git_source_status",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "publish_graph_snapshot.py",
+      "source_location": "L197",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_publish_graph_snapshot_build_fallback_report",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "run_graphify_kb_py",
+      "target": "tools_run_graphify_kb_python_executable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "run_graphify_kb_py",
+      "target": "tools_run_graphify_kb_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "run_graphify_kb_py",
+      "target": "tools_run_graphify_kb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "run_graphify_kb.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_run_graphify_kb_python_executable",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_run_graphify_kb_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "update_graph_snapshot_py",
+      "target": "tools_run_graphify_kb_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L30",
+      "weight": 1.0,
+      "source": "tools_update_graph_snapshot_capture",
+      "target": "tools_run_graphify_kb_run",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "update_graph_snapshot_py",
+      "target": "tools_run_graphify_kb_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L141",
+      "weight": 1.0,
+      "source": "tools_run_graphify_kb_main",
+      "target": "tools_update_graph_snapshot_has_changes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "source": "update_graph_snapshot_py",
+      "target": "tools_update_graph_snapshot_capture",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "update_graph_snapshot_py",
+      "target": "tools_update_graph_snapshot_has_changes",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "update_graph_snapshot.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "tools_update_graph_snapshot_has_changes",
+      "target": "tools_update_graph_snapshot_capture",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "3c23196029267a6ae0bd0e4cf04223f65295d4d8"
+}
