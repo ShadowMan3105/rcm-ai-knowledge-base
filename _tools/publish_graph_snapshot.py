@@ -93,7 +93,33 @@ def git_source_status(root: Path) -> str:
     )
 
 
-def build_fallback_report(graph_path: Path, node_count: int | None, edge_count: int | None) -> str:
+def build_kb_entry_summary(root: Path) -> list[str]:
+    index_path = root / "index.json"
+    if not index_path.exists():
+        return ["- UNKNOWN - requires: index.json"]
+    try:
+        data = json.loads(read_text(index_path))
+    except Exception as exc:
+        return [f"- UNKNOWN - requires: readable index.json ({exc})"]
+
+    entries = data.get("entries") if isinstance(data, dict) else None
+    if not isinstance(entries, list):
+        return ["- UNKNOWN - requires: index.json entries list"]
+
+    lines: list[str] = []
+    for item in entries:
+        if not isinstance(item, dict):
+            continue
+        entry_id = item.get("id") or "UNKNOWN-ID"
+        title = item.get("title") or "Untitled"
+        domain = item.get("domain") or "unknown-domain"
+        status = item.get("status") or "unknown-status"
+        path = item.get("path") or "unknown-path"
+        lines.append(f"- `{entry_id}` - {title} | domain: `{domain}` | status: `{status}` | path: `{path}`")
+    return lines or ["- UNKNOWN - requires: non-empty index.json entries"]
+
+
+def build_fallback_report(root: Path, graph_path: Path, node_count: int | None, edge_count: int | None) -> str:
     data = json.loads(read_text(graph_path))
     nodes = data.get("nodes") if isinstance(data, dict) else []
     edges = []
@@ -132,6 +158,12 @@ def build_fallback_report(graph_path: Path, node_count: int | None, edge_count: 
         "",
         f"- Nodes: {node_count if node_count is not None else 'UNKNOWN'}",
         f"- Edges: {edge_count if edge_count is not None else 'UNKNOWN'}",
+        "",
+        "## KB Source Entries From index.json",
+        "",
+        "These are authoritative source candidates for AI navigation. Graph edges remain advisory and must be verified against source files.",
+        "",
+        *build_kb_entry_summary(root),
         "",
         "## File Types",
         "",
@@ -194,7 +226,7 @@ def main() -> int:
         print(f"Invalid graph.json: {exc}", file=sys.stderr)
         return 2
 
-    report_text = read_text(graph_report_path) if graph_report_path.exists() else build_fallback_report(graph_json_path, node_count, edge_count)
+    report_text = read_text(graph_report_path) if graph_report_path.exists() else build_fallback_report(root, graph_json_path, node_count, edge_count)
 
     for source_name, source in ((GRAPH_JSON, graph_json_path),):
         hits = scan_sensitive(source)

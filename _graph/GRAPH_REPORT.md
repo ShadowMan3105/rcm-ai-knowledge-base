@@ -9,6 +9,16 @@ Use this as a navigation map only. Verify every conclusion against the source KB
 - Nodes: 49
 - Edges: 103
 
+## KB Source Entries From index.json
+
+These are authoritative source candidates for AI navigation. Graph edges remain advisory and must be verified against source files.
+
+- `KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser` - n8n DataTable Workflow Pattern With Idempotent Upsert And PDF Parser Architecture | domain: `automations` | status: `active` | path: `automations/n8n-datatable-idempotent-upsert-pdf-parser/`
+- `KB-2026-0002-universal-claims-ingestion-transient-dedupe` - Universal Claims Ingestion with Transient Deduplication Workflow Pattern | domain: `automations` | status: `active` | path: `automations/universal-claims-ingestion-transient-dedupe/`
+- `KB-2026-0003-rcm-ai-knowledge-base-setup` - RCM AI Knowledge Base Multi-Agent Governance Setup | domain: `automations` | status: `active` | path: `automations/rcm-ai-knowledge-base-setup/`
+- `KB-2026-0004-rcm-executive-dashboards-hf-2026` - RCM Executive Dashboards Framework For HF 2026 | domain: `executive-reports` | status: `active` | path: `executive-reports/rcm-executive-dashboards-hf-2026/`
+- `KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf` - Multi-Clinic Paid Claims Consolidation from Heterogeneous Payer PDFs | domain: `automations` | status: `active` | path: `automations/multi-clinic-paid-claims-consolidation-pdf/`
+
 ## File Types
 
 - `code`: 44
