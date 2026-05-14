@@ -6,13 +6,14 @@ You may use Graphify outputs to navigate the KB faster, but Graphify is advisory
 
 Required order:
 
-1. Read `index.json` or the generated corpus summary.
-2. Filter by `domain`, `status`, `kind`, and `tags`.
-3. Prefer `active` entries over `proposed`; treat `challenged`, `deprecated`, and `superseded` according to protocol.
-4. Read the source `meta.json`, `report.md`, and `lessons.md` before acting.
-5. Check related `challenges/` and `patches/`.
-6. Use Graphify only to find relationships, paths, clusters, and candidate contradictions.
-7. Convert substantive graph findings into a challenge, patch, or new KB entry. Do not directly rewrite active entries.
+1. Read `AGENTS.md`, `READ_PROTOCOL.md`, `AI_PROTOCOL.md`, and `index.json`.
+2. If `_graph/GRAPH_REPORT.md` exists, read it as an advisory map.
+3. Use `_graph/graph.json` or Graphify queries only to find relationships, paths, clusters, and candidate contradictions.
+4. Filter source entries by `domain`, `status`, `kind`, and `tags`.
+5. Prefer `active` entries over `proposed`; treat `challenged`, `deprecated`, and `superseded` according to protocol.
+6. Read the source `meta.json`, `report.md`, and `lessons.md` before acting.
+7. Check related `challenges/` and `patches/`.
+8. Convert substantive graph findings into a challenge, patch, or new KB entry. Do not directly rewrite active entries.
 
 Safe example questions:
 

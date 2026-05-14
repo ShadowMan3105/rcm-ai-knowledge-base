@@ -16,6 +16,7 @@ graphify-out/
 .graphify_cache/
 .graphify_labels.json
 .graphify-kb-corpus/
+_graph/
 
 # Avoid accidental ingestion of local exports or operational dumps.
 exports/

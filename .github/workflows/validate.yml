@@ -25,6 +25,12 @@ jobs:
       - name: Validate all entries and challenges
         run: python _tools/validate.py
 
+      - name: Validate Graphify publication policy
+        run: python _tools/check_graphify_policy.py
+
+      - name: Check Graphify update command shape
+        run: python _tools/update_graph_snapshot.py --dry-run
+
       - name: Verify index.json is up-to-date
         run: |
           cp index.json index.before.json

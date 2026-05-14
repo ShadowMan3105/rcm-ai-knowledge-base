@@ -18,6 +18,8 @@ If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to 
 INDEX:     https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/index.json
 PROTOCOL:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/AI_PROTOCOL.md
 README:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/README.md
+GRAPH:     https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/GRAPH_REPORT.md
+GRAPH JSON:https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/graph.json
 
 ENTRY meta:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/meta.json
 ENTRY report:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/report.md
@@ -92,14 +94,16 @@ See `_tools/query.py --help`.
 <!-- GRAPHIFY-KB-LAYER:START -->
 ## Optional Graphify navigation
 Graphify may be used after the normal read protocol. It is a navigation aid only.
+The cloud-readable graph lives in `_graph/` and is generated locally by Docker/Ollama jobs.
 
 Required behavior:
 
 1. Read `AGENTS.md`, `AI_PROTOCOL.md`, `READ_PROTOCOL.md`, and `index.json` first.
-2. Use Graphify to discover candidate relationships, clusters, or paths.
-3. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
-4. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
-5. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
+2. If `_graph/GRAPH_REPORT.md` exists, read it as an advisory map.
+3. Use `_graph/graph.json` or Graphify queries to discover candidate relationships, clusters, or paths.
+4. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
+5. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
+6. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
 
 See `_schema/graphify-agent-prompt.md` for a copy-paste agent prompt.
 <!-- GRAPHIFY-KB-LAYER:END -->

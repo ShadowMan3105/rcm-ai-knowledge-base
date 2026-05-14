@@ -6,7 +6,7 @@ repository.
 
 ```yaml
 system_directives:
-  version: "3.0"
+  version: "3.1"
   status: mandatory
   scope: "ShadowMan3105/rcm-ai-knowledge-base"
 
@@ -38,6 +38,7 @@ authority_order:
     - "patches/"
   advisory_only:
     - "GRAPHIFY_INTEGRATION.md"
+    - "_graph/ published Graphify snapshot"
     - ".graphify-kb-corpus/"
     - "graphify-out/"
     - "Graphify graph edges, clusters, paths, summaries, reports, and inferred relationships"
@@ -49,6 +50,7 @@ required_read_flow:
     - "Read READ_PROTOCOL.md for KB consumption rules."
     - "Read this AGENTS.md for operating constraints."
     - "Read index.json before choosing entries."
+    - "Read _graph/GRAPH_REPORT.md when present as an advisory navigation cache."
   entry_selection:
     - "Filter by domain, tags, kind, status, confidence, and last_verified."
     - "Prefer active entries over proposed entries."
@@ -62,15 +64,18 @@ required_read_flow:
 graphify_mechanism:
   purpose: "Navigation, relationship discovery, clustering, and candidate contradiction detection."
   input_boundary: "_tools/build_graphify_corpus.py creates .graphify-kb-corpus/ from governed KB files."
+  published_cache: "_graph/ contains commit-safe Graphify artifacts generated locally and pushed to GitHub."
+  cloud_access_pattern: "Cloud AIs read _graph/ from GitHub; they do not connect to local Ollama."
   run_paths:
     headless_ci: "python _tools/run_graphify_kb.py --workflow extract --backend <backend>"
     assistant_mapping: "python _tools/run_graphify_kb.py --workflow map --no-viz --wiki"
+    local_publish: "python _tools/update_graph_snapshot.py --backend ollama --commit --push"
   mandatory_rules:
     - "Graphify is never the source of truth."
     - "Verify every graph-derived conclusion against original KB files."
     - "Convert substantive graph findings into a challenge, patch, or new governed KB entry."
     - "Do not rewrite active entry content because a graph edge suggests a relationship."
-    - "Do not commit generated Graphify outputs unless AI_PROTOCOL.md and .gitignore are explicitly updated for that policy."
+    - "Commit only controlled _graph/ snapshots, not raw graphify-out/ or .graphify-kb-corpus/."
 
 write_policy:
   default: "read_only_until_task_requires_write"
@@ -97,6 +102,7 @@ verification:
     - "python _tools/rebuild_index.py"
     - "python _tools/check_graphify_policy.py when Graphify files change"
     - "python _tools/build_graphify_corpus.py --strict-secrets when Graphify corpus logic changes"
+    - "python _tools/update_graph_snapshot.py --dry-run when local graph publication logic changes"
     - "git diff --check before commit"
 
 task_management:

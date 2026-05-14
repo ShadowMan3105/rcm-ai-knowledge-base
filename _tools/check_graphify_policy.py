@@ -11,8 +11,15 @@ REQUIRED_FILES = (
     "AGENTS.md",
     "GRAPHIFY_INTEGRATION.md",
     ".graphifyignore",
+    ".env.example",
+    "compose.local-ai.yml",
+    "docker/graphify-runner.Dockerfile",
+    "docs/local-graphify-n8n.md",
+    "_graph/README.md",
     "_tools/build_graphify_corpus.py",
     "_tools/run_graphify_kb.py",
+    "_tools/publish_graph_snapshot.py",
+    "_tools/update_graph_snapshot.py",
     "_tools/check_graphify_policy.py",
     "_schema/graphify-agent-prompt.md",
 )
@@ -23,6 +30,13 @@ REQUIRED_GITIGNORE_LINES = (
     ".graphify/",
     ".graphify_cache/",
     ".graphify_labels.json",
+    ".env",
+    ".env.*",
+    "!.env.example",
+)
+
+REQUIRED_GRAPHIFYIGNORE_LINES = (
+    "_graph/",
 )
 
 SECRET_REGEXES = (
@@ -51,8 +65,20 @@ def main() -> int:
     else:
         errors.append(".gitignore not found.")
 
+    graphifyignore = root / ".graphifyignore"
+    if graphifyignore.exists():
+        lines = [line.strip() for line in graphifyignore.read_text(encoding="utf-8", errors="replace").splitlines()]
+        for required in REQUIRED_GRAPHIFYIGNORE_LINES:
+            if required not in lines:
+                errors.append(f".graphifyignore must include: {required}")
+    else:
+        errors.append(".graphifyignore not found.")
+
     scan_names = set(REQUIRED_FILES) | {
         ".gitignore",
+        ".graphifyignore",
+        "README.md",
+        "GRAPHIFY_INTEGRATION.md",
         "READ_PROTOCOL.md",
         "AI_PROTOCOL.md",
         "SETUP.md",

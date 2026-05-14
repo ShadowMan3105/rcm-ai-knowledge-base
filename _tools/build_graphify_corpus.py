@@ -34,6 +34,9 @@ PROTOCOL_FILES = (
     "SETUP.md",
     "CHANGELOG.md",
     "GRAPHIFY_INTEGRATION.md",
+    "compose.local-ai.yml",
+    ".graphifyignore",
+    "docs/local-graphify-n8n.md",
 )
 
 EXCLUDED_DIR_NAMES = {
@@ -41,6 +44,7 @@ EXCLUDED_DIR_NAMES = {
     ".github",
     ".graphify-kb-corpus",
     "graphify-out",
+    "_graph",
     "__pycache__",
     ".venv",
     "venv",

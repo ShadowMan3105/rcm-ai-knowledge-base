@@ -1,40 +1,54 @@
 # Graphify Integration for RCM AI Knowledge Base
 
-Status: proposed integration layer
+Status: local-generation and published-navigation layer
 Owner: Dr. Seidel / RCM Operations & AI Strategy
-Scope: navigation, relationship discovery, and advisory knowledge-graph queries
+Scope: local graph generation, published advisory graph snapshots, and relationship discovery
 
 ---
 
 ## 1. Purpose
 
-This repository remains the source of truth for RCM strategies, blueprints, lessons learned, challenges, patches, and curator-reviewed decisions.
+This repository remains the source of truth for RCM strategies, blueprints,
+lessons learned, challenges, patches, and curator-reviewed decisions.
 
-Graphify adds a **knowledge graph layer** on top of the repository. Its purpose is to help humans and AI agents find relationships across entries faster:
+Graphify adds a knowledge graph layer on top of the repository. Its purpose is
+to help humans and AI agents find relationships across entries faster:
 
 - which strategies, lessons, challenges, patches, and domains are connected;
 - which entries may duplicate, contradict, or supersede each other;
 - which mistakes appear across multiple RCM areas;
-- which automation, billing configuration, consulting, research, and operations documents should be read together;
+- which automation, billing configuration, consulting, research, and operations
+  documents should be read together;
 - which open challenges or patches may affect a planned action.
 
-Graphify is **advisory only**. It does not change the KB lifecycle or authority model.
+Graphify is advisory only. It does not change the KB lifecycle or authority
+model. The approved operating model is:
+
+```text
+local Docker/Ollama -> Graphify -> controlled _graph/ snapshot -> GitHub -> cloud AI reads _graph/
+```
+
+Cloud AIs must not connect to local Ollama. They read `_graph/` from GitHub and
+verify every conclusion against source KB files.
 
 ---
 
-## 2. Authority model
+## 2. Authority Model
 
 The authoritative order remains:
 
 1. `AI_PROTOCOL.md`
-2. `index.json`, rebuilt by `_tools/rebuild_index.py`
-3. each entry's `meta.json`
-4. `report.md`
-5. `lessons.md`
-6. `challenges/` and `patches/`
-7. Graphify outputs (`graphify-out/`) as advisory navigation aids only
+2. `AGENTS.md`
+3. `index.json`, rebuilt by `_tools/rebuild_index.py`
+4. each entry's `meta.json`
+5. `report.md`
+6. `lessons.md`
+7. `challenges/` and `patches/`
+8. published Graphify snapshot (`_graph/`) as advisory navigation only
+9. raw local Graphify outputs (`graphify-out/`) as temporary working files only
 
-Graph-derived conclusions must never be treated as verified KB truth until converted into one of the existing governed paths:
+Graph-derived conclusions must never be treated as verified KB truth until
+converted into one of the existing governed paths:
 
 - a new KB entry;
 - a challenge in `challenges/`;
@@ -43,17 +57,22 @@ Graph-derived conclusions must never be treated as verified KB truth until conve
 
 ---
 
-## 3. Recommended architecture
+## 3. Recommended Architecture
 
 ```text
 RCM AI Knowledge Base
-├── protocol + schemas + validators      # authoritative rules
-├── domain entries                       # authoritative content
-├── challenges / patches                 # governed correction layer
-├── .graphifyignore                      # graph input boundary
-├── _tools/build_graphify_corpus.py      # curated graph corpus builder
-├── _tools/run_graphify_kb.py            # repeatable graphify runner
-└── graphify-out/                        # generated graph/report outputs
+|-- protocol + schemas + validators      # authoritative rules
+|-- domain entries                       # authoritative content
+|-- challenges / patches                 # governed correction layer
+|-- .graphifyignore                      # graph input boundary
+|-- compose.local-ai.yml                 # local Docker stack
+|-- docker/graphify-runner.Dockerfile    # local Graphify runner image
+|-- _tools/build_graphify_corpus.py      # curated graph corpus builder
+|-- _tools/run_graphify_kb.py            # repeatable Graphify runner
+|-- _tools/publish_graph_snapshot.py     # controlled _graph publisher
+|-- _tools/update_graph_snapshot.py      # local generation + commit helper
+|-- graphify-out/                        # raw local generated output, ignored
+`-- _graph/                              # controlled committed navigation snapshot
 ```
 
 The integration uses a generated local corpus folder:
@@ -62,13 +81,68 @@ The integration uses a generated local corpus folder:
 .graphify-kb-corpus/
 ```
 
-This folder is rebuilt from the KB and is not committed. It combines metadata and Markdown content into Graphify-friendly files so `meta.json`, `index.json`, `report.md`, and `lessons.md` can be read as one navigable knowledge surface.
+This folder is rebuilt from the KB and is not committed. It combines metadata
+and Markdown content into Graphify-friendly files so `meta.json`, `index.json`,
+`report.md`, and `lessons.md` can be read as one navigable knowledge surface.
 
-Every AI agent must read `AGENTS.md` before using the graph. That file defines the mandatory operating contract: truth policy, authority order, verification gates, Graphify advisory boundaries, and controlled-tool rules.
+Published cloud-readable graph files live in:
+
+```text
+_graph/
+|-- README.md
+|-- GRAPH_REPORT.md
+|-- graph.json
+`-- manifest.json
+```
+
+Every AI agent must read `AGENTS.md` before using the graph. That file defines
+the mandatory operating contract: truth policy, authority order, verification
+gates, Graphify advisory boundaries, and controlled-tool rules.
 
 ---
 
-## 4. Installation
+## 4. Local Docker Stack
+
+Use the local stack when you want Ollama, n8n, and Graphify kept together:
+
+```bash
+cp .env.example .env
+docker compose -f compose.local-ai.yml up -d ollama postgres n8n
+```
+
+Pull a local model once:
+
+```bash
+docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+```
+
+Run Graphify locally through Docker:
+
+```bash
+docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+```
+
+Publish and push the controlled `_graph/` snapshot from the host or runner:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
+```
+
+For n8n, configure Ollama credentials with:
+
+```text
+http://ollama:11434
+```
+
+From the host machine, Ollama is available at:
+
+```text
+http://localhost:11434
+```
+
+---
+
+## 5. Installation Without Docker
 
 Recommended install:
 
@@ -86,10 +160,10 @@ pip install graphifyy
 Optional extras for this repository:
 
 ```bash
-pip install "graphifyy[openai]"   # OpenAI / OpenAI-compatible backend
-pip install "graphifyy[gemini]"   # Gemini backend
-pip install "graphifyy[ollama]"   # local Ollama backend
-pip install "graphifyy[mcp]"      # expose graph as MCP tools
+pip install "graphifyy[openai]"
+pip install "graphifyy[gemini]"
+pip install "graphifyy[ollama]"
+pip install "graphifyy[mcp]"
 ```
 
 Register with an assistant if desired:
@@ -100,63 +174,52 @@ graphify install
 
 ---
 
-## 5. Standard workflow
+## 6. Standard Workflows
 
-From the repository root:
+Build the curated corpus:
 
 ```bash
 python _tools/validate.py
 python _tools/rebuild_index.py
-python _tools/build_graphify_corpus.py
+python _tools/build_graphify_corpus.py --strict-secrets
+```
+
+Headless cloud/API extraction:
+
+```bash
 python _tools/run_graphify_kb.py --workflow extract --backend openai
 ```
 
-This uses the headless Graphify command:
-
-```bash
-graphify extract .graphify-kb-corpus --backend openai
-```
-
-For assistant-style project mapping with flags such as `--no-viz` or `--wiki`:
-
-```bash
-python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
-```
-
-This uses:
-
-```bash
-graphify .graphify-kb-corpus --no-viz --wiki
-```
-
-For a local-only backend:
+Local Ollama extraction:
 
 ```bash
 OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 \
   python _tools/run_graphify_kb.py --workflow extract --backend ollama
 ```
 
-For an IDE/assistant skill workflow:
+Assistant-style project mapping:
 
 ```bash
-python _tools/build_graphify_corpus.py
-/graphify .graphify-kb-corpus --update
+python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
 ```
 
-Query examples:
+Publish a controlled `_graph/` snapshot:
 
 ```bash
-graphify query "what connects denial management to eCW configuration?"
-graphify query "which challenged entries affect automation decisions?"
-graphify path "timely filing" "claim scrubber"
-graphify explain "KB lifecycle"
+python _tools/publish_graph_snapshot.py --backend ollama --model-label ollama:llama3.1
+```
+
+Full local update with optional Git commit/push:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ```
 
 ---
 
-## 6. Commit policy
+## 7. Commit Policy
 
-Do not commit generated Graphify output by default:
+Do not commit raw generated Graphify output:
 
 ```text
 .graphify-kb-corpus/
@@ -166,11 +229,19 @@ graphify-out/
 .graphify_labels.json
 ```
 
-The graph can be regenerated from authoritative KB files. If the curator later wants a shareable graph artifact committed, update this policy and `.gitignore` explicitly in that PR.
+Commit only the controlled `_graph/` snapshot. `_graph/manifest.json` must record
+the source commit, branch, backend, model label, Graphify version if available,
+published files, graph counts if available, and verification status.
+
+If `_graph/graph.json` or `_graph/GRAPH_REPORT.md` contains sensitive patterns,
+publication must fail.
+
+If the curator later wants additional graph artifacts committed, update this
+policy explicitly in the same PR.
 
 ---
 
-## 7. Safety rules
+## 8. Safety Rules
 
 Graphify must not ingest or generate:
 
@@ -183,15 +254,15 @@ Graphify must not ingest or generate:
 - screenshots containing patient identifiers;
 - unreviewed external files unless they are clearly safe for this KB.
 
-Before running Graphify on new content, ensure the content is allowed by the repository's existing exclusion policy.
+Before running Graphify on new content, ensure the content is allowed by the
+repository's existing exclusion policy.
 
-Do not use `graphify add <url>` for live client, payer, EHR, clearinghouse, or production data.
+Do not use `graphify add <url>` for live client, payer, EHR, clearinghouse, or
+production data.
 
 ---
 
-## 8. How to turn graph findings into KB changes
-
-Use this decision table:
+## 9. How To Turn Graph Findings Into KB Changes
 
 | Graph finding | KB action |
 |---|---|
@@ -201,26 +272,41 @@ Use this decision table:
 | New durable strategy or reusable workflow | create a new KB entry |
 | Old strategy should no longer be used | curator decides deprecation or supersession |
 
-Never edit immutable `### Mistake N` blocks directly. New information belongs in the permitted subsequent-update path or in a challenge/supersession flow.
+Never edit immutable `### Mistake N` blocks directly. New information belongs
+in the permitted subsequent-update path or in a challenge/supersession flow.
 
 ---
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 ### `graphify: command not found`
 
-Use `uv tool install graphifyy` or `pipx install graphifyy`, then reopen the terminal.
+Use `uv tool install graphifyy` or `pipx install graphifyy`, or run the local
+Docker `graphify-runner` service.
 
-### Headless extraction asks for an API key
+### Ollama is unavailable from n8n
 
-When using `graphify extract`, choose a backend and provide the correct environment variable, for example:
+Inside Docker, use:
 
-```bash
-python _tools/run_graphify_kb.py --backend openai
-python _tools/run_graphify_kb.py --backend gemini
+```text
+http://ollama:11434
 ```
 
-Set backend credentials only in your local shell environment. Never commit API keys or paste them into KB files.
+Do not use `localhost` from inside the n8n container.
+
+### Ollama is unavailable from the host
+
+From the host, use:
+
+```text
+http://localhost:11434
+```
+
+Check the service:
+
+```bash
+docker compose -f compose.local-ai.yml ps ollama
+```
 
 ### Graph output contains stale relationships
 
@@ -228,25 +314,26 @@ Run:
 
 ```bash
 python _tools/rebuild_index.py
-python _tools/build_graphify_corpus.py --clean
-graphify extract .graphify-kb-corpus --force
+python _tools/build_graphify_corpus.py --clean --strict-secrets
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ```
 
 ### Graph output conflicts in Git
 
-Regenerate from the current branch after resolving source-file conflicts. Treat `graphify-out/` as derived output, not as primary KB content.
+Regenerate from the current branch after resolving source-file conflicts. Treat
+`graphify-out/` as derived local output and `_graph/` as a published advisory
+cache.
 
 ---
 
-## 10. Initial validation checklist
-
-Before merging this integration:
+## 11. Validation Checklist
 
 - [ ] `python _tools/check_graphify_policy.py` passes.
 - [ ] `python _tools/validate.py` passes or only emits accepted warnings.
 - [ ] `python _tools/rebuild_index.py` runs cleanly.
-- [ ] `python _tools/build_graphify_corpus.py` generates `.graphify-kb-corpus/`.
-- [ ] `graphify --version` works locally.
-- [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected command.
+- [ ] `python _tools/build_graphify_corpus.py --strict-secrets` generates `.graphify-kb-corpus/`.
+- [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected extract command.
 - [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
+- [ ] `python _tools/update_graph_snapshot.py --dry-run` prints the local publication workflow.
+- [ ] `python _tools/publish_graph_snapshot.py` publishes only allowlisted files when Graphify output exists.
 - [ ] No secrets or PHI are committed.

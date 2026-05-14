@@ -66,6 +66,8 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons
 ├── README.md
 ├── SETUP.md
 ├── index.json              ← Auto-generated. Do not hand-edit.
+├── compose.local-ai.yml    ← Local n8n + Ollama + Graphify stack
+├── _graph/                 ← Published advisory Graphify snapshot
 ├── _schema/                ← JSON schemas + templates
 │   ├── entry.schema.json
 │   ├── challenge.schema.json
@@ -80,7 +82,8 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons
 ├── _tools/
 │   ├── rebuild_index.py    ← Run after any change
 │   ├── validate.py         ← Run before commit (emits WARN for staleness + non-canonical tags)
-│   └── next_id.py          ← Get next stable KB ID
+│   ├── next_id.py          ← Get next stable KB ID
+│   └── update_graph_snapshot.py ← Local Graphify publish helper
 ├── challenges/             ← Substantive disputes (curator-resolved)
 ├── patches/                ← Surface corrections (CI-green merge)
 └── <domain>/<slug>/
@@ -128,22 +131,37 @@ v1.2 (2026-05-12) — see `AI_PROTOCOL.md`.
 <!-- GRAPHIFY-KB-LAYER:START -->
 ## Optional Graphify knowledge graph layer
 
-This KB can be navigated with Graphify as an advisory knowledge graph layer. The graph helps agents and humans discover relationships across entries, lessons, challenges, patches, and domains, but it does not replace `AI_PROTOCOL.md`, `index.json`, `meta.json`, `report.md`, or `lessons.md`.
+This KB can be navigated with Graphify as an advisory knowledge graph layer.
+The approved pattern is local generation plus cloud-readable publication:
 
-Standard workflow:
-
-```bash
-python _tools/validate.py
-python _tools/rebuild_index.py
-python _tools/build_graphify_corpus.py
-python _tools/run_graphify_kb.py --workflow extract --backend openai
+```text
+local Docker/Ollama -> Graphify -> _graph/ snapshot -> GitHub -> cloud AI reads _graph/
 ```
 
-For assistant-style project mapping with visualization flags:
+The graph does not replace `AI_PROTOCOL.md`, `AGENTS.md`, `index.json`,
+`meta.json`, `report.md`, `lessons.md`, `challenges/`, or `patches/`.
+
+Local Ollama workflow:
 
 ```bash
-python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ```
+
+Docker workflow:
+
+```bash
+docker compose -f compose.local-ai.yml up -d ollama postgres n8n
+docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+```
+
+Cloud AI read flow:
+
+1. Read `AGENTS.md`, `READ_PROTOCOL.md`, `AI_PROTOCOL.md`, and `index.json`.
+2. Read `_graph/GRAPH_REPORT.md` if present.
+3. Use `_graph/graph.json` only for navigation.
+4. Verify conclusions against source KB files before acting.
 
 See `GRAPHIFY_INTEGRATION.md` for safety rules, commit policy, and query examples.
+See `docs/local-graphify-n8n.md` for the local Docker/n8n operating model.
 <!-- GRAPHIFY-KB-LAYER:END -->

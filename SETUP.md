@@ -48,7 +48,28 @@ From that point forward, every successful session will end with the upload offer
 <!-- GRAPHIFY-KB-LAYER:START -->
 ## Optional: Graphify setup
 
-Install Graphify:
+Preferred local Docker setup:
+
+```bash
+cp .env.example .env
+docker compose -f compose.local-ai.yml up -d ollama postgres n8n
+docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+```
+
+n8n Ollama credential URL inside Docker:
+
+```text
+http://ollama:11434
+```
+
+Host Ollama URL:
+
+```text
+http://localhost:11434
+```
+
+Install Graphify on the host only if you do not use the Docker runner:
 
 ```bash
 uv tool install graphifyy
@@ -75,6 +96,12 @@ Run assistant-style project mapping:
 
 ```bash
 python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
+```
+
+Publish the controlled graph snapshot to GitHub:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ```
 
 Set backend credentials only in your local shell environment. Never commit API keys or paste them into repository files.
