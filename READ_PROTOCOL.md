@@ -88,3 +88,18 @@ python _tools/query.py --search "claims dedupe"
 ```
 
 See `_tools/query.py --help`.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Optional Graphify navigation
+Graphify may be used after the normal read protocol. It is a navigation aid only.
+
+Required behavior:
+
+1. Read `index.json` first.
+2. Use Graphify to discover candidate relationships, clusters, or paths.
+3. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
+4. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
+5. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
+
+See `_schema/graphify-agent-prompt.md` for a copy-paste agent prompt.
+<!-- GRAPHIFY-KB-LAYER:END -->

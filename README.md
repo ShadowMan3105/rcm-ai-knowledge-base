@@ -36,7 +36,7 @@ A multi-agent-safe repository of strategies, blueprints, lessons learned, and an
 
 ```
 proposed ──► active ──► challenged ──► (deprecated | superseded)
-                  └─────────────────► deprecated  (curator-decided)
+                  └────────────────► deprecated  (curator-decided)
 ```
 
 ## Challenge vs Patch — which one do I file?
@@ -122,3 +122,20 @@ Dr. Seidel — RCM Operations & AI Strategy
 
 ## Protocol version
 v1.2 (2026-05-12) — see `AI_PROTOCOL.md`.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Optional Graphify knowledge graph layer
+
+This KB can be navigated with Graphify as an advisory knowledge graph layer. The graph helps agents and humans discover relationships across entries, lessons, challenges, patches, and domains, but it does not replace `AI_PROTOCOL.md`, `index.json`, `meta.json`, `report.md`, or `lessons.md`.
+
+Standard workflow:
+
+```bash
+python _tools/validate.py
+python _tools/rebuild_index.py
+python _tools/build_graphify_corpus.py
+python _tools/run_graphify_kb.py --backend openai --no-viz
+```
+
+See `GRAPHIFY_INTEGRATION.md` for safety rules, commit policy, and query examples.
+<!-- GRAPHIFY-KB-LAYER:END -->
