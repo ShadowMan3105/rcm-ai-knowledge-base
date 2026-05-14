@@ -1,21 +1,22 @@
 # Published Graph Snapshot
 
-This folder is the controlled public snapshot location for Graphify output.
+This folder is a controlled, commit-safe Graphify snapshot generated from the
+RCM AI Knowledge Base.
 
-Local Docker/Ollama jobs publish only these files here:
+Read order for AI agents:
 
-- `GRAPH_REPORT.md`
-- `graph.json`
-- `manifest.json`
-- `README.md`
+1. `AGENTS.md`
+2. `READ_PROTOCOL.md`
+3. `AI_PROTOCOL.md`
+4. `index.json`
+5. `_graph/GRAPH_REPORT.md`
+6. `_graph/graph.json` only for navigation
+7. Source `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/`
 
-Raw Graphify working folders stay local and ignored:
+Rules:
 
-- `.graphify-kb-corpus/`
-- `graphify-out/`
-- `.graphify/`
-- `.graphify_cache/`
-- `.graphify_labels.json`
-
-AI agents may use `_graph/` for navigation only. They must verify every
-conclusion against the authoritative KB files before acting.
+- `_graph/` is advisory only.
+- Do not treat inferred graph edges as KB truth.
+- Do not edit active KB entries based only on graph output.
+- Convert substantive graph findings into a challenge, patch, or governed KB entry.
+- Raw `graphify-kb-corpus/`, `.graphify-kb-corpus/`, and `graphify-out/` stay local and ignored.
