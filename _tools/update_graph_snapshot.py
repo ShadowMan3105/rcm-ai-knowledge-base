@@ -46,6 +46,7 @@ def main() -> int:
     parser.add_argument("--graph-out", default=None, help="Raw Graphify output folder. Default: <corpus>/graphify-out.")
     parser.add_argument("--dest", default="_graph", help="Published graph snapshot folder.")
     parser.add_argument("--workflow", choices=("extract", "map"), default="extract", help="Graphify workflow.")
+    parser.add_argument("--max-concurrency", default=None, help="Graphify extract max concurrency. Default for ollama: 1.")
     parser.add_argument("--commit", action="store_true", help="Commit _graph and index.json changes.")
     parser.add_argument("--push", action="store_true", help="Push current branch after committing.")
     parser.add_argument("--message", default="graph: update published knowledge map", help="Commit message.")
@@ -60,6 +61,7 @@ def main() -> int:
 
     py = sys.executable or "python3"
     graph_out = args.graph_out or str(Path(args.corpus) / "graphify-out")
+    max_concurrency = args.max_concurrency or ("1" if args.backend == "ollama" else None)
     model_label = args.model_label or (
         f"{args.backend}:{os.environ['OLLAMA_MODEL']}" if args.backend == "ollama" and os.environ.get("OLLAMA_MODEL") else None
     )
@@ -85,6 +87,8 @@ def main() -> int:
             if model_label:
                 model_name = model_label.split(":", 1)[1] if ":" in model_label else model_label
                 graph_cmd.extend(["--model", model_name])
+            if max_concurrency:
+                graph_cmd.extend(["--max-concurrency", max_concurrency])
         else:
             graph_cmd.extend(["--no-viz", "--wiki"])
         run(graph_cmd, cwd=root, dry_run=args.dry_run)

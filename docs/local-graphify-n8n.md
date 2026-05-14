@@ -84,6 +84,9 @@ From the host:
 python _tools/update_graph_snapshot.py --backend ollama
 ```
 
+For local Ollama, the wrapper serializes semantic chunks with
+`--max-concurrency 1` unless you explicitly override it.
+
 From Docker:
 
 ```bash

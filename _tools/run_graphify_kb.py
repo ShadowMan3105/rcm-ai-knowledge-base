@@ -44,6 +44,7 @@ def main() -> int:
     )
     parser.add_argument("--backend", default=None, help="Graphify backend: openai, gemini, claude, claude-cli, ollama, bedrock, etc.")
     parser.add_argument("--model", default=None, help="Optional backend model name.")
+    parser.add_argument("--max-concurrency", default=None, help="Extract workflow only: parallel semantic chunks. Use 1 for local LLMs.")
     parser.add_argument("--mode", default=None, help="Optional Graphify mode, for example: deep.")
     parser.add_argument("--update", action="store_true", help="Re-extract only changed files.")
     parser.add_argument("--force", action="store_true", help="Pass --force to Graphify.")
@@ -58,6 +59,9 @@ def main() -> int:
         return 2
     if args.workflow == "map" and (args.backend or args.model):
         print("--backend and --model are only valid with --workflow extract.", file=sys.stderr)
+        return 2
+    if args.workflow == "map" and args.max_concurrency:
+        print("--max-concurrency is only valid with --workflow extract.", file=sys.stderr)
         return 2
 
     root = Path(args.root).resolve()
@@ -99,6 +103,8 @@ def main() -> int:
             cmd.extend(["--backend", args.backend])
         if args.model:
             cmd.extend(["--model", args.model])
+        if args.max_concurrency:
+            cmd.extend(["--max-concurrency", args.max_concurrency])
     else:
         cmd.append(corpus_path)
     if args.mode:
