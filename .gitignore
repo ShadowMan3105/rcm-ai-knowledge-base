@@ -22,6 +22,7 @@ _scratch/
 *.log
 
 # Graphify local/generated files
+graphify-kb-corpus/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/

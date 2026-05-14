@@ -42,14 +42,14 @@ def main() -> int:
     parser.add_argument("--root", default=".", help="Repository root. Default: current directory.")
     parser.add_argument("--backend", default="ollama", help="Graphify backend for extract workflow.")
     parser.add_argument("--model-label", default=None, help="Model label for _graph/manifest.json.")
-    parser.add_argument("--corpus", default=".graphify-kb-corpus", help="Generated corpus folder.")
-    parser.add_argument("--graph-out", default="graphify-out", help="Raw Graphify output folder.")
+    parser.add_argument("--corpus", default="graphify-kb-corpus", help="Generated corpus folder.")
+    parser.add_argument("--graph-out", default=None, help="Raw Graphify output folder. Default: <corpus>/graphify-out.")
     parser.add_argument("--dest", default="_graph", help="Published graph snapshot folder.")
     parser.add_argument("--workflow", choices=("extract", "map"), default="extract", help="Graphify workflow.")
     parser.add_argument("--commit", action="store_true", help="Commit _graph and index.json changes.")
     parser.add_argument("--push", action="store_true", help="Push current branch after committing.")
     parser.add_argument("--message", default="graph: update published knowledge map", help="Commit message.")
-    parser.add_argument("--skip-graphify", action="store_true", help="Publish existing graphify-out without running Graphify.")
+    parser.add_argument("--skip-graphify", action="store_true", help="Publish existing raw graph output without running Graphify.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without changing files.")
     args = parser.parse_args()
 
@@ -59,6 +59,7 @@ def main() -> int:
         return 2
 
     py = sys.executable or "python3"
+    graph_out = args.graph_out or str(Path(args.corpus) / "graphify-out")
     model_label = args.model_label or (
         f"{args.backend}:{os.environ['OLLAMA_MODEL']}" if args.backend == "ollama" and os.environ.get("OLLAMA_MODEL") else None
     )
@@ -81,6 +82,9 @@ def main() -> int:
         graph_cmd = [py, "_tools/run_graphify_kb.py", "--skip-validate", "--corpus", args.corpus, "--workflow", args.workflow]
         if args.workflow == "extract":
             graph_cmd.extend(["--backend", args.backend])
+            if model_label:
+                model_name = model_label.split(":", 1)[1] if ":" in model_label else model_label
+                graph_cmd.extend(["--model", model_name])
         else:
             graph_cmd.extend(["--no-viz", "--wiki"])
         run(graph_cmd, cwd=root, dry_run=args.dry_run)
@@ -89,7 +93,7 @@ def main() -> int:
         py,
         "_tools/publish_graph_snapshot.py",
         "--graph-out",
-        args.graph_out,
+        graph_out,
         "--dest",
         args.dest,
         "--backend",

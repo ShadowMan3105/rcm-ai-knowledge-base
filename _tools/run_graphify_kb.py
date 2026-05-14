@@ -32,7 +32,7 @@ def run(cmd: list[str], *, dry_run: bool = False, check: bool = True) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build and query the RCM KB Graphify layer.")
     parser.add_argument("--root", default=".", help="Repository root. Default: current directory.")
-    parser.add_argument("--corpus", default=".graphify-kb-corpus", help="Generated corpus folder.")
+    parser.add_argument("--corpus", default="graphify-kb-corpus", help="Generated corpus folder.")
     parser.add_argument(
         "--workflow",
         choices=("extract", "map"),

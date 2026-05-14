@@ -43,6 +43,7 @@ EXCLUDED_DIR_NAMES = {
     ".git",
     ".github",
     ".graphify-kb-corpus",
+    "graphify-kb-corpus",
     "graphify-out",
     "_graph",
     "__pycache__",
@@ -237,7 +238,7 @@ def copy_tooling(root: Path, out_dir: Path) -> int:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Build a Graphify-friendly corpus from the RCM AI KB.")
     parser.add_argument("--root", default=".", help="Repository root. Default: current directory.")
-    parser.add_argument("--out", default=".graphify-kb-corpus", help="Output corpus folder.")
+    parser.add_argument("--out", default="graphify-kb-corpus", help="Output corpus folder.")
     parser.add_argument("--clean", action="store_true", default=True, help="Delete existing output first. Default: true.")
     parser.add_argument("--no-clean", dest="clean", action="store_false", help="Do not delete existing output first.")
     parser.add_argument("--max-revision-bytes", type=int, default=20000, help="Max bytes copied per revision file.")

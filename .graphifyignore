@@ -10,7 +10,7 @@ __pycache__/
 *.pyc
 .DS_Store
 
-# Generated Graphify outputs. Use .graphify-kb-corpus as input instead.
+# Generated Graphify outputs. Use graphify-kb-corpus as the input corpus instead.
 graphify-out/
 .graphify/
 .graphify_cache/

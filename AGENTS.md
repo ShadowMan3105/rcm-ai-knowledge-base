@@ -39,6 +39,7 @@ authority_order:
   advisory_only:
     - "GRAPHIFY_INTEGRATION.md"
     - "_graph/ published Graphify snapshot"
+    - "graphify-kb-corpus/"
     - ".graphify-kb-corpus/"
     - "graphify-out/"
     - "Graphify graph edges, clusters, paths, summaries, reports, and inferred relationships"
@@ -63,7 +64,7 @@ required_read_flow:
 
 graphify_mechanism:
   purpose: "Navigation, relationship discovery, clustering, and candidate contradiction detection."
-  input_boundary: "_tools/build_graphify_corpus.py creates .graphify-kb-corpus/ from governed KB files."
+  input_boundary: "_tools/build_graphify_corpus.py creates graphify-kb-corpus/ from governed KB files."
   published_cache: "_graph/ contains commit-safe Graphify artifacts generated locally and pushed to GitHub."
   cloud_access_pattern: "Cloud AIs read _graph/ from GitHub; they do not connect to local Ollama."
   run_paths:
@@ -75,7 +76,7 @@ graphify_mechanism:
     - "Verify every graph-derived conclusion against original KB files."
     - "Convert substantive graph findings into a challenge, patch, or new governed KB entry."
     - "Do not rewrite active entry content because a graph edge suggests a relationship."
-    - "Commit only controlled _graph/ snapshots, not raw graphify-out/ or .graphify-kb-corpus/."
+    - "Commit only controlled _graph/ snapshots, not raw graphify-kb-corpus/, .graphify-kb-corpus/, or graphify-out/."
 
 write_policy:
   default: "read_only_until_task_requires_write"

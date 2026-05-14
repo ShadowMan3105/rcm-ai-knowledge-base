@@ -72,14 +72,15 @@ RCM AI Knowledge Base
 |-- _tools/run_graphify_kb.py            # repeatable Graphify runner
 |-- _tools/publish_graph_snapshot.py     # controlled _graph publisher
 |-- _tools/update_graph_snapshot.py      # local generation + commit helper
-|-- graphify-out/                        # raw local generated output, ignored
+|-- graphify-kb-corpus/                  # generated Graphify input corpus, ignored
+|   `-- graphify-out/                    # raw local generated output, ignored
 `-- _graph/                              # controlled committed navigation snapshot
 ```
 
 The integration uses a generated local corpus folder:
 
 ```text
-.graphify-kb-corpus/
+graphify-kb-corpus/
 ```
 
 This folder is rebuilt from the KB and is not committed. It combines metadata
@@ -223,6 +224,13 @@ OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 \
   python _tools/run_graphify_kb.py --workflow extract --backend ollama
 ```
 
+Graphify's Ollama backend may require `OLLAMA_API_KEY` even for a local
+server. Use a non-secret local placeholder:
+
+```bash
+OLLAMA_API_KEY=ollama-local
+```
+
 Assistant-style project mapping:
 
 ```bash
@@ -248,6 +256,7 @@ python _tools/update_graph_snapshot.py --backend ollama --commit --push
 Do not commit raw generated Graphify output:
 
 ```text
+graphify-kb-corpus/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/
@@ -347,7 +356,7 @@ python _tools/update_graph_snapshot.py --backend ollama --commit --push
 ### Graph output conflicts in Git
 
 Regenerate from the current branch after resolving source-file conflicts. Treat
-`graphify-out/` as derived local output and `_graph/` as a published advisory
+`graphify-kb-corpus/graphify-out/` as derived local output and `_graph/` as a published advisory
 cache.
 
 ---
@@ -357,7 +366,7 @@ cache.
 - [ ] `python _tools/check_graphify_policy.py` passes.
 - [ ] `python _tools/validate.py` passes or only emits accepted warnings.
 - [ ] `python _tools/rebuild_index.py` runs cleanly.
-- [ ] `python _tools/build_graphify_corpus.py --strict-secrets` generates `.graphify-kb-corpus/`.
+- [ ] `python _tools/build_graphify_corpus.py --strict-secrets` generates `graphify-kb-corpus/`.
 - [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected extract command.
 - [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
 - [ ] `python _tools/update_graph_snapshot.py --dry-run` prints the local publication workflow.

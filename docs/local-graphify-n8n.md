@@ -51,6 +51,14 @@ n8n Ollama credential URL:
 http://ollama:11434
 ```
 
+Graphify's Ollama backend may still require an `OLLAMA_API_KEY` environment
+variable. This is not a real secret for local Ollama; use the placeholder from
+`.env.example`:
+
+```text
+OLLAMA_API_KEY=ollama-local
+```
+
 If your n8n network has a different name:
 
 ```powershell
@@ -104,6 +112,7 @@ index.json
 Raw local files stay ignored:
 
 ```text
+graphify-kb-corpus/
 .graphify-kb-corpus/
 graphify-out/
 .graphify/

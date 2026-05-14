@@ -26,6 +26,7 @@ REQUIRED_FILES = (
 )
 
 REQUIRED_GITIGNORE_LINES = (
+    "graphify-kb-corpus/",
     ".graphify-kb-corpus/",
     "graphify-out/",
     ".graphify/",
