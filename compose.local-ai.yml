@@ -64,7 +64,7 @@ services:
       - ollama
     working_dir: /workspace
     environment:
-      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_BASE_URL: http://ollama:11434/v1
       OLLAMA_MODEL: ${OLLAMA_MODEL:-llama3.1}
       OLLAMA_API_KEY: ${OLLAMA_API_KEY:-ollama-local}
     volumes:

@@ -220,8 +220,15 @@ python _tools/run_graphify_kb.py --workflow extract --backend openai
 Local Ollama extraction:
 
 ```bash
-OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 \
+OLLAMA_BASE_URL=http://localhost:11434/v1 OLLAMA_MODEL=llama3.1 \
   python _tools/run_graphify_kb.py --workflow extract --backend ollama --max-concurrency 1
+```
+
+When using Graphify's Ollama backend directly, `OLLAMA_BASE_URL` must point to
+Ollama's OpenAI-compatible endpoint:
+
+```bash
+OLLAMA_BASE_URL=http://localhost:11434/v1
 ```
 
 Graphify's Ollama backend may require `OLLAMA_API_KEY` even for a local

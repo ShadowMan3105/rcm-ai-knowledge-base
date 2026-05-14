@@ -51,6 +51,12 @@ n8n Ollama credential URL:
 http://ollama:11434
 ```
 
+Graphify runner Ollama URL:
+
+```text
+http://ollama:11434/v1
+```
+
 Graphify's Ollama backend may still require an `OLLAMA_API_KEY` environment
 variable. This is not a real secret for local Ollama; use the placeholder from
 `.env.example`:
