@@ -8,10 +8,9 @@ local model.
 
 ```text
 local Docker
-|-- n8n                # orchestration and scheduled/manual triggers
+|-- existing n8n       # orchestration and scheduled/manual triggers
 |-- ollama             # local model API
 |-- graphify-runner    # builds Graphify map from governed KB files
-|-- postgres           # n8n database
 `-- qdrant optional    # later RAG/vector memory
 
 GitHub
@@ -19,24 +18,54 @@ GitHub
 `-- _graph/            # advisory published graph snapshot
 ```
 
-## Start The Local Stack
+## Current Environment
+
+The current Docker environment already has n8n:
+
+```text
+project: n8n-docker
+n8n URL: http://localhost:5800
+n8n network: n8n-docker_default
+```
+
+Do not start another n8n unless explicitly doing a standalone install.
+
+## Attach Ollama To Existing n8n
+
+Use this command when n8n already exists:
 
 ```bash
-cp .env.example .env
-docker compose -f compose.local-ai.yml up -d ollama postgres n8n
-docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
 ```
 
 Open n8n:
 
 ```text
-http://localhost:5678
+http://localhost:5800
 ```
 
 n8n Ollama credential URL:
 
 ```text
 http://ollama:11434
+```
+
+If your n8n network has a different name:
+
+```powershell
+$env:N8N_DOCKER_NETWORK="<network-name>"
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+```
+
+## Standalone n8n Mode
+
+Use only if you do not already have n8n:
+
+```bash
+cp .env.example .env
+docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama postgres n8n
+docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
 ```
 
 ## Generate The Graph Locally
@@ -50,7 +79,7 @@ python _tools/update_graph_snapshot.py --backend ollama
 From Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
 ```
 
 ## Publish The Graph Snapshot

@@ -13,6 +13,7 @@ REQUIRED_FILES = (
     ".graphifyignore",
     ".env.example",
     "compose.local-ai.yml",
+    "compose.existing-n8n.yml",
     "docker/graphify-runner.Dockerfile",
     "docs/local-graphify-n8n.md",
     "_graph/README.md",

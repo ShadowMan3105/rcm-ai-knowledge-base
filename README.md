@@ -150,10 +150,12 @@ python _tools/update_graph_snapshot.py --backend ollama --commit --push
 Docker workflow:
 
 ```bash
-docker compose -f compose.local-ai.yml up -d ollama postgres n8n
-docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
-docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
 ```
+
+Use `--profile standalone-n8n` only if there is no existing n8n container.
 
 Cloud AI read flow:
 

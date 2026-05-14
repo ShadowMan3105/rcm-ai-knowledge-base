@@ -3,6 +3,7 @@ name: rcm-kb-local-ai
 services:
   postgres:
     image: postgres:16-alpine
+    profiles: ["standalone-n8n"]
     restart: unless-stopped
     environment:
       POSTGRES_USER: n8n
@@ -13,6 +14,7 @@ services:
 
   n8n:
     image: n8nio/n8n:latest
+    profiles: ["standalone-n8n"]
     restart: unless-stopped
     depends_on:
       - postgres

@@ -48,13 +48,19 @@ From that point forward, every successful session will end with the upload offer
 <!-- GRAPHIFY-KB-LAYER:START -->
 ## Optional: Graphify setup
 
-Preferred local Docker setup:
+Preferred setup when n8n already exists in Docker:
+
+```bash
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
+```
+
+Standalone n8n setup only if there is no existing n8n:
 
 ```bash
 cp .env.example .env
-docker compose -f compose.local-ai.yml up -d ollama postgres n8n
-docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
-docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama postgres n8n
 ```
 
 n8n Ollama credential URL inside Docker:

@@ -65,7 +65,8 @@ RCM AI Knowledge Base
 |-- domain entries                       # authoritative content
 |-- challenges / patches                 # governed correction layer
 |-- .graphifyignore                      # graph input boundary
-|-- compose.local-ai.yml                 # local Docker stack
+|-- compose.local-ai.yml                 # local Ollama/Graphify stack
+|-- compose.existing-n8n.yml             # attach Ollama to an existing n8n network
 |-- docker/graphify-runner.Dockerfile    # local Graphify runner image
 |-- _tools/build_graphify_corpus.py      # curated graph corpus builder
 |-- _tools/run_graphify_kb.py            # repeatable Graphify runner
@@ -103,23 +104,48 @@ gates, Graphify advisory boundaries, and controlled-tool rules.
 
 ## 4. Local Docker Stack
 
-Use the local stack when you want Ollama, n8n, and Graphify kept together:
+Use this mode when you already have n8n running in Docker. This is the preferred
+mode for the current environment.
+
+```bash
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+```
+
+The override attaches Ollama to the existing n8n Docker network:
+
+```text
+n8n-docker_default
+```
+
+Then n8n can call Ollama at:
+
+```text
+http://ollama:11434
+```
+
+If the existing n8n network name differs, set:
+
+```bash
+N8N_DOCKER_NETWORK=<your-existing-n8n-network>
+```
+
+Use this standalone mode only when you do not already have n8n:
 
 ```bash
 cp .env.example .env
-docker compose -f compose.local-ai.yml up -d ollama postgres n8n
+docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama postgres n8n
 ```
 
 Pull a local model once:
 
 ```bash
-docker compose -f compose.local-ai.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
 ```
 
 Run Graphify locally through Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml --profile graphify run --rm graphify-runner
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
 ```
 
 Publish and push the controlled `_graph/` snapshot from the host or runner:
