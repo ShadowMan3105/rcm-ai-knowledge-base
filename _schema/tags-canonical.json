@@ -1,6 +1,6 @@
 {
   "$schema_version": "1.0",
-  "last_updated": "2026-05-12",
+  "last_updated": "2026-05-15",
   "policy": "warn",
   "description": "Canonical tag vocabulary per domain. validate.py emits a warning (not error) when an entry uses a tag not listed here. Helps AIs filter entries cleanly during the READ_PROTOCOL ranking step and avoids tag drift (e.g. n8n vs n8n-workflows vs n8n-platform). Add new tags here BEFORE using them in an entry.",
   "rules": [
@@ -33,7 +33,14 @@
     "executive-report",
     "blueprint",
     "lesson",
-    "sop"
+    "sop",
+    "postgres",
+    "sync",
+    "performance",
+    "data-quality",
+    "security",
+    "configuration",
+    "api-integration"
   ],
   "by_domain": {
     "automations": [
