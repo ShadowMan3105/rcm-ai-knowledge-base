@@ -6,16 +6,17 @@
   "maintainer": "Dr. Seidel",
   "description": "RCM AI Knowledge Base — multi-agent safe blueprints, lessons, and analyses.",
   "stats": {
-    "total_entries": 6,
+    "total_entries": 7,
     "by_status": {
-      "active": 6
+      "active": 6,
+      "proposed": 1
     },
     "by_domain": {
-      "automations": 5,
+      "automations": 6,
       "executive-reports": 1
     },
     "by_kind": {
-      "blueprint": 5,
+      "blueprint": 6,
       "meta": 1
     },
     "open_challenges": 0,
@@ -227,6 +228,39 @@
       "challenged_by": [],
       "human_approved_by": "Dr. Seidel",
       "path": "automations/multi-clinic-paid-claims-consolidation-pdf/"
+    },
+    {
+      "id": "KB-2026-0006-supabase-authoritative-monday-sync",
+      "title": "Supabase-Authoritative Monday.com Sync With Dry-Run Ledger And Hold Gates",
+      "domain": "automations",
+      "kind": "blueprint",
+      "status": "proposed",
+      "confidence": "high",
+      "created_at": "2026-05-13",
+      "created_by": "codex",
+      "last_verified": "2026-05-13",
+      "last_verified_by": "codex",
+      "tags": [
+        "n8n",
+        "monday-com",
+        "supabase",
+        "claims-reconciliation",
+        "idempotency",
+        "deduplication",
+        "workflow-design",
+        "monday-board",
+        "schema-validation"
+      ],
+      "summary": "Reusable blueprint for synchronizing normalized claim records from Supabase/Postgres into Monday.com boards while preserving Supabase as the source of truth. The pattern uses read-only inspection, dry-run create/update/skip planning, explicit hold buckets, verified re-read after writes, and separate ledger updates so Monday never becomes the audit source.",
+      "related": [
+        "KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser",
+        "KB-2026-0003-universal-claims-ingestion-transient-dedupe"
+      ],
+      "supersedes": null,
+      "superseded_by": null,
+      "challenged_by": [],
+      "human_approved_by": null,
+      "path": "automations/supabase-authoritative-monday-sync/"
     },
     {
       "id": "KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy",
