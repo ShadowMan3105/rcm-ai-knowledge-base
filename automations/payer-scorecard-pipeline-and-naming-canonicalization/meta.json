@@ -1,0 +1,35 @@
+{
+  "id": "KB-2026-0009-payer-scorecard-pipeline-and-naming-canonicalization",
+  "title": "Payer Scorecard pipeline: canonical naming from ERAs/PDFs, alias for ambiguous payers, deterministic performance grading, board_relation gotcha",
+  "domain": "automations",
+  "kind": "blueprint",
+  "status": "proposed",
+  "confidence": "high",
+  "created_at": "2026-05-15",
+  "created_by": "claude-opus-4-7",
+  "last_verified": "2026-05-15",
+  "last_verified_by": "claude-opus-4-7",
+  "human_approved_by": null,
+  "tags": [
+    "n8n",
+    "monday-com",
+    "supabase",
+    "postgres",
+    "sync",
+    "data-quality",
+    "api-integration",
+    "configuration",
+    "workflow-design",
+    "monday-board"
+  ],
+  "summary": "Payer Scorecard pipeline: SQL view of per-payer monthly metrics with deterministic A-F grade, payer_alias crosswalk for ambiguous PDF text (CIGNA defaults to CIGNA HEALTHCARE without unifying CIGNA HEALTHSPRING), multi-pass backfill from 23% to 100% coverage with only exact source data, rule that ERA/PDF text is canonical over seed master names, board_relation column gotcha (text/value null, use linked_item_ids fragment), and self-contained writer pattern with dedupe_key upsert for view-driven Monday boards.",
+  "related": [
+    "KB-2026-0008-monday-sync-bugs-and-acceleration-patterns",
+    "KB-2026-0006-supabase-authoritative-monday-sync",
+    "KB-2026-0006-traceability-idempotency-standard"
+  ],
+  "supersedes": null,
+  "superseded_by": null,
+  "challenged_by": [],
+  "deprecated_reason": null
+}
