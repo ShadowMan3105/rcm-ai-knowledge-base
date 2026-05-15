@@ -2,7 +2,7 @@
 
 **Companion to `AI_PROTOCOL.md`.** That file governs *writing*; this one governs *reading*.
 
-If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to help with anything RCM-, billing-, automation-, or healthcare-operations-related, follow these steps **before** generating advice or code.
+If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to help with anything RCM-, billing-, automation-, or healthcare-operations-related, read [`AGENTS.md`](AGENTS.md) first and then follow these steps **before** generating advice or code.
 
 ---
 
@@ -18,6 +18,9 @@ If you are an AI (Claude, GPT, Codex, Gemini, Ollama, custom agent…) about to 
 INDEX:     https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/index.json
 PROTOCOL:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/AI_PROTOCOL.md
 README:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/README.md
+GRAPH:     https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/GRAPH_REPORT.md
+GRAPH JSON:https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/graph.json
+GRAPH INC: https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/_graph/incremental-latest/GRAPH_REPORT.md
 
 ENTRY meta:    https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/meta.json
 ENTRY report:  https://raw.githubusercontent.com/ShadowMan3105/rcm-ai-knowledge-base/main/<path>/report.md
@@ -88,3 +91,21 @@ python _tools/query.py --search "claims dedupe"
 ```
 
 See `_tools/query.py --help`.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Optional Graphify navigation
+Graphify may be used after the normal read protocol. It is a navigation aid only.
+The cloud-readable graph lives in `_graph/` and is generated locally by Docker/Ollama jobs.
+
+Required behavior:
+
+1. Read `AGENTS.md`, `AI_PROTOCOL.md`, `READ_PROTOCOL.md`, and `index.json` first.
+2. If `_graph/GRAPH_REPORT.md` exists, read it as an advisory map.
+3. If the task involves recently changed files, read `_graph/incremental-latest/GRAPH_REPORT.md` as the recent-change map.
+4. Use `_graph/graph.json`, `_graph/incremental-latest/graph.json`, or Graphify queries to discover candidate relationships, clusters, or paths.
+5. Verify every conclusion against the original `meta.json`, `report.md`, `lessons.md`, `challenges/`, and `patches/` files.
+6. Treat `EXTRACTED`, `INFERRED`, and `AMBIGUOUS` graph relationships according to their confidence; inferred or ambiguous relationships are not KB truth.
+7. Convert substantive findings into a challenge, patch, or new KB entry instead of directly rewriting active content.
+
+See `_schema/graphify-agent-prompt.md` for a copy-paste agent prompt.
+<!-- GRAPHIFY-KB-LAYER:END -->

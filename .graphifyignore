@@ -1,0 +1,44 @@
+# RCM AI Knowledge Base Graphify boundary
+# Same syntax as .gitignore.
+
+# Never index VCS or local tooling state.
+.git/
+.github/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.DS_Store
+
+# Generated Graphify outputs. Use graphify-kb-corpus as the input corpus instead.
+graphify-out/
+.graphify/
+.graphify_cache/
+.graphify_labels.json
+.graphify-kb-corpus/
+_graph/
+
+# Avoid accidental ingestion of local exports or operational dumps.
+exports/
+raw/
+tmp/
+temp/
+*.csv
+*.xlsx
+*.xls
+*.zip
+*.7z
+*.tar
+*.gz
+*.sqlite
+*.db
+*.log
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Direct-root Graphify fallback: include only KB-governed content and tools.
+# The preferred workflow is: python _tools/build_graphify_corpus.py

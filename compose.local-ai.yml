@@ -1,0 +1,84 @@
+name: rcm-kb-local-ai
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    profiles: ["standalone-n8n"]
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-n8n-local-only}
+      POSTGRES_DB: n8n
+    volumes:
+      - n8n_postgres_data:/var/lib/postgresql/data
+
+  n8n:
+    image: n8nio/n8n:latest
+    profiles: ["standalone-n8n"]
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - ollama
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: n8n
+      DB_POSTGRESDB_USER: n8n
+      DB_POSTGRESDB_PASSWORD: ${POSTGRES_PASSWORD:-n8n-local-only}
+      N8N_HOST: ${N8N_HOST:-localhost}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS: "true"
+      OLLAMA_BASE_URL: http://ollama:11434
+    volumes:
+      - n8n_data:/home/node/.n8n
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    ports:
+      - "${OLLAMA_PORT:-11434}:11434"
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+    volumes:
+      - ollama_data:/root/.ollama
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: unless-stopped
+    profiles: ["rag"]
+    ports:
+      - "${QDRANT_PORT:-6333}:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+
+  graphify-runner:
+    build:
+      context: .
+      dockerfile: docker/graphify-runner.Dockerfile
+    profiles: ["graphify"]
+    depends_on:
+      - ollama
+    working_dir: /workspace
+    environment:
+      OLLAMA_BASE_URL: http://ollama:11434/v1
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b}
+      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-ollama-local}
+    volumes:
+      - .:/workspace
+    command:
+      - python
+      - _tools/update_graph_snapshot.py
+      - --backend
+      - ollama
+      - --model-label
+      - ollama:${OLLAMA_MODEL:-qwen2.5-coder:7b}
+
+volumes:
+  n8n_data:
+  n8n_postgres_data:
+  ollama_data:
+  qdrant_data:

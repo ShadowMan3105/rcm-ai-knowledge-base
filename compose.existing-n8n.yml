@@ -1,0 +1,17 @@
+services:
+  ollama:
+    networks:
+      default: {}
+      existing_n8n:
+        aliases:
+          - ollama
+
+  graphify-runner:
+    networks:
+      default: {}
+      existing_n8n: {}
+
+networks:
+  existing_n8n:
+    external: true
+    name: ${N8N_DOCKER_NETWORK:-n8n-docker_default}

@@ -10,29 +10,22 @@
 
 ---
 
-## Step 2 — Create a Personal Access Token (PAT)
+## Step 2 — Configure GitHub authentication securely
 
-This is the credential AI agents will use to push entries.
+Use local GitHub authentication through GitHub CLI browser login or your operating-system credential manager.
 
-1. GitHub → Settings → Developer Settings → Personal Access Tokens → Tokens (classic)
-2. Click **Generate new token (classic)**
-3. Name: `kb-writer`
-4. Expiration: No expiration (or 1 year — your call)
-5. Scopes: check only `repo` (full control of private/public repos)
-6. Click **Generate token**
-7. **Copy it immediately** — GitHub won't show it again
-8. Store it in your password manager
+Do not paste GitHub credentials into chat, repository files, shell history, commits, pull requests, or issue comments.
 
-This token is what you give to Claude (or any AI) when approving an upload.
+If a short-lived repo-scoped credential is ever required, keep it local to your machine, store it in a password manager, and rotate it immediately if it is exposed.
 
 ---
 
-## Step 3 — Push Initial Structure (Claude does this with your PAT)
+## Step 3 — Push Initial Structure
 
-Once you have the PAT and repo URL, tell Claude:
-> "Push the KB structure to GitHub. Repo: [your-username]/rcm-ai-knowledge-base. PAT: [your-token]"
+After local GitHub authentication is configured, tell the agent:
+> "Push the KB structure to GitHub. Repo: [your-username]/rcm-ai-knowledge-base."
 
-Claude will run the git commands to initialize and push.
+The agent should use the local Git credential flow. Do not include secret values in the prompt.
 
 ---
 
@@ -48,6 +41,74 @@ From that point forward, every successful session will end with the upload offer
 ---
 
 ## Notes
-- PAT gives write access — only share with trusted AI sessions
-- You can revoke and regenerate the PAT anytime from GitHub settings
-- Repo is public: anyone can read, only PAT holders can write
+- Use least-privilege GitHub access.
+- Revoke or rotate any credential that appears in chat, logs, commits, or docs.
+- Repo is public: anyone can read; only authorized collaborators can write.
+
+<!-- GRAPHIFY-KB-LAYER:START -->
+## Optional: Graphify setup
+
+Preferred setup when n8n already exists in Docker:
+
+```bash
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull llama3.1
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm graphify-runner
+```
+
+Standalone n8n setup only if there is no existing n8n:
+
+```bash
+cp .env.example .env
+docker compose -f compose.local-ai.yml --profile standalone-n8n up -d ollama postgres n8n
+```
+
+n8n Ollama credential URL inside Docker:
+
+```text
+http://ollama:11434
+```
+
+Host Ollama URL:
+
+```text
+http://localhost:11434
+```
+
+Install Graphify on the host only if you do not use the Docker runner:
+
+```bash
+uv tool install graphifyy
+# or
+pipx install graphifyy
+```
+
+Build the curated corpus and run a dry-run:
+
+```bash
+python _tools/build_graphify_corpus.py
+python _tools/run_graphify_kb.py --dry-run
+```
+
+Run headless extraction with a backend:
+
+```bash
+python _tools/run_graphify_kb.py --workflow extract --backend openai
+python _tools/run_graphify_kb.py --workflow extract --backend gemini
+OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3.1 python _tools/run_graphify_kb.py --workflow extract --backend ollama
+```
+
+Run assistant-style project mapping:
+
+```bash
+python _tools/run_graphify_kb.py --workflow map --no-viz --wiki
+```
+
+Publish the controlled graph snapshot to GitHub:
+
+```bash
+python _tools/update_graph_snapshot.py --backend ollama --commit --push
+```
+
+Set backend credentials only in your local shell environment. Never commit API keys or paste them into repository files.
+<!-- GRAPHIFY-KB-LAYER:END -->

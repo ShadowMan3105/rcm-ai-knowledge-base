@@ -16,3 +16,16 @@ Thumbs.db
 *.tmp
 *.bak
 _scratch/
+.env
+.env.*
+!.env.example
+*.log
+
+# Graphify local/generated files
+graphify-kb-corpus/
+graphify-kb-corpus-incremental/
+.graphify-kb-corpus/
+graphify-out/
+.graphify/
+.graphify_cache/
+.graphify_labels.json
