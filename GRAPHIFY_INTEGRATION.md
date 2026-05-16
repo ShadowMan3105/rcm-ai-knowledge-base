@@ -25,20 +25,23 @@ Graphify is advisory only. It does not change the KB lifecycle or authority
 model. The approved operating model is:
 
 ```text
-local Docker/Ollama -> Graphify -> controlled _graph/ snapshot -> GitHub -> cloud AI reads _graph/
+local Claude/Sonnet runner -> Graphify -> controlled _graph/ snapshot -> GitHub -> cloud AI reads _graph/
 ```
 
-Cloud AIs must not connect to local Ollama. They read `_graph/` from GitHub and
-verify every conclusion against source KB files.
+Cloud AIs must not connect to local models, LiteLLM, Ollama, n8n, or local
+credentials. They read `_graph/` from GitHub and verify every conclusion against
+source KB files.
 
 Current production refresh:
 
 ```text
 cadence: every 8 hours
 local times: 02:00, 10:00, 18:00
-model: ollama:qwen2.5-coder:7b
+model: bedrock:claude-sonnet-4-5 via LiteLLM
 scope: files changed in the previous 8 hours
 output: _graph/incremental-latest/
+operations: docs/graphify-production-operations.md
+notification: n8n Slack bridge with local outbox retry
 ```
 
 ---

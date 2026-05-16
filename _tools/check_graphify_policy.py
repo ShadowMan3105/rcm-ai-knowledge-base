@@ -15,6 +15,7 @@ REQUIRED_FILES = (
     "compose.local-ai.yml",
     "compose.existing-n8n.yml",
     "docker/graphify-runner.Dockerfile",
+    "docs/graphify-production-operations.md",
     "docs/local-graphify-n8n.md",
     "_graph/README.md",
     "_tools/build_graphify_corpus.py",

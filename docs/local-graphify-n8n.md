@@ -1,16 +1,17 @@
-# Local Graphify + Ollama + n8n Operating Model
+# Local Graphify + Claude/Sonnet + Ollama + n8n Operating Model
 
-Purpose: generate the KB graph locally with Ollama, publish only a controlled
-snapshot to GitHub, and let cloud AIs read that snapshot without accessing the
-local model.
+Purpose: generate the KB graph locally, publish only a controlled snapshot to
+GitHub, and let cloud AIs read that snapshot without accessing local models,
+LiteLLM, Ollama, n8n, or credentials.
 
 ## Architecture
 
 ```text
-local Docker
-|-- existing n8n       # orchestration and scheduled/manual triggers
-|-- ollama             # local model API
-|-- graphify-runner    # builds Graphify map from governed KB files
+local Docker / local host
+|-- existing n8n       # Slack notification bridge and optional orchestration
+|-- LiteLLM            # OpenAI-compatible proxy to AWS Bedrock Claude/Sonnet
+|-- graphify runner    # builds Graphify map from governed KB files
+|-- ollama             # paused/fallback local model API
 `-- qdrant optional    # later RAG/vector memory
 
 GitHub
@@ -32,11 +33,16 @@ Do not start another n8n unless explicitly doing a standalone install.
 
 ## Current Production Runner
 
-The current production runner is scheduled outside this repository as a
-host-level automation named:
+The active production runner is documented in:
 
 ```text
-graphify-incremental-kb-snapshot
+docs/graphify-production-operations.md
+```
+
+It is scheduled outside this repository as a host-level automation named:
+
+```text
+graphify-claude-sonnet-kb-snapshot
 ```
 
 It runs every 8 hours at:
@@ -45,15 +51,20 @@ It runs every 8 hours at:
 02:00, 10:00, 18:00 local time
 ```
 
-The job uses `qwen2.5-coder:7b`, processes only files changed in the previous
-8 hours, and publishes the result to:
+The job uses Claude/Sonnet through LiteLLM and AWS Bedrock, processes only files
+changed in the previous 8 hours, and publishes the result to:
 
 ```text
 _graph/incremental-latest/
 ```
 
-If this deployment is moved to n8n, recreate the same cadence and command.
-Do not create a second persistent n8n container.
+It sends success/failure status through the existing n8n Slack credential using
+workflow `qyt7gkqBX8kfwGtO`. Do not create a second Slack app or duplicate n8n
+credentials.
+
+The older Ollama/qwen automation `graphify-incremental-kb-snapshot` is paused,
+not deleted. Keep it as a fallback path unless the user explicitly asks to
+remove it.
 
 ## Attach Ollama To Existing n8n
 
@@ -114,6 +125,22 @@ docker compose -f compose.local-ai.yml exec ollama ollama pull qwen2.5-coder:7b
 ```
 
 ## Generate The Graph Locally
+
+Active Claude/Sonnet production command:
+
+```powershell
+Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
+.\run-kb-graphify.ps1 -ChangedSince "8 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+```
+
+Flush pending Slack notifications without running Graphify:
+
+```powershell
+Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
+.\run-kb-graphify.ps1 -FlushNotificationsOnly
+```
+
+Legacy Ollama command, kept as fallback only:
 
 From the host:
 

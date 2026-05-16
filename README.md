@@ -68,8 +68,8 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons
 ├── README.md
 ├── SETUP.md
 ├── index.json              ← Auto-generated. Do not hand-edit.
-├── compose.local-ai.yml    ← Ollama + Graphify runner; standalone n8n only by profile
-├── compose.existing-n8n.yml ← Attach Ollama to an existing n8n Docker network
+├── compose.local-ai.yml    ← Local AI services; standalone n8n only by profile
+├── compose.existing-n8n.yml ← Attach local services to an existing n8n Docker network
 ├── _graph/                 ← Published advisory Graphify snapshots
 │   ├── GRAPH_REPORT.md     ← Full advisory graph report when generated
 │   ├── graph.json          ← Full advisory graph data
@@ -141,19 +141,20 @@ This KB can be navigated with Graphify as an advisory knowledge graph layer.
 The approved pattern is local generation plus cloud-readable publication:
 
 ```text
-local Docker/Ollama -> Graphify -> _graph/ snapshot -> GitHub -> cloud AI reads _graph/
+local Claude/Sonnet runner -> Graphify -> _graph/ snapshot -> GitHub -> cloud AI reads _graph/
 ```
 
 The graph does not replace `AI_PROTOCOL.md`, `AGENTS.md`, `index.json`,
 `meta.json`, `report.md`, `lessons.md`, `challenges/`, or `patches/`.
 
-Local Ollama workflow:
+Active production workflow:
 
-```bash
-python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --commit --push
+```powershell
+Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
+.\run-kb-graphify.ps1 -ChangedSince "8 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
-Docker workflow:
+Paused Ollama fallback workflow:
 
 ```bash
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
@@ -167,9 +168,10 @@ Current production cadence:
 
 ```text
 02:00, 10:00, and 18:00 local time
-model: ollama:qwen2.5-coder:7b
+model: bedrock:claude-sonnet-4-5 via LiteLLM
 scope: changed files from the previous 8 hours
 published output: _graph/incremental-latest/
+notification: n8n Slack bridge with local retry outbox
 ```
 
 Cloud AI read flow:
@@ -182,4 +184,5 @@ Cloud AI read flow:
 
 See `GRAPHIFY_INTEGRATION.md` for safety rules, commit policy, and query examples.
 See `docs/local-graphify-n8n.md` for the local Docker/n8n operating model.
+See `docs/graphify-production-operations.md` for the active runner, failure policy, and Slack notification retry path.
 <!-- GRAPHIFY-KB-LAYER:END -->
