@@ -55,6 +55,26 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
+  # LiteLLM proxy: traduce calls OpenAI-compatible -> AWS Bedrock Claude Opus 4.6
+  # Mantenemos Ollama como fallback automático configurado en litellm-config.yaml
+  litellm:
+    image: ghcr.io/berriai/litellm:main-latest
+    profiles: ["graphify"]
+    restart: unless-stopped
+    ports:
+      - "${LITELLM_PORT:-4000}:4000"
+    depends_on:
+      - ollama
+    environment:
+      AWS_BEARER_TOKEN_BEDROCK: ${AWS_BEARER_TOKEN_BEDROCK}
+      AWS_REGION_NAME: ${AWS_REGION:-us-east-1}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-clinicahf-local}
+    volumes:
+      - ./litellm-config.yaml:/app/config.yaml:ro
+      - ./litellm_strip_markdown.py:/app/litellm_strip_markdown.py:ro
+    working_dir: /app
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "1"]
+
   graphify-runner:
     build:
       context: .
@@ -64,9 +84,11 @@ services:
       - ollama
     working_dir: /workspace
     environment:
+      # Revertido a Ollama directo (2026-05-15 ses 14). Bedrock+LiteLLM mantenido para otros usos.
+      # Razón: Claude Opus 4.6 responde con prosa narrativa, no JSON. Ver tasks/handoff.md.
       OLLAMA_BASE_URL: http://ollama:11434/v1
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b}
-      OLLAMA_API_KEY: ${OLLAMA_API_KEY:-ollama-local}
+      OLLAMA_API_KEY: ollama-local
     volumes:
       - .:/workspace
     command:
@@ -75,7 +97,11 @@ services:
       - --backend
       - ollama
       - --model-label
-      - ollama:${OLLAMA_MODEL:-qwen2.5-coder:7b}
+      - ollama:qwen2.5-coder:7b
+      - --changed-since
+      - "24 hours ago"
+      - --token-budget
+      - "4000"
 
 volumes:
   n8n_data:
