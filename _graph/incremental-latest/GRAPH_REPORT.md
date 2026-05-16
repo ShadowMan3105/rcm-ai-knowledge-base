@@ -6,60 +6,71 @@ Use this as a navigation map only. Verify every conclusion against the source KB
 
 ## Summary
 
-- Nodes: 32
-- Edges: 77
+- Nodes: 361
+- Edges: 715
 
 ## KB Source Entries From index.json
 
 These are authoritative source candidates for AI navigation. Graph edges remain advisory and must be verified against source files.
 
 - `KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser` - n8n DataTable Workflow Pattern With Idempotent Upsert And PDF Parser Architecture | domain: `automations` | status: `active` | path: `automations/n8n-datatable-idempotent-upsert-pdf-parser/`
-- `KB-2026-0002-universal-claims-ingestion-transient-dedupe` - Universal Claims Ingestion with Transient Deduplication Workflow Pattern | domain: `automations` | status: `active` | path: `automations/universal-claims-ingestion-transient-dedupe/`
-- `KB-2026-0003-rcm-ai-knowledge-base-setup` - RCM AI Knowledge Base Multi-Agent Governance Setup | domain: `automations` | status: `active` | path: `automations/rcm-ai-knowledge-base-setup/`
-- `KB-2026-0004-rcm-executive-dashboards-hf-2026` - RCM Executive Dashboards Framework For HF 2026 | domain: `executive-reports` | status: `active` | path: `executive-reports/rcm-executive-dashboards-hf-2026/`
-- `KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf` - Multi-Clinic Paid Claims Consolidation from Heterogeneous Payer PDFs | domain: `automations` | status: `active` | path: `automations/multi-clinic-paid-claims-consolidation-pdf/`
+- `KB-2026-0002-rcm-ai-knowledge-base-setup` - RCM AI Knowledge Base — Setup & Architecture | domain: `automations` | status: `active` | path: `automations/rcm-ai-knowledge-base-setup/`
+- `KB-2026-0003-universal-claims-ingestion-transient-dedupe` - Universal Claims Ingestion With Transient Cache And Durable Dedupe | domain: `automations` | status: `active` | path: `automations/universal-claims-ingestion-transient-dedupe/`
+- `KB-2026-0004-rcm-executive-dashboards-hf-2026` - Blueprint: Dashboards Ejecutivos RCM desde SQLite hasta React — HF Multi-Clínica | domain: `executive-reports` | status: `active` | path: `executive-reports/rcm-executive-dashboards-hf-2026/`
+- `KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf` - Multi-Clinic Paid Claims Consolidation From eCW PDF Reports (ALL_CLAIM + PAYMENT + RECEIVABLES) | domain: `automations` | status: `active` | path: `automations/multi-clinic-paid-claims-consolidation-pdf/`
+- `KB-2026-0006-supabase-authoritative-monday-sync` - Supabase-Authoritative Monday.com Sync With Dry-Run Ledger And Hold Gates | domain: `automations` | status: `active` | path: `automations/supabase-authoritative-monday-sync/`
+- `KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy` - Denied Claims Refresh With Supabase Authority, Monday Resolution, And Cache Rebuild | domain: `automations` | status: `active` | path: `automations/denied-claims-refresh-cache-rebuild-strategy/`
+- `KB-2026-0008-monday-sync-bugs-and-acceleration-patterns` - Monday↔Supabase sync — bug catalog, label normalization, drain acceleration & DataTable migration design | domain: `automations` | status: `proposed` | path: `automations/monday-sync-bugs-and-acceleration-patterns/`
+- `KB-2026-0009-payer-scorecard-pipeline-and-naming-canonicalization` - Payer Scorecard pipeline: canonical naming from ERAs/PDFs, alias for ambiguous payers, deterministic performance grading, board_relation gotcha | domain: `automations` | status: `proposed` | path: `automations/payer-scorecard-pipeline-and-naming-canonicalization/`
+- `KB-2026-0010-paid-date-accounting-reconciliation-pdf-last-resort` - Paid Date Accounting Reconciliation With PDF Last-Resort Evidence | domain: `automations` | status: `proposed` | path: `automations/paid-date-accounting-reconciliation-pdf-last-resort/`
 
 ## File Types
 
-- `code`: 31
-- `document`: 1
+- `code`: 168
+- `concept`: 88
+- `document`: 73
+- `rationale`: 32
 
 ## Communities
 
-- `0`: 8 node(s)
-- `1`: 7 node(s)
-- `2`: 7 node(s)
-- `3`: 5 node(s)
-- `4`: 4 node(s)
-- `5`: 1 node(s)
+- `0`: 56 node(s)
+- `1`: 50 node(s)
+- `2`: 49 node(s)
+- `3`: 38 node(s)
+- `4`: 37 node(s)
+- `6`: 29 node(s)
+- `5`: 29 node(s)
+- `7`: 17 node(s)
+- `8`: 16 node(s)
+- `9`: 13 node(s)
 
 ## Sample Nodes
 
-- build_graphify_corpus.py
-- rel()
-- read_text()
-- write_text()
-- load_json()
-- dump_json_for_md()
-- scan_sensitive()
-- fence()
-- iter_entry_dirs()
-- git_lines()
-- changed_paths()
-- entry_for_changed_path()
-- changed_entries()
-- build_index_summary()
-- build_entry_file()
-- copy_markdown_collection()
-- copy_markdown_paths()
-- copy_tooling()
-- check_graphify_policy.py
-- publish_graph_snapshot.py
-- run_capture()
-- validate_graph_json()
-- git_source_status()
-- build_fallback_report()
-- run_graphify_kb.py
+- manifest.json
+- challenges
+- changed_paths
+- changed_since
+- entries
+- generated_at
+- index_summary_included
+- mode
+- patches
+- protocol_files
+- protocol_mode
+- secret_scan_hits
+- source_root
+- tooling_files
+- tooling_mode
+- challenge.schema.json
+- claim_type
+- resolved_at
+- resolved_by
+- resolution_notes
+- successor_entry
+- $schema
+- $id
+- title
+- description
 
 ## Required Verification
 

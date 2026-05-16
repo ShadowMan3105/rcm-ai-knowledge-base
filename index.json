@@ -2,7 +2,7 @@
   "kb_version": "2.1",
   "schema": "_schema/entry.schema.json",
   "protocol": "AI_PROTOCOL.md",
-  "last_built": "2026-05-16",
+  "last_built": "2026-05-15",
   "maintainer": "Dr. Seidel",
   "description": "RCM AI Knowledge Base — multi-agent safe blueprints, lessons, and analyses.",
   "stats": {
