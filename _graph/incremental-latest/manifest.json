@@ -1,9 +1,10 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-16T03:49:22+00:00",
-  "source_commit": "bbe511ce89e0d92de940e11179578b1286bf7667",
+  "generated_at": "2026-05-16T04:17:18+00:00",
+  "source_commit": "c5ccb965bd70c6adfeca633984570cbbe5e632c2",
   "source_branch": "main",
-  "source_worktree_status": "M index.json",
+  "source_worktree_status": "clean",
+  "controlled_output_status_before_publish": "clean",
   "backend": "bedrock-via-litellm-ollama-transport",
   "model": "bedrock:claude-sonnet-4-5",
   "graphify_version": "UNKNOWN",
