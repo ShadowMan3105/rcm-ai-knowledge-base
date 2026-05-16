@@ -70,6 +70,7 @@ Full rules: [`AI_PROTOCOL.md`](AI_PROTOCOL.md) §4 (paths A–D), §4.5 (lessons
 ├── index.json              ← Auto-generated. Do not hand-edit.
 ├── compose.local-ai.yml    ← Local AI services; standalone n8n only by profile
 ├── compose.existing-n8n.yml ← Attach local services to an existing n8n Docker network
+├── ops/graphify/           ← Versioned production Graphify/Sonnet runner
 ├── _graph/                 ← Published advisory Graphify snapshots
 │   ├── GRAPH_REPORT.md     ← Full advisory graph report when generated
 │   ├── graph.json          ← Full advisory graph data
@@ -150,9 +151,11 @@ The graph does not replace `AI_PROTOCOL.md`, `AGENTS.md`, `index.json`,
 Active production workflow:
 
 ```powershell
-Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
-.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
+
+Runtime env files stay outside Git. Use `-EnvFile` or `GRAPHIFY_ENV_FILE` to
+point the wrapper at the local AWS Bedrock/LiteLLM settings.
 
 Paused Ollama fallback workflow:
 
@@ -185,4 +188,5 @@ Cloud AI read flow:
 See `GRAPHIFY_INTEGRATION.md` for safety rules, commit policy, and query examples.
 See `docs/local-graphify-n8n.md` for the local Docker/n8n operating model.
 See `docs/graphify-production-operations.md` for the active runner, failure policy, and Slack notification retry path.
+See `docs/kb-maintenance-audit.md` for the weekly structural audit contract.
 <!-- GRAPHIFY-KB-LAYER:END -->

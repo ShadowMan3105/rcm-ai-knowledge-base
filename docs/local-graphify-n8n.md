@@ -129,15 +129,13 @@ docker compose -f compose.local-ai.yml exec ollama ollama pull qwen2.5-coder:7b
 Active Claude/Sonnet production command:
 
 ```powershell
-Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
-.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 Flush pending Slack notifications without running Graphify:
 
 ```powershell
-Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
-.\run-kb-graphify.ps1 -FlushNotificationsOnly
+.\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
 ```
 
 Legacy Ollama command, kept as fallback only:
@@ -221,7 +219,7 @@ Safer production workflow:
 Schedule Trigger
 -> run daily at 02:00 local time
 -> Git pull main
--> run incremental graph update for the previous 8 hours
+-> run incremental graph update for the previous 24 hours
 -> if git diff _graph/ exists, commit and push
 -> send success/failure notification
 ```
@@ -243,3 +241,13 @@ Cloud AIs read GitHub only:
 7. source KB files for verification
 
 They never call local Ollama directly.
+
+## Drift Prevention
+
+- Production wrapper and Sonnet/LiteLLM lab assets live in `ops/graphify/`.
+- The host automation should call `ops/graphify/run-kb-graphify.ps1`, not an
+  untracked lab copy.
+- `meta.json.related` must contain only existing KB IDs or existing repository
+  entry paths. Keep external context in report prose.
+- A weekly `kb-weekly-structure-audit` automation checks validation, Graphify
+  policy, wrapper drift, graph manifest metadata, and secret exposure.

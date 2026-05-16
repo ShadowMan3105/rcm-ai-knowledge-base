@@ -259,7 +259,7 @@ SQL artifacts:
 ## Related Entries
 
 - **KB-2026-0006-supabase-authoritative-monday-sync** — original sync direction & precedence rules. This entry extends it with concrete failure modes encountered in production.
-- **KB-2026-0006-traceability-idempotency-standard** — the idempotency key naming convention (`{entity}_key`, `payment_idempotency_key`, etc.) that the queue and the audit table both rely on.
+- Idempotency key conventions (`{entity}_key`, `payment_idempotency_key`, etc.) are currently documented inside **KB-2026-0006-supabase-authoritative-monday-sync**; there is no separate traceability/idempotency KB entry yet.
 - **KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy** — cache rebuild pattern; the D4 design here will let denied-claims cache eventually use the same Postgres approach.
 
 ## Tags

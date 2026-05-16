@@ -29,6 +29,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SCHEMA_DIR = ROOT / "_schema"
 
 STALENESS_DAYS = 180  # active entries older than this trigger a WARN
+DOMAINS = ["automations", "research", "rcm-operations", "billing-config", "executive-reports", "consulting"]
 
 try:
     import jsonschema  # type: ignore
@@ -146,6 +147,38 @@ def load_canonical_tags() -> dict | None:
     return out
 
 
+def entry_meta_paths() -> list[Path]:
+    """Return all entry meta.json files under known KB domains."""
+    paths: list[Path] = []
+    for dom in DOMAINS:
+        domain_dir = ROOT / dom
+        if domain_dir.is_dir():
+            paths.extend(sorted(domain_dir.glob("*/meta.json")))
+    return paths
+
+
+def build_known_related_targets(meta_paths: list[Path]) -> set[str]:
+    """Build resolvable targets allowed in meta.json related arrays.
+
+    `related` is intentionally limited to KB IDs or repository entry paths so
+    machine readers do not follow dead links. External context belongs in
+    report.md prose, not in meta.json related.
+    """
+    targets: set[str] = set()
+    for meta_path in meta_paths:
+        try:
+            instance = load_json(meta_path)
+        except Exception:
+            continue
+        entry_id = instance.get("id")
+        if isinstance(entry_id, str):
+            targets.add(entry_id)
+        rel = meta_path.parent.relative_to(ROOT).as_posix()
+        targets.add(rel)
+        targets.add(f"{rel}/")
+    return targets
+
+
 def check_staleness(instance: dict) -> list[str]:
     """Return warnings for active entries that have not been verified in a while."""
     warns: list[str] = []
@@ -181,6 +214,22 @@ def check_tags(instance: dict, canonical: dict | None) -> list[str]:
     return warns
 
 
+def check_related(instance: dict, known_targets: set[str]) -> list[str]:
+    errors: list[str] = []
+    related = instance.get("related") or []
+    if not isinstance(related, list):
+        return errors
+    for idx, target in enumerate(related):
+        if not isinstance(target, str):
+            continue
+        if target not in known_targets:
+            errors.append(
+                f"related[{idx}]: unresolved target '{target}'. "
+                "Use an existing KB id/path, create the missing entry, or move external context to report.md."
+            )
+    return errors
+
+
 def main() -> int:
     strict = "--strict" in sys.argv
 
@@ -193,9 +242,11 @@ def main() -> int:
     n_ok = n_fail = n_warn = 0
     ids_seen: dict[str, Path] = {}
 
-    domains = ["automations", "research", "rcm-operations", "billing-config", "executive-reports", "consulting"]
-    for dom in domains:
-        for meta_path in sorted((ROOT / dom).glob("*/meta.json")) if (ROOT / dom).is_dir() else []:
+    meta_paths = entry_meta_paths()
+    known_related_targets = build_known_related_targets(meta_paths)
+
+    for dom in DOMAINS:
+        for meta_path in [p for p in meta_paths if p.parent.parent.name == dom]:
             try:
                 instance = load_json(meta_path)
             except Exception as e:
@@ -203,6 +254,7 @@ def main() -> int:
                 n_fail += 1
                 continue
             errs = validate(instance, entry_schema)
+            errs.extend(check_related(instance, known_related_targets))
             entry_id = instance.get("id", "")
             if entry_id in ids_seen:
                 errs.append(f"duplicate id: also seen in {ids_seen[entry_id].relative_to(ROOT)}")

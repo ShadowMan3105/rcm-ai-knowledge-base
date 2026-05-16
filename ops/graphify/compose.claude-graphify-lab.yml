@@ -1,0 +1,51 @@
+name: claude-graphify-lab
+
+services:
+  litellm-sonnet:
+    image: ghcr.io/berriai/litellm:main-latest
+    restart: unless-stopped
+    ports:
+      - "${LAB_LITELLM_PORT:-4001}:4000"
+    environment:
+      AWS_BEARER_TOKEN_BEDROCK: ${AWS_BEARER_TOKEN_BEDROCK}
+      AWS_REGION: ${AWS_REGION:-us-east-1}
+      AWS_DEFAULT_REGION: ${AWS_REGION:-us-east-1}
+      AWS_REGION_NAME: ${AWS_REGION:-us-east-1}
+      LITELLM_MASTER_KEY: ${LITELLM_MASTER_KEY:-sk-local-lab}
+    volumes:
+      - ./litellm-sonnet-config.yaml:/app/config.yaml:ro
+      - ./json_guard_callback.py:/app/json_guard_callback.py:ro
+    working_dir: /app
+    command: ["--config", "/app/config.yaml", "--port", "4000", "--num_workers", "1"]
+
+  graphify-sonnet:
+    build:
+      context: .
+      dockerfile: Dockerfile.graphify-runner
+    depends_on:
+      - litellm-sonnet
+    working_dir: /lab
+    environment:
+      OLLAMA_BASE_URL: http://litellm-sonnet:4000/v1
+      OLLAMA_MODEL: ${LAB_CLAUDE_MODEL_ALIAS:-claude-sonnet-4-5}
+      OLLAMA_API_KEY: ${LITELLM_MASTER_KEY:-sk-local-lab}
+      GRAPHIFY_API_TIMEOUT: ${GRAPHIFY_API_TIMEOUT:-300}
+      GRAPHIFY_MAX_OUTPUT_TOKENS: ${GRAPHIFY_MAX_OUTPUT_TOKENS:-2048}
+      GRAPHIFY_OLLAMA_KEEP_ALIVE: ${GRAPHIFY_OLLAMA_KEEP_ALIVE:-5m}
+      GRAPHIFY_DISABLE_OLLAMA_EXTRA_BODY: "1"
+    volumes:
+      - .:/lab
+    command:
+      - graphify
+      - extract
+      - /lab/corpus
+      - --backend
+      - ollama
+      - --model
+      - ${LAB_CLAUDE_MODEL_ALIAS:-claude-sonnet-4-5}
+      - --max-concurrency
+      - "1"
+      - --token-budget
+      - ${LAB_TOKEN_BUDGET:-1200}
+      - --out
+      - /lab/out

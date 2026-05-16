@@ -55,8 +55,8 @@ services:
     volumes:
       - qdrant_data:/qdrant/storage
 
-  # LiteLLM proxy: traduce calls OpenAI-compatible -> AWS Bedrock Claude Opus 4.6
-  # Mantenemos Ollama como fallback automático configurado en litellm-config.yaml
+  # Legacy/fallback LiteLLM proxy for local Graphify tests.
+  # Active production uses ops/graphify/run-kb-graphify.ps1 with Claude Sonnet.
   litellm:
     image: ghcr.io/berriai/litellm:main-latest
     profiles: ["graphify"]
@@ -84,8 +84,8 @@ services:
       - ollama
     working_dir: /workspace
     environment:
-      # Revertido a Ollama directo (2026-05-15 ses 14). Bedrock+LiteLLM mantenido para otros usos.
-      # Razón: Claude Opus 4.6 responde con prosa narrativa, no JSON. Ver tasks/handoff.md.
+      # Paused fallback path: Ollama direct for low-cost local tests.
+      # Active production is the versioned Sonnet wrapper under ops/graphify/.
       OLLAMA_BASE_URL: http://ollama:11434/v1
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5-coder:7b}
       OLLAMA_API_KEY: ollama-local

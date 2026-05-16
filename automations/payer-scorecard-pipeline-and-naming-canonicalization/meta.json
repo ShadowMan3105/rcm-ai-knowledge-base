@@ -25,8 +25,7 @@
   "summary": "Payer Scorecard pipeline: SQL view of per-payer monthly metrics with deterministic A-F grade, payer_alias crosswalk for ambiguous PDF text (CIGNA defaults to CIGNA HEALTHCARE without unifying CIGNA HEALTHSPRING), multi-pass backfill from 23% to 100% coverage with only exact source data, rule that ERA/PDF text is canonical over seed master names, board_relation column gotcha (text/value null, use linked_item_ids fragment), and self-contained writer pattern with dedupe_key upsert for view-driven Monday boards.",
   "related": [
     "KB-2026-0008-monday-sync-bugs-and-acceleration-patterns",
-    "KB-2026-0006-supabase-authoritative-monday-sync",
-    "KB-2026-0006-traceability-idempotency-standard"
+    "KB-2026-0006-supabase-authoritative-monday-sync"
   ],
   "supersedes": null,
   "superseded_by": null,

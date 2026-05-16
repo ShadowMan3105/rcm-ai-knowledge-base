@@ -6,7 +6,7 @@ repository.
 
 ```yaml
 system_directives:
-  version: "3.1"
+  version: "3.2"
   status: mandatory
   scope: "ShadowMan3105/rcm-ai-knowledge-base"
 
@@ -71,6 +71,9 @@ graphify_mechanism:
   cloud_access_pattern: "Cloud AIs read _graph/ from GitHub; they do not connect to local models, LiteLLM, Ollama, or n8n."
   active_model: "bedrock:claude-sonnet-4-5 via LiteLLM"
   active_runner_doc: "docs/graphify-production-operations.md"
+  active_runner_script: "ops/graphify/run-kb-graphify.ps1"
+  active_runner_assets: "ops/graphify/"
+  env_file_policy: "Runtime env files stay outside Git; pass with -EnvFile or GRAPHIFY_ENV_FILE."
   paused_fallback_model: "ollama:qwen2.5-coder:7b"
   production_refresh:
     cadence: "daily"
@@ -78,13 +81,13 @@ graphify_mechanism:
     changed_since: "24 hours ago"
     output: "_graph/incremental-latest/"
     scheduler: "host-level automation named graphify-claude-sonnet-kb-snapshot"
-    command: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
+    command: "powershell -ExecutionPolicy Bypass -File '.\\ops\\graphify\\run-kb-graphify.ps1' -EnvFile '<local-env-file>' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
     notification: "n8n workflow qyt7gkqBX8kfwGtO posts minimal Slack status; local outbox retries if n8n/Slack is unavailable."
   run_paths:
     headless_ci: "python _tools/run_graphify_kb.py --workflow extract --backend <backend>"
     assistant_mapping: "python _tools/run_graphify_kb.py --workflow map --no-viz --wiki"
-    active_local_publish: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
-    notification_retry: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -FlushNotificationsOnly"
+    active_local_publish: "powershell -ExecutionPolicy Bypass -File '.\\ops\\graphify\\run-kb-graphify.ps1' -EnvFile '<local-env-file>' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
+    notification_retry: "powershell -ExecutionPolicy Bypass -File '.\\ops\\graphify\\run-kb-graphify.ps1' -FlushNotificationsOnly"
     paused_ollama_publish: "python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since '24 hours ago' --commit --push"
   mandatory_rules:
     - "Graphify is never the source of truth."
@@ -93,6 +96,8 @@ graphify_mechanism:
     - "Do not rewrite active entry content because a graph edge suggests a relationship."
     - "_graph/incremental-latest/ is a recent-change map only; do not treat it as a replacement for full _graph/."
     - "Commit only controlled _graph/ snapshots, not raw graphify-kb-corpus/, graphify-kb-corpus-incremental/, .graphify-kb-corpus/, or graphify-out/."
+    - "Production Graphify wrapper changes must be made in ops/graphify/ and documented in docs/graphify-production-operations.md."
+    - "Do not depend on untracked local lab scripts for production behavior."
 
 write_policy:
   default: "read_only_until_task_requires_write"
@@ -104,6 +109,9 @@ write_policy:
   index_json:
     - "Never hand-edit index.json."
     - "Run _tools/rebuild_index.py after governed KB changes."
+  related_links:
+    - "meta.json related values must resolve to an existing KB id or an existing repository entry path."
+    - "External context belongs in report.md prose, not meta.json related."
 
 verification:
   required_before_marking_done: true
@@ -121,6 +129,21 @@ verification:
     - "python _tools/build_graphify_corpus.py --strict-secrets when Graphify corpus logic changes"
     - "python _tools/update_graph_snapshot.py --dry-run when local graph publication logic changes"
     - "git diff --check before commit"
+
+maintenance_guardrails:
+  weekly_audit:
+    scheduler: "host-level automation named kb-weekly-structure-audit"
+    purpose: "catch wrapper drift, dead related links, stale graph metadata, validation failures, and secret exposure before they accumulate"
+    required_checks:
+      - "git fetch origin main:refs/remotes/origin/main"
+      - "git status --short --branch"
+      - "python _tools/validate.py"
+      - "python _tools/check_graphify_policy.py"
+      - "python -m compileall _tools"
+      - "python _tools/publish_graph_snapshot.py --dry-run --graph-out _graph/incremental-latest --dest _graph/incremental-latest"
+      - "verify ops/graphify/run-kb-graphify.ps1 is the documented production wrapper"
+      - "verify _graph/*/manifest.json source_commit and source_worktree_status are explainable"
+    escalation: "Report exact failing check, file path, and required fix. Do not claim clean unless all required checks pass."
 
 task_management:
   plan_required_when:

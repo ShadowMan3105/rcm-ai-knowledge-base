@@ -287,7 +287,7 @@ If `linked_item_ids` is populated, the board_relation is working — don't be mi
 
 - KB-2026-0008 documents the upstream Monday sync hardening (drain acceleration, normalize_monday_label, etc.) that this pipeline depends on
 - KB-2026-0006 (supabase-authoritative-monday-sync) — the contract that Supabase is the source of truth, which justifies renaming the Monday master to match the remittance
-- KB-2026-0006 (traceability-idempotency-standard) — the dedupe-key naming convention applied here as `{payer_monday_item_id}|{YYYY-MM}`
+- The dedupe-key naming convention applied here as `{payer_monday_item_id}|{YYYY-MM}` is currently documented inside KB-2026-0006; there is no separate traceability/idempotency KB entry yet.
 
 ## Tags
 

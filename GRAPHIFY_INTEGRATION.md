@@ -81,6 +81,7 @@ RCM AI Knowledge Base
 |-- compose.local-ai.yml                 # local Ollama/Graphify stack
 |-- compose.existing-n8n.yml             # attach Ollama to an existing n8n network
 |-- docker/graphify-runner.Dockerfile    # local Graphify runner image
+|-- ops/graphify/                        # active versioned Sonnet/LiteLLM production runner
 |-- _tools/build_graphify_corpus.py      # curated graph corpus builder
 |-- _tools/run_graphify_kb.py            # repeatable Graphify runner
 |-- _tools/publish_graph_snapshot.py     # controlled _graph publisher
@@ -162,6 +163,15 @@ Run the production-style incremental Graphify job through Docker:
 ```bash
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago"
 ```
+
+Run the active Claude/Sonnet production wrapper from the repository root:
+
+```powershell
+.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+```
+
+The env file remains local and ignored. The wrapper, LiteLLM config, JSON guard,
+Dockerfile, and Graphify transport patch are versioned in `ops/graphify/`.
 
 Run a full local snapshot only when intentionally refreshing the full map:
 
@@ -410,6 +420,8 @@ cache.
 - [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected extract command.
 - [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
 - [ ] `python _tools/update_graph_snapshot.py --dry-run` prints the local publication workflow.
+- [ ] `ops/graphify/run-kb-graphify.ps1` is the documented production wrapper.
+- [ ] `meta.json.related` values resolve to existing KB IDs or entry paths.
 - [ ] The production runner cadence is daily at 02:00 local time with a 24-hour changed-file window.
 - [ ] `python _tools/publish_graph_snapshot.py` publishes only allowlisted files when Graphify output exists.
 - [ ] No secrets or PHI are committed.

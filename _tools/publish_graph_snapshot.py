@@ -67,7 +67,7 @@ def validate_graph_json(path: Path) -> tuple[int | None, int | None]:
     return node_count, edge_count
 
 
-def git_source_status(root: Path) -> str:
+def git_status(root: Path, paths: list[str]) -> str:
     return run_capture(
         [
             "git",
@@ -78,7 +78,19 @@ def git_source_status(root: Path) -> str:
             "status",
             "--short",
             "--",
+            *paths,
+        ],
+        root,
+        empty="clean",
+    )
+
+
+def git_source_status(root: Path) -> str:
+    return git_status(
+        root,
+        [
             ".",
+            ":(exclude)index.json",
             ":(exclude)_graph",
             ":(exclude)graphify-kb-corpus",
             ":(exclude)graphify-kb-corpus-incremental",
@@ -87,10 +99,19 @@ def git_source_status(root: Path) -> str:
             ":(exclude).graphify",
             ":(exclude).graphify_cache",
             ":(exclude).graphify_labels.json",
+            ":(exclude)ops/graphify/out",
+            ":(exclude)ops/graphify/corpus",
         ],
-        root,
-        empty="clean",
     )
+
+
+def git_controlled_output_status(root: Path, dest: Path) -> str:
+    paths = ["index.json"]
+    try:
+        paths.append(dest.relative_to(root).as_posix())
+    except ValueError:
+        paths.append(str(dest))
+    return git_status(root, paths)
 
 
 def build_kb_entry_summary(root: Path) -> list[str]:
@@ -246,6 +267,7 @@ def main() -> int:
     source_commit = args.source_commit or run_capture(["git", "rev-parse", "HEAD"], root)
     source_branch = run_capture(["git", "branch", "--show-current"], root)
     source_status = git_source_status(root)
+    controlled_output_status = git_controlled_output_status(root, dest)
     graphify_version = run_capture(["graphify", "--version"], root)
     generated_at = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
@@ -255,6 +277,7 @@ def main() -> int:
         "source_commit": source_commit,
         "source_branch": source_branch,
         "source_worktree_status": source_status,
+        "controlled_output_status_before_publish": controlled_output_status,
         "backend": args.backend,
         "model": args.model_label or "UNKNOWN - requires: OLLAMA_MODEL or explicit --model-label",
         "graphify_version": graphify_version,
@@ -312,7 +335,9 @@ Rules:
 
     dest.mkdir(parents=True, exist_ok=True)
     write_text(dest / GRAPH_REPORT, report_text)
-    shutil.copyfile(graph_json_path, dest / GRAPH_JSON)
+    dest_graph_json = dest / GRAPH_JSON
+    if graph_json_path.resolve() != dest_graph_json.resolve():
+        shutil.copyfile(graph_json_path, dest_graph_json)
     write_text(dest / "manifest.json", json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
     write_text(dest / "README.md", readme)
     print(f"Published Graphify snapshot to {dest.relative_to(root).as_posix()}/")

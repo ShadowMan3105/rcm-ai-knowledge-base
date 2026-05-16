@@ -9,8 +9,9 @@ published Graphify snapshot.
 active_runner: "Claude/Sonnet via LiteLLM and AWS Bedrock"
 transport: "Graphify ollama backend pointed at LiteLLM OpenAI-compatible endpoint"
 model_label: "bedrock:claude-sonnet-4-5"
-local_lab_path: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab"
-runner_script: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1"
+runner_assets: "ops/graphify/"
+runner_script: "ops/graphify/run-kb-graphify.ps1"
+env_file: "local only; pass with -EnvFile or GRAPHIFY_ENV_FILE"
 repo_root: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\review_graphify_git"
 output_path: "_graph/incremental-latest/"
 cadence: "daily"
@@ -27,10 +28,10 @@ published snapshot runner.
 
 ## Run Command
 
-From the lab folder:
+From the repository root:
 
 ```powershell
-.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 The script performs the full operation:
@@ -62,22 +63,23 @@ Notification rules:
 Local notification files:
 
 ```yaml
-pending_queue: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\out\\notifications\\pending\\*.json"
-sent_archive: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\out\\notifications\\sent\\*.json"
-history_log: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\out\\notifications\\history.jsonl"
+pending_queue: "ops/graphify/out/notifications/pending/*.json by default"
+sent_archive: "ops/graphify/out/notifications/sent/*.json by default"
+history_log: "ops/graphify/out/notifications/history.jsonl by default"
+override: "GRAPHIFY_NOTIFICATION_ROOT or -NotificationRoot"
 ```
 
 Flush pending notifications without running Graphify:
 
 ```powershell
-.\run-kb-graphify.ps1 -FlushNotificationsOnly
+.\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
 ```
 
 Create a controlled test notification without running Graphify:
 
 ```powershell
-.\run-kb-graphify.ps1 -NotifyOnlyStatus success
-.\run-kb-graphify.ps1 -NotifyOnlyStatus failure
+.\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus success
+.\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus failure
 ```
 
 ## Failure Policy
@@ -126,9 +128,19 @@ n8n_or_slack_unavailable:
   `.graphify-kb-corpus/`, `graphify-out/`, `.graphify/`, or local lab `out/`.
 - Do not replace the n8n Slack bridge with new Slack credentials unless the user
   explicitly asks.
+- Do not run production from untracked local lab scripts. The wrapper and
+  LiteLLM/Graphify lab assets must stay versioned under `ops/graphify/`.
 - Do not claim a successful production run unless the wrapper reports
   `GRAPHIFY_KB_OK`, validation passed, policy check passed, GitHub push
   succeeded or no commit was needed, and the success notification was sent or
   queued.
 - If notification is queued but not sent, report it as a notification delivery
   issue, not as a graph generation failure.
+
+## Drift Prevention
+
+- Weekly maintenance audit contract: `docs/kb-maintenance-audit.md`.
+- `python _tools/check_graphify_policy.py` must fail if the versioned production
+  wrapper or required Graphify operations docs disappear.
+- `python _tools/validate.py` must fail on unresolved `meta.json.related`
+  values so machine readers do not follow dead KB references.

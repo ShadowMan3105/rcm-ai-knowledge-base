@@ -29,3 +29,5 @@ graphify-out/
 .graphify/
 .graphify_cache/
 .graphify_labels.json
+ops/graphify/out/
+ops/graphify/corpus/

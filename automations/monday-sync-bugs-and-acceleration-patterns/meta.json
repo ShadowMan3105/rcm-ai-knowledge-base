@@ -24,7 +24,6 @@
   ],
   "summary": "Concentrates 10 bugs discovered and fixed during the Supabase→Monday sync pipeline hardening (sessions 10-12, May 14-15 2026): wrong n8n port hardcoded in 4+ workflows, JWT credentials leaked in parameters, Monday dropdown/status label case-sensitivity, board_relation serializer missing, PostgREST max_rows silent truncation, parsed_claim_rows duplicate lines distorting aggregations, Monday bulk-mutation contagious failure from archived items, n8n DataTable size limit being instance-wide, and a 30x drain acceleration approach. Includes design for migrating `monday_board_cache_v2` DataTable to dedicated Postgres in Supabase with zero-downtime dual-write strategy.",
   "related": [
-    "KB-2026-0006-traceability-idempotency-standard",
     "KB-2026-0006-supabase-authoritative-monday-sync",
     "KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy"
   ],

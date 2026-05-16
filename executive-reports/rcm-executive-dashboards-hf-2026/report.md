@@ -76,9 +76,14 @@ PDFs del vendor
 - Pipeline SQLite → JSON embebido en JSX (evita dependencia de backend para dashboards ejecutivos)
 
 ## Related Entries
+- `KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf` — Pipeline PDF multi-clinic reusable para consolidacion y reconciliacion.
+- `KB-2026-0006-supabase-authoritative-monday-sync` — Patron de Supabase como fuente de verdad y Monday como superficie operativa.
+- `KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy` — Estrategia de refresh/cache para claims denegados.
+
+External context from the original project, not current KB entries:
 - `rcm-operations/denial-tracker-monday-board/` — Board de seguimiento de denials en Monday.com
-- `rcm-operations/cpt-gap-analysis/` — Análisis de oportunidades CPT vs competidores
-- `billing-config/dual-architecture-ikon-ecw/` — Plan de transición in-house
+- `rcm-operations/cpt-gap-analysis/` — Analisis de oportunidades CPT vs competidores
+- `billing-config/dual-architecture-ikon-ecw/` — Plan de transicion in-house
 
 ## Tags
 rcm, revenue-cycle, denial-management, claims-analytics, sqlite, react-dashboard, recharts, multi-clinic, timely-filing, cpt-analysis, hispano-medical, dfw, executive-report, billing-transition, category-ii-cpt, capitation, 835-remittance

@@ -220,6 +220,20 @@ The point of the canon is that the `READ_PROTOCOL.md` ranking step can do clean 
 
 `validate.py` emits a warning when an `active` entry has `last_verified` older than 180 days. The entry stays `active` — but ranking in `READ_PROTOCOL.md` §3.4 should treat stale entries as less trustworthy than recently-verified ones. To clear the warning: re-verify against the source and bump `last_verified` + `last_verified_by` (a Path B edit, no challenge needed).
 
+### 12.4 Related Link Integrity
+
+`meta.json.related` is machine-readable, so every value must resolve to an
+existing KB ID or an existing repository entry path. Do not put planned,
+external, or historical project paths in `meta.json.related`; keep those in
+`report.md` prose under an explicit external-context label.
+
+`validate.py` fails when a related value cannot be resolved. To fix it, choose
+one of three paths:
+
+1. replace it with an existing KB ID or entry path;
+2. create the missing KB entry;
+3. move the external reference to `report.md` prose.
+
 ---
 
 ## 13. Patches Operational Notes
@@ -249,6 +263,8 @@ Rules:
 - Do not ingest PHI, credentials, API keys, payer-specific rates, live operational data, or unreviewed client exports.
 - Use `_tools/build_graphify_corpus.py` as the preferred input boundary.
 - Use `_tools/update_graph_snapshot.py` to publish controlled `_graph/` snapshots.
+- Keep the active production wrapper and Sonnet/LiteLLM runtime assets versioned
+  under `ops/graphify/`.
 - Run `_tools/check_graphify_policy.py`, `_tools/validate.py`, `_tools/rebuild_index.py`, and `_tools/update_graph_snapshot.py --dry-run` before committing integration changes.
 
 Commit policy:

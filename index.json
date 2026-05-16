@@ -181,9 +181,9 @@
       ],
       "summary": "Pipeline completo SQLite a React para análisis ejecutivo de RCM en grupo médico multi-clínica (12 ubicaciones DFW): 45K+ claims, métricas verificadas, 12 lecciones de errores críticos de datos.",
       "related": [
-        "rcm-operations/denial-tracker-monday-board/",
-        "rcm-operations/cpt-gap-analysis/",
-        "billing-config/dual-architecture-ikon-ecw/"
+        "KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf",
+        "KB-2026-0006-supabase-authoritative-monday-sync",
+        "KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy"
       ],
       "supersedes": null,
       "superseded_by": null,
@@ -324,7 +324,6 @@
       ],
       "summary": "Concentrates 10 bugs discovered and fixed during the Supabase→Monday sync pipeline hardening (sessions 10-12, May 14-15 2026): wrong n8n port hardcoded in 4+ workflows, JWT credentials leaked in parameters, Monday dropdown/status label case-sensitivity, board_relation serializer missing, PostgREST max_rows silent truncation, parsed_claim_rows duplicate lines distorting aggregations, Monday bulk-mutation contagious failure from archived items, n8n DataTable size limit being instance-wide, and a 30x drain acceleration approach. Includes design for migrating `monday_board_cache_v2` DataTable to dedicated Postgres in Supabase with zero-downtime dual-write strategy.",
       "related": [
-        "KB-2026-0006-traceability-idempotency-standard",
         "KB-2026-0006-supabase-authoritative-monday-sync",
         "KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy"
       ],
@@ -360,8 +359,7 @@
       "summary": "Payer Scorecard pipeline: SQL view of per-payer monthly metrics with deterministic A-F grade, payer_alias crosswalk for ambiguous PDF text (CIGNA defaults to CIGNA HEALTHCARE without unifying CIGNA HEALTHSPRING), multi-pass backfill from 23% to 100% coverage with only exact source data, rule that ERA/PDF text is canonical over seed master names, board_relation column gotcha (text/value null, use linked_item_ids fragment), and self-contained writer pattern with dedupe_key upsert for view-driven Monday boards.",
       "related": [
         "KB-2026-0008-monday-sync-bugs-and-acceleration-patterns",
-        "KB-2026-0006-supabase-authoritative-monday-sync",
-        "KB-2026-0006-traceability-idempotency-standard"
+        "KB-2026-0006-supabase-authoritative-monday-sync"
       ],
       "supersedes": null,
       "superseded_by": null,

@@ -1,11 +1,11 @@
 model_list:
-  # Alias que Graphify ya usa (no requiere cambio en Graphify)
-  - model_name: qwen2.5-coder:7b
+  # Production-compatible Sonnet alias. Active production uses ops/graphify/.
+  - model_name: claude-sonnet-4-5
     litellm_params:
-      model: bedrock/us.anthropic.claude-opus-4-6-v1
+      model: bedrock/us.anthropic.claude-sonnet-4-5-20250929-v1:0
       aws_region_name: us-east-1
 
-  # Alias adicional explícito por si queremos referenciarlo directamente
+  # Legacy Opus alias kept only for controlled experiments, not production.
   - model_name: claude-opus-4-6
     litellm_params:
       model: bedrock/us.anthropic.claude-opus-4-6-v1
@@ -20,17 +20,19 @@ model_list:
 # Auto-fallback si Bedrock falla (rate limit, network, etc.)
 litellm_settings:
   fallbacks:
-    - qwen2.5-coder:7b: ["qwen2.5-coder-local"]
+    - claude-sonnet-4-5: ["qwen2.5-coder-local"]
     - claude-opus-4-6: ["qwen2.5-coder-local"]
-  request_timeout: 600           # 10 min — Opus puede tomar tiempo en outputs largos
+  request_timeout: 300
   num_retries: 2
-  set_verbose: false             # subir a true si debug
-  # Callback que strip markdown fences (```json ... ```) del response de Claude
-  # Crítico: Graphify hace json.loads(content) directo, Claude wrappea en markdown
-  # NOTA: debe ser STRING (no lista) para custom CustomLogger callbacks
+  drop_params: true
+  additional_drop_params:
+    - keep_alive
+    - options
+  set_verbose: false
+  # Callback strips markdown fences and short preambles without fabricating JSON.
   callbacks: litellm_strip_markdown.proxy_handler_instance
 
 # General settings
 general_settings:
   master_key: os.environ/LITELLM_MASTER_KEY
-  database_url: os.environ/DATABASE_URL  # opcional — para spend tracking persistent
+  database_url: os.environ/DATABASE_URL

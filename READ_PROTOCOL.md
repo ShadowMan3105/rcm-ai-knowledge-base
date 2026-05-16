@@ -95,7 +95,9 @@ See `_tools/query.py --help`.
 <!-- GRAPHIFY-KB-LAYER:START -->
 ## Optional Graphify navigation
 Graphify may be used after the normal read protocol. It is a navigation aid only.
-The cloud-readable graph lives in `_graph/` and is generated locally by Docker/Ollama jobs.
+The cloud-readable graph lives in `_graph/` and is generated locally by the
+versioned runner in `ops/graphify/`. The active production path uses
+Claude/Sonnet through LiteLLM; Ollama/qwen is fallback/local test infrastructure.
 
 Required behavior:
 
