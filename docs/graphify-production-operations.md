@@ -13,9 +13,9 @@ local_lab_path: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graph
 runner_script: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1"
 repo_root: "C:\\Users\\Seide\\Documents\\New project 2\\tasks\\review_graphify_git"
 output_path: "_graph/incremental-latest/"
-cadence: "every 8 hours"
-local_times: ["02:00", "10:00", "18:00"]
-changed_since: "8 hours ago"
+cadence: "daily"
+local_times: ["02:00"]
+changed_since: "24 hours ago"
 notification_bridge: "n8n workflow qyt7gkqBX8kfwGtO"
 notification_webhook: "http://localhost:5800/webhook/graphify-status-rcm-kb"
 slack_message_format: "Graphify activado - ejecucion exitosa|ejecucion fallida - YYYY-MM-DD HH:mm:ss"
@@ -30,7 +30,7 @@ published snapshot runner.
 From the lab folder:
 
 ```powershell
-.\run-kb-graphify.ps1 -ChangedSince "8 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 The script performs the full operation:

@@ -45,14 +45,14 @@ It is scheduled outside this repository as a host-level automation named:
 graphify-claude-sonnet-kb-snapshot
 ```
 
-It runs every 8 hours at:
+It runs daily at:
 
 ```text
-02:00, 10:00, 18:00 local time
+02:00 local time
 ```
 
 The job uses Claude/Sonnet through LiteLLM and AWS Bedrock, processes only files
-changed in the previous 8 hours, and publishes the result to:
+changed in the previous 24 hours, and publishes the result to:
 
 ```text
 _graph/incremental-latest/
@@ -130,7 +130,7 @@ Active Claude/Sonnet production command:
 
 ```powershell
 Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
-.\run-kb-graphify.ps1 -ChangedSince "8 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 Flush pending Slack notifications without running Graphify:
@@ -155,13 +155,13 @@ unless you explicitly override those values.
 From Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago"
 ```
 
 For the scheduled resource-conscious run, process only recent changes:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago"
 ```
 
 This writes a recent-change snapshot to `_graph/incremental-latest/` by
@@ -211,7 +211,7 @@ Recommended first workflow:
 ```text
 Manual Trigger
 -> Execute Command or local webhook runner
--> python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago" --commit --push
+-> python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago" --commit --push
 -> notify result
 ```
 
@@ -219,7 +219,7 @@ Safer production workflow:
 
 ```text
 Schedule Trigger
--> run at 02:00, 10:00, 18:00 local time
+-> run daily at 02:00 local time
 -> Git pull main
 -> run incremental graph update for the previous 8 hours
 -> if git diff _graph/ exists, commit and push

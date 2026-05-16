@@ -73,19 +73,19 @@ graphify_mechanism:
   active_runner_doc: "docs/graphify-production-operations.md"
   paused_fallback_model: "ollama:qwen2.5-coder:7b"
   production_refresh:
-    cadence: "every 8 hours"
-    local_times: ["02:00", "10:00", "18:00"]
-    changed_since: "8 hours ago"
+    cadence: "daily"
+    local_times: ["02:00"]
+    changed_since: "24 hours ago"
     output: "_graph/incremental-latest/"
     scheduler: "host-level automation named graphify-claude-sonnet-kb-snapshot"
-    command: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '8 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
+    command: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
     notification: "n8n workflow qyt7gkqBX8kfwGtO posts minimal Slack status; local outbox retries if n8n/Slack is unavailable."
   run_paths:
     headless_ci: "python _tools/run_graphify_kb.py --workflow extract --backend <backend>"
     assistant_mapping: "python _tools/run_graphify_kb.py --workflow map --no-viz --wiki"
-    active_local_publish: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '8 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
+    active_local_publish: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -ChangedSince '24 hours ago' -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush"
     notification_retry: "powershell -ExecutionPolicy Bypass -File 'C:\\Users\\Seide\\Documents\\New project 2\\tasks\\claude_graphify_lab\\run-kb-graphify.ps1' -FlushNotificationsOnly"
-    paused_ollama_publish: "python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since '8 hours ago' --commit --push"
+    paused_ollama_publish: "python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since '24 hours ago' --commit --push"
   mandatory_rules:
     - "Graphify is never the source of truth."
     - "Verify every graph-derived conclusion against original KB files."

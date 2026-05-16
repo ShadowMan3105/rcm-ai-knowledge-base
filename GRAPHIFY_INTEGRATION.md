@@ -35,10 +35,10 @@ source KB files.
 Current production refresh:
 
 ```text
-cadence: every 8 hours
-local times: 02:00, 10:00, 18:00
+cadence: daily
+local time: 02:00
 model: bedrock:claude-sonnet-4-5 via LiteLLM
-scope: files changed in the previous 8 hours
+scope: files changed in the previous 24 hours
 output: _graph/incremental-latest/
 operations: docs/graphify-production-operations.md
 notification: n8n Slack bridge with local outbox retry
@@ -160,7 +160,7 @@ docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama o
 Run the production-style incremental Graphify job through Docker:
 
 ```bash
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago"
 ```
 
 Run a full local snapshot only when intentionally refreshing the full map:
@@ -279,7 +279,7 @@ python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwe
 Incremental local update for recent changes:
 
 ```bash
-python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago" --commit --push
+python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago" --commit --push
 ```
 
 Incremental output is published to `_graph/incremental-latest/` by default.
@@ -410,6 +410,6 @@ cache.
 - [ ] `python _tools/run_graphify_kb.py --dry-run` prints the expected extract command.
 - [ ] `python _tools/run_graphify_kb.py --workflow map --no-viz --wiki --dry-run` prints the expected map command.
 - [ ] `python _tools/update_graph_snapshot.py --dry-run` prints the local publication workflow.
-- [ ] The production runner cadence is every 8 hours and includes a 02:00 local run.
+- [ ] The production runner cadence is daily at 02:00 local time with a 24-hour changed-file window.
 - [ ] `python _tools/publish_graph_snapshot.py` publishes only allowlisted files when Graphify output exists.
 - [ ] No secrets or PHI are committed.

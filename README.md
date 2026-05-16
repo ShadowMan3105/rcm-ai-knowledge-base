@@ -151,7 +151,7 @@ Active production workflow:
 
 ```powershell
 Set-Location "C:\Users\Seide\Documents\New project 2\tasks\claude_graphify_lab"
-.\run-kb-graphify.ps1 -ChangedSince "8 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+.\run-kb-graphify.ps1 -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 Paused Ollama fallback workflow:
@@ -159,7 +159,7 @@ Paused Ollama fallback workflow:
 ```bash
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml up -d ollama
 docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama ollama pull qwen2.5-coder:7b
-docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "8 hours ago"
+docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile graphify run --rm -e OLLAMA_MODEL=qwen2.5-coder:7b graphify-runner python _tools/update_graph_snapshot.py --backend ollama --model-label ollama:qwen2.5-coder:7b --changed-since "24 hours ago"
 ```
 
 Use `--profile standalone-n8n` only if there is no existing n8n container.
@@ -167,9 +167,9 @@ Use `--profile standalone-n8n` only if there is no existing n8n container.
 Current production cadence:
 
 ```text
-02:00, 10:00, and 18:00 local time
+02:00 local time
 model: bedrock:claude-sonnet-4-5 via LiteLLM
-scope: changed files from the previous 8 hours
+scope: changed files from the previous 24 hours
 published output: _graph/incremental-latest/
 notification: n8n Slack bridge with local retry outbox
 ```
