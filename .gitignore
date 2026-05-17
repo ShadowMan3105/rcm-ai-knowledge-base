@@ -16,6 +16,7 @@ Thumbs.db
 *.tmp
 *.bak
 _scratch/
+tasks/
 .env
 .env.*
 !.env.example

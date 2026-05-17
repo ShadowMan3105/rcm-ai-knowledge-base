@@ -167,7 +167,7 @@ docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml --profile gra
 Run the active Claude/Sonnet production wrapper from the repository root:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 The env file remains local and ignored. The wrapper, LiteLLM config, JSON guard,

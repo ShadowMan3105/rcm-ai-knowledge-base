@@ -201,7 +201,7 @@ function Invoke-GitSyncBeforeRun {
     if ($dirty) {
         throw "Tracked worktree is dirty before Graphify run. Requires clean repo before unattended publish."
     }
-    Invoke-Native git "fetch" "origin" "main:refs/remotes/origin/main"
+    Invoke-GitFetchWithRetry
     $behind = & git rev-list --count "HEAD..origin/main"
     if ($LASTEXITCODE -ne 0) {
         throw "Unable to compare local main to origin/main"
@@ -215,6 +215,23 @@ function Invoke-GitSyncBeforeRun {
     } elseif ([int]$behind -gt 0 -and [int]$ahead -gt 0) {
         throw "Local main and origin/main diverged before run. Refusing unattended publish."
     }
+}
+
+function Invoke-GitFetchWithRetry {
+    $lastError = ""
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
+        try {
+            Invoke-Native git "fetch" "origin" "main:refs/remotes/origin/main"
+            return
+        } catch {
+            $lastError = $_.Exception.Message
+            Write-Warning "git fetch attempt $attempt failed: $lastError"
+            if ($attempt -lt 3) {
+                Start-Sleep -Seconds ([Math]::Min(30, [Math]::Pow(2, $attempt)))
+            }
+        }
+    }
+    throw "git fetch failed after 3 attempts. Last error: $lastError"
 }
 
 function Invoke-GitPushOnce {

@@ -129,13 +129,13 @@ docker compose -f compose.local-ai.yml exec ollama ollama pull qwen2.5-coder:7b
 Active Claude/Sonnet production command:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 Flush pending Slack notifications without running Graphify:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
 ```
 
 Legacy Ollama command, kept as fallback only:

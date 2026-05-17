@@ -151,7 +151,7 @@ The graph does not replace `AI_PROTOCOL.md`, `AGENTS.md`, `index.json`,
 Active production workflow:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 Runtime env files stay outside Git. Use `-EnvFile` or `GRAPHIFY_ENV_FILE` to

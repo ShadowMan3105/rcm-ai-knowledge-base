@@ -31,7 +31,7 @@ published snapshot runner.
 From the repository root:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -EnvFile "<local-env-file>" -ChangedSince "24 hours ago" -TokenBudget 1200 -MaxOutputTokens 8192 -CommitPush
 ```
 
 The script performs the full operation:
@@ -72,14 +72,14 @@ override: "GRAPHIFY_NOTIFICATION_ROOT or -NotificationRoot"
 Flush pending notifications without running Graphify:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -FlushNotificationsOnly
 ```
 
 Create a controlled test notification without running Graphify:
 
 ```powershell
-.\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus success
-.\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus failure
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus success
+powershell -ExecutionPolicy Bypass -File .\ops\graphify\run-kb-graphify.ps1 -NotifyOnlyStatus failure
 ```
 
 ## Failure Policy
