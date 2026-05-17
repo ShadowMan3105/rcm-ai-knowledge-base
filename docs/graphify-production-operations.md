@@ -18,7 +18,7 @@ cadence: "daily"
 local_times: ["02:00"]
 changed_since: "24 hours ago"
 notification_bridge: "n8n workflow qyt7gkqBX8kfwGtO"
-notification_webhook: "http://localhost:5800/webhook/graphify-status-rcm-kb"
+notification_webhook: "http://localhost:7080/webhook/graphify-status-rcm-kb"
 slack_message_format: "Graphify activado - ejecucion exitosa|ejecucion fallida - YYYY-MM-DD HH:mm:ss"
 ```
 

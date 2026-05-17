@@ -25,7 +25,7 @@ The current Docker environment already has n8n:
 
 ```text
 project: n8n-docker
-n8n URL: http://localhost:5800
+n8n URL: http://localhost:7080
 n8n network: n8n-docker_default
 ```
 
@@ -78,7 +78,7 @@ docker compose -f compose.local-ai.yml -f compose.existing-n8n.yml exec ollama o
 Open n8n:
 
 ```text
-http://localhost:5800
+http://localhost:7080
 ```
 
 n8n Ollama credential URL:

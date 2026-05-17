@@ -6,7 +6,7 @@ param(
     [int]$TokenBudget = 1200,
     [int]$MaxOutputTokens = 8192,
     [string]$ChangedSince = "24 hours ago",
-    [string]$NotifyUrl = "http://localhost:5800/webhook/graphify-status-rcm-kb",
+    [string]$NotifyUrl = "http://localhost:7080/webhook/graphify-status-rcm-kb",
     [string]$NotificationRoot = "",
     [int]$NotificationAttempts = 5,
     [ValidateSet("", "success", "failure")]
