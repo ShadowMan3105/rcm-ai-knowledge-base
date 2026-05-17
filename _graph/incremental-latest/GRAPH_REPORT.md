@@ -6,8 +6,8 @@ Use this as a navigation map only. Verify every conclusion against the source KB
 
 ## Summary
 
-- Nodes: 361
-- Edges: 715
+- Nodes: 55
+- Edges: 80
 
 ## KB Source Entries From index.json
 
@@ -26,51 +26,46 @@ These are authoritative source candidates for AI navigation. Graph edges remain 
 
 ## File Types
 
-- `code`: 168
-- `concept`: 88
-- `document`: 73
-- `rationale`: 32
+- `code`: 22
+- `document`: 18
+- `concept`: 15
 
 ## Communities
 
-- `0`: 56 node(s)
-- `1`: 50 node(s)
-- `2`: 49 node(s)
-- `3`: 38 node(s)
-- `4`: 37 node(s)
-- `6`: 29 node(s)
-- `5`: 29 node(s)
-- `7`: 17 node(s)
-- `8`: 16 node(s)
-- `9`: 13 node(s)
+- `1`: 13 node(s)
+- `0`: 13 node(s)
+- `2`: 13 node(s)
+- `3`: 10 node(s)
+- `5`: 3 node(s)
+- `4`: 3 node(s)
 
 ## Sample Nodes
 
 - manifest.json
-- challenges
 - changed_paths
 - changed_since
 - entries
 - generated_at
 - index_summary_included
 - mode
-- patches
 - protocol_files
 - protocol_mode
 - secret_scan_hits
 - source_root
 - tooling_files
 - tooling_mode
-- challenge.schema.json
-- claim_type
-- resolved_at
-- resolved_by
-- resolution_notes
-- successor_entry
-- $schema
-- $id
-- title
-- description
+- Graphify Corpus README
+- build_graphify_corpus.py
+- AI_PROTOCOL.md
+- index.json
+- meta.json
+- report.md
+- lessons.md
+- Challenges
+- Patches
+- RCM AI Knowledge Base
+- Graphify Integration Protocol
+- Knowledge Graph Layer
 
 ## Required Verification
 

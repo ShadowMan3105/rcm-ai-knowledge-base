@@ -1,10 +1,10 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-05-16T04:17:18+00:00",
-  "source_commit": "c5ccb965bd70c6adfeca633984570cbbe5e632c2",
+  "generated_at": "2026-05-17T22:28:12+00:00",
+  "source_commit": "bc94fe53d35398b7dc5a563cfedb978cbdaa3301",
   "source_branch": "main",
   "source_worktree_status": "clean",
-  "controlled_output_status_before_publish": "clean",
+  "controlled_output_status_before_publish": "M index.json",
   "backend": "bedrock-via-litellm-ollama-transport",
   "model": "bedrock:claude-sonnet-4-5",
   "graphify_version": "UNKNOWN",
@@ -13,8 +13,8 @@
     "graph.json"
   ],
   "graph_counts": {
-    "nodes": 361,
-    "edges": 715
+    "nodes": 55,
+    "edges": 80
   },
   "verification": {
     "raw_graphify_output_committed": false,
