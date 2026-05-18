@@ -1,0 +1,32 @@
+{
+  "id": "KB-2026-0011-markitdown-secondary-extractor-for-claims-ingestion",
+  "title": "MarkItDown As Secondary Extractor For Claims Ingestion",
+  "domain": "automations",
+  "kind": "blueprint",
+  "status": "proposed",
+  "confidence": "medium",
+  "created_at": "2026-05-17",
+  "created_by": "codex",
+  "last_verified": "2026-05-17",
+  "last_verified_by": "codex",
+  "human_approved_by": "Dr. Seidel",
+  "tags": [
+    "markitdown",
+    "claims-ingestion",
+    "pdf-parsing",
+    "fallback-extractor",
+    "n8n",
+    "control-totals",
+    "source-verification"
+  ],
+  "summary": "Use Microsoft MarkItDown only as a secondary extractor or preview layer for unusual files before the existing claims parser. It may help with strange PDFs and mixed office formats, but it must not replace claim/DOS parsing, service-line extraction, control-total validation, dedupe, accounting decisions, or Supabase/Monday writes.",
+  "related": [
+    "KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser",
+    "KB-2026-0003-universal-claims-ingestion-transient-dedupe",
+    "KB-2026-0005-multi-clinic-paid-claims-consolidation-pdf"
+  ],
+  "supersedes": null,
+  "superseded_by": null,
+  "challenged_by": [],
+  "deprecated_reason": null
+}
