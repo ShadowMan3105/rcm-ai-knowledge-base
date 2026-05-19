@@ -2,21 +2,21 @@
   "kb_version": "2.1",
   "schema": "_schema/entry.schema.json",
   "protocol": "AI_PROTOCOL.md",
-  "last_built": "2026-05-17",
+  "last_built": "2026-05-18",
   "maintainer": "Dr. Seidel",
   "description": "RCM AI Knowledge Base — multi-agent safe blueprints, lessons, and analyses.",
   "stats": {
-    "total_entries": 11,
+    "total_entries": 12,
     "by_status": {
-      "active": 7,
+      "active": 8,
       "proposed": 4
     },
     "by_domain": {
-      "automations": 10,
+      "automations": 11,
       "executive-reports": 1
     },
     "by_kind": {
-      "blueprint": 9,
+      "blueprint": 10,
       "meta": 1,
       "sop": 1
     },
@@ -434,6 +434,44 @@
       "challenged_by": [],
       "human_approved_by": "Dr. Seidel",
       "path": "automations/markitdown-secondary-extractor-for-claims-ingestion/"
+    },
+    {
+      "id": "KB-2026-0012-claims-ingestion-n8n-supabase-monday-operating-strategy",
+      "title": "Claims Ingestion Operating Strategy From n8n Parser To Supabase And Monday",
+      "domain": "automations",
+      "kind": "blueprint",
+      "status": "active",
+      "confidence": "high",
+      "created_at": "2026-05-18",
+      "created_by": "codex",
+      "last_verified": "2026-05-18",
+      "last_verified_by": "codex",
+      "tags": [
+        "n8n",
+        "supabase",
+        "monday-com",
+        "claims-ingestion",
+        "claims-reconciliation",
+        "service-line-audit",
+        "control-totals",
+        "transient-cache",
+        "workflow-design",
+        "source-verification",
+        "schema-validation",
+        "idempotency"
+      ],
+      "summary": "End-to-end operating strategy for parsing paid, denied, pending, all-claim, and payment-detail claim sources through n8n adapters, staging only bounded transient data, uploading verified audit/final rows into Supabase/Postgres, and synchronizing Monday as the operational output surface after dry-run and re-read gates.",
+      "related": [
+        "KB-2026-0001-n8n-datatable-idempotent-upsert-pdf-parser",
+        "KB-2026-0003-universal-claims-ingestion-transient-dedupe",
+        "KB-2026-0006-supabase-authoritative-monday-sync",
+        "KB-2026-0007-denied-claims-refresh-cache-rebuild-strategy"
+      ],
+      "supersedes": null,
+      "superseded_by": null,
+      "challenged_by": [],
+      "human_approved_by": "Dr. Seidel",
+      "path": "automations/claims-ingestion-n8n-supabase-monday-operating-strategy/"
     }
   ],
   "challenges": [],
